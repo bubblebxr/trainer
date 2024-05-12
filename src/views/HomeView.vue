@@ -3,7 +3,7 @@
     <el-header>
       <el-row :gutter="30" class="header-content">
         <el-col :span="1">
-          <h3>logo</h3>
+          <img src="../assets/logo.png" style="width:100%;height:100%;margin-top:20%;"/>
         </el-col>
         <el-col :span="3">
           <h1>汪汪旅途</h1>
@@ -38,7 +38,7 @@
         </el-container>
       </el-main>
       <el-aside width="18%">
-        <v-card hover style="background-color: #f8fbff;border-radius: 25px;width:100%;height:95%;margin-top:6%;">
+        <v-card hover style="background-color: #f8fafb;border-radius: 25px;width:100%;height:95%;margin-top:6%;">
           <h1>消息通知（占地）</h1>
         </v-card>
       </el-aside>

@@ -3,7 +3,7 @@
     <el-header>
       <el-row :gutter="30" class="header-content">
         <el-col :span="1">
-          <img src="../assets/logo.png" style="width:100%;height:100%;margin-top:20%;"/>
+          <img src="../assets/logo.png" style="width:100%;height:100%;margin-top:20%;" />
         </el-col>
         <el-col :span="3">
           <h1>汪汪旅途</h1>
@@ -23,7 +23,7 @@
       </el-row>
     </el-header>
     <div class="main">
-      <el-main width="80%">
+      <el-main width="80%" style="height:92vh;">
         <el-container v-if="activeIndex === '1'" class="menu-change">
           <ticket-component></ticket-component>
         </el-container>
@@ -37,8 +37,8 @@
           <orders-component></orders-component>
         </el-container>
       </el-main>
-      <el-aside width="18%">
-        <v-card hover style="background-color: #f8fafb;border-radius: 25px;width:100%;height:95%;margin-top:6%;">
+      <el-aside width="18%" style="height:92vh;">
+        <v-card hover style="background-color: #f8fafb;border-radius: 25px;width:100%;height:97%;margin-top:6%;">
           <h1>消息通知（占地）</h1>
         </v-card>
       </el-aside>
@@ -65,6 +65,10 @@ const selectMenu = (key) => {
   height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+body {
+  overflow: hidden;
 }
 
 .el-header {
@@ -100,7 +104,8 @@ const selectMenu = (key) => {
 .menu {
   margin-left: 10%;
 }
-.menu-change{
-  height:100%;
+
+.menu-change {
+  height: 100%;
 }
 </style>

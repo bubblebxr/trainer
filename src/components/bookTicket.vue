@@ -3,12 +3,13 @@
         <v-card hover style="background-color: #e4f5ff; border-radius: 25px; width:100%; height:10%;display: block;">
             <div class="select">
                 <el-autocomplete v-model="startStation" :fetch-suggestions="queryStartStation" placeholder="出发地"
-                    class="item" @select="handleStart" clearable :popper-class="popperClass" />
+                    class="item" @select="handleStart" clearable :popper-class="popperClass" id="startStation" />
                 <el-icon :size="20">
                     <Switch @click="switchStation" />
                 </el-icon>
                 <el-autocomplete v-model="destinationStation" :fetch-suggestions="queryStartStation" placeholder="到达地"
-                    class="item" @select="handleDestination" clearable :popper-class="popperClass" />
+                    class="item" @select="handleDestination" clearable :popper-class="popperClass"
+                    id="destinationStation" />
                 <el-date-picker class="item" v-model="date" type="date" placeholder="出发日期" :shortcuts="shortcuts"
                     :size="20" />
                 <el-icon style="width:30px;">
@@ -84,8 +85,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted,watch } from 'vue'
-
+import { ref, onMounted, watch } from 'vue'
+import { getStation } from '../api/api';
 const date = ref('');
 const train = ref(true);
 const normalTrain = ref(true);
@@ -99,6 +100,7 @@ const sortType = ref('1');
 const startStation = ref('');
 const destinationStation = ref('');
 const startStationOptions = ref([]);
+const stations = ref([]);/*车站信息*/
 const tableData = [
     {
         date: '2016-05-03',
@@ -162,12 +164,46 @@ const loadStartStationOptions = () => {
 const search = () => {
     //TODO
 }
+watch([startStation], (newValue, oldValue) => {
+    // if (newValue[0] != '' && !stations.value.includes(newValue[0])){
+    //     var start = document.getElementById('startStation');
+    //     start.setAttribute('id', 'startNo');
+    // }else{
+    //     var start = document.getElementById('startStation');
+    //     if(start===null){
+    //         start = document.getElementById('startNo');
+    //     }
+    //     start.setAttribute('id', 'startStation');
+    // }
+    // if (newValue[1] != '' && !stations.value.includes(newValue[1])) {
+    //     var start = document.getElementById('destinationStation');
+    //     start.setAttribute('id', 'endNo');
+    // } else {
+    //     var end = document.getElementById('destinationStation');
+    //     if (end === null) {
+    //         end = document.getElementById('endNo');
+    //     }
+    //     end.setAttribute('id', 'destinationStation');
+    // }
+}, { immediate: true });
 watch([train, normalTrain, business, one, two, soft_sleeper, hard_sleeper, hard_seat, sortType], (newValue, oldValue) => {
     console.log('筛选方式改变', newValue, oldValue);
     search();
 }, { immediate: true });
+const fetchData = async () => {
+    console.log("check");
+    try {
+        const data = await getStation();
+        stations.value = data.data.station;
+        console.log("获取车站数组成功", stations.value);
+    } catch (error) {
+        console.error('获取车站数组失败：', error);
+    }
+};
 onMounted(() => {
     startStationOptions.value = loadStartStationOptions();
+    fetchData();
+
 });
 const shortcuts = [
     {
@@ -229,5 +265,13 @@ const selectAllSeat = () => {
     .cell {
         white-space: pre-wrap;
     }
+}
+
+#startNo {
+    border: 1px solid red;
+}
+
+#endNo {
+    border: 1px solid red;
 }
 </style>

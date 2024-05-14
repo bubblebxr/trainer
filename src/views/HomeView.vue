@@ -23,7 +23,7 @@
       </el-row>
     </el-header>
     <div class="main">
-      <el-main width="80%" style="height:92vh;">
+      <el-main width="80%" style="height:93vh;">
         <el-container v-if="activeIndex === '1'" class="menu-change">
           <ticket-component></ticket-component>
         </el-container>
@@ -65,10 +65,6 @@ const selectMenu = (key) => {
   height: 100vh;
   display: flex;
   flex-direction: column;
-}
-
-body {
-  overflow: hidden;
 }
 
 .el-header {

@@ -14,4 +14,8 @@ export default {
     width: 0 !important;
     height: 0;
 }
+
+body {
+    overflow: hidden;
+}
 </style>

@@ -37,11 +37,11 @@
           <orders-component></orders-component>
         </el-container>
       </el-main>
-      <el-aside width="18%">
+      <!-- <el-aside width="18%">
         <v-card hover style="background-color: #f8fafb;border-radius: 25px;width:100%;height:95%;margin-top:6%;">
           <h1>消息通知（占地）</h1>
         </v-card>
-      </el-aside>
+      </el-aside> -->
     </div>
   </el-container>
 </template>

@@ -92,7 +92,7 @@
       </div>
     </div>
   </div>
-  <div style="position: fixed; bottom: 2%; right: 20%">
+  <div style="position: fixed; bottom: 2%; right: 1%">
     <foodCart v-model="order_foods" />
   </div>
 </template>

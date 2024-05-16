@@ -32,10 +32,10 @@
                 <el-col :span="1.5">
                     <el-text tag="b" size="large">车次类型：</el-text>
                 </el-col>
-                <el-col :span="2">
+                <el-col :span="1">
                     <el-button type="success" plain size="small" @click="selectAllStyle">全部</el-button>
                 </el-col>
-                <el-col :span="7" style="margin-top:-0.7%;">
+                <el-col :span="7" style="margin-top:-0.5%;">
                     <el-checkbox v-model="train" label="动车" size="large" />
                     <el-checkbox v-model="normalTrain" label="普通火车" size="large" />
                 </el-col>
@@ -44,20 +44,23 @@
                 <el-col :span="1.5">
                     <el-text tag="b" size="large">车次席别：</el-text>
                 </el-col>
-                <el-col :span="2">
+                <el-col :span="1">
                     <el-button type="success" plain size="small" @click="selectAllSeat">全部</el-button>
                 </el-col>
-                <el-col :span="20.5" style="margin-top:-0.7%;">
+                <el-col :span="20.5" style="margin-top:-0.5%;">
                     <el-checkbox v-model="business" label="商务座" size="large" />
                     <el-checkbox v-model="one" label="一等座" size="large" />
                     <el-checkbox v-model="two" label="二等座" size="large" />
+                    <el-checkbox v-model="soft_sleeper" label="软卧" size="large" />
+                    <el-checkbox v-model="hard_sleeper" label="硬卧" size="large" />
+                    <el-checkbox v-model="hard_seat" label="硬座" size="large" />
                 </el-col>
             </el-row>
             <el-row style="margin-top:0.5%;">
                 <el-col :span="1.5">
                     <el-text tag="b" size="large">排序方式：</el-text>
                 </el-col>
-                <el-col :span="10" style="margin-top:-0.7%;">
+                <el-col :span="10" style="margin-top:-0.5%;">
                     <el-radio-group v-model="sortType" class="ml-4">
                         <el-radio value="1" size="large">出发时间升序</el-radio>
                         <el-radio value="2" size="large">出发时间降序</el-radio>
@@ -66,27 +69,82 @@
                 </el-col>
             </el-row>
         </div>
-        <div style="margin-top:1%;  width:100%; height:3%;display: block;padding-left:1%;">
+        <div style="margin-top:0.7%;  width:100%; height:3%;display: block;padding-left:1%;">
             <el-row>
-                <el-col :span="8">
+                <el-col :span="9">
                     <el-text tag="i" style="color:gray;">{{ startStation }}到{{ destinationStation }}共{{ }}个车次</el-text>
                 </el-col>
-                <el-col :span="3" style="margin-top:-0.7%;" :offset="13">
+                <el-col :span="2" style="margin-top:-0.7%;" :offset="13">
                     <el-checkbox v-model="isHide" label="隐藏冲突列车信息" size="large" />
                 </el-col>
             </el-row>
         </div>
         <div style="margin-top:0.2%;  width:100%;display: block;padding-left:1%;margin-bottom:3%;">
-            <el-table :data="searchResult" height="560" 
-                :header-cell-style="{ background: '#8abbe7', color: 'white',}"  empty-text="没有列车信息">
-                <el-table-column prop="tid" label="车次" width="100" />
+            <el-table :data="searchResult" height="500" :header-cell-style="{ background: '#8abbe7', color: 'white', }"
+                empty-text="没有列车信息">
+                <el-table-column prop="tid" label="车次" width="100">
+                    <template #default="scope">
+                        <el-popover effect="light" trigger="hover" placement="right" width="auto">
+                            <template #default>
+                                <el-table :data="scope.row.station_info">
+                                    <el-table-column width="100" property="id" label="站序" />
+                                    <el-table-column width="100" property="arrive" label="到站时间" />
+                                    <el-table-column width="100" property="departure" label="出发时间" />
+                                    <el-table-column width="100" property="stop" label="停留时间" />
+                                </el-table>
+                            </template>
+                            <template #reference>
+                                <el-tag>{{ scope.row.tid }}</el-tag>
+                            </template>
+                        </el-popover>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="station" :label="'出发站\n到达站'" width="220" />
-                <el-table-column prop="startEnd" :label="'出发时间\n到达时间'" width="220" />
+                <el-table-column prop="startEnd" :label="'出发时间\n到达时间'" width="200" />
                 <el-table-column prop="time" label="历时" width="125" />
-                <el-table-column prop="business" label="商务座" width="125" />
-                <el-table-column prop="one" label="一等座" width="125" />
-                <el-table-column prop="two" label="二等座" width="125" />
-                <el-table-column prop="beizhu" label="备注" />
+                <el-table-column prop="business" label="商务座" width="125">
+                    <template #default="scope">
+                        <span v-if="scope.row.business === '无票'" style="color:gray">{{ scope.row.business }}</span>
+                        <span v-else style="color: #37B328">{{ scope.row.business }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="one" label="一等座" width="125">
+                    <template #default="scope">
+                        <span v-if="scope.row.one === '无票'" style="color:gray">{{ scope.row.one }}</span>
+                        <span v-else style="color: #37B328">{{ scope.row.one }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="two" label="二等座" width="125">
+                    <template #default="scope">
+                        <span v-if="scope.row.two === '无票'" style="color:gray">{{ scope.row.two }}</span>
+                        <span v-else style="color: #37B328">{{ scope.row.two }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="soft_sleeper" label="软卧" width="125">
+                    <template #default="scope">
+                        <span v-if="scope.row.soft_sleeper === '无票'" style="color:gray">{{ scope.row.soft_sleeper
+                            }}</span>
+                        <span v-else style="color: #37B328">{{ scope.row.soft_sleeper }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="hard_sleeper" label="硬卧" width="125">
+                    <template #default="scope">
+                        <span v-if="scope.row.hard_sleeper === '无票'" style="color:gray">{{ scope.row.hard_sleeper
+                            }}</span>
+                        <span v-else style="color: #37B328">{{ scope.row.hard_sleeper }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="hard_seat" label="硬座" width="125">
+                    <template #default="scope">
+                        <span v-if="scope.row.hard_seat === '无票'" style="color:gray">{{ scope.row.hard_seat }}</span>
+                        <span v-else style="color: #37B328">{{ scope.row.hard_seat }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column fixed="right" label="备注" width="125">
+                    <template #default="scope">
+                        <el-button type="success" plain @click="submitTicket(scope.row)">预订</el-button>
+                    </template>
+                </el-table-column>
             </el-table>
         </div>
     </div>
@@ -104,6 +162,9 @@ const isHide = ref(true);/**是否隐藏冲突列车信息 */
 const business = ref(true);/**商务座 */
 const one = ref(true);/**一等座*/
 const two = ref(true);/**二等座 */
+const soft_sleeper = ref(true);/**软卧 */
+const hard_sleeper = ref(true);/**硬卧 */
+const hard_seat = ref(true);/**硬座 */
 const sortType = ref('1');/**排序方式 */
 const startStation = ref('');/**起始站 */
 const destinationStation = ref('');/**终点站 */
@@ -125,24 +186,23 @@ const queryStartStation = (queryString, cb) => {
         : startStationOptions.value;
     cb(filteredOptions);
 };
-const first=ref(false);
+const first = ref(false);
 const fetchSearchResult = async () => {
-    if (searchValid.value === false&&first.value) {
+    if (searchValid.value === false && first.value) {
         var isGD = 1;
         if (train.value === true && normalTrain.value === true) isGD = 2;
         else if (normalTrain.value === true && train.value === false) isGD = 0;
-        var seatType = [business.value, one.value, two.value];
+        var seatType = [business.value, one.value, two.value, soft_sleeper.value, hard_sleeper.value, hard_seat.value];
         try {
             const response = await getSearchResult(startStation.value, destinationStation.value, date.value, isGD, sortType.value, seatType, isHide.value);
-            var a=response.data.result;
-            for (let i=0;i<a.length;i++) {
+            var a = response.data.result;
+            for (let i = 0; i < a.length; i++) {
                 a[i].startEnd = `${a[i].start_time}\n${a[i].arrive_time}`;
                 delete a[i].start_time;
                 delete a[i].arrive_time;
                 a[i].station = `${a[i].start_station}\n${a[i].arrive_station}`;
                 delete a[i].start_station;
                 delete a[i].arrive_station;
-                var flag=false;//记录是否还能买票
                 if (a[i].business) {
                     if (a[i].business.remain != 0) {
                         var temp = a[i].business.price;
@@ -179,11 +239,47 @@ const fetchSearchResult = async () => {
                 } else {
                     a[i].two = "无票";
                 }
+                if (a[i].soft_sleeper) {
+                    if (a[i].soft_sleeper.remain != 0) {
+                        var temp = a[i].soft_sleeper.price;
+                        delete a[i].soft_sleeper;
+                        a[i].soft_sleeper = temp;
+                    } else {
+                        delete a[i].soft_sleeper;
+                        a[i].soft_sleeper = "无票";
+                    }
+                } else {
+                    a[i].soft_sleeper = "无票";
+                }
+                if (a[i].hard_sleeper) {
+                    if (a[i].hard_sleeper.remain != 0) {
+                        var temp = a[i].hard_sleeper.price;
+                        delete a[i].hard_sleeper;
+                        a[i].hard_sleeper = temp;
+                    } else {
+                        delete a[i].hard_sleeper;
+                        a[i].hard_sleeper = "无票";
+                    }
+                } else {
+                    a[i].hard_sleeper = "无票";
+                }
+                if (a[i].hard_seat) {
+                    if (a[i].hard_seat.remain != 0) {
+                        var temp = a[i].hard_seat.price;
+                        delete a[i].hard_seat;
+                        a[i].hard_seat = temp;
+                    } else {
+                        delete a[i].hard_seat;
+                        a[i].hard_seat = "无票";
+                    }
+                } else {
+                    a[i].hard_seat = "无票";
+                }
             }
             searchResult.value = a;
             console.log("获取查询信息成功", a);
         } catch (error) {
-            console.error('Error fetching search result:', error);
+            console.error('获取查询信息失败', error);
         }
     }
 };
@@ -244,7 +340,7 @@ const fetchData = async () => {
 };
 onMounted(() => {
     fetchData();
-    first.value=true;
+    first.value = true;
 });
 const shortcuts = [
     {
@@ -306,17 +402,21 @@ const selectAllSeat = () => {
 .el-table {
     .cell {
         white-space: pre-wrap !important;
-        text-align:center !important;
+        text-align: center !important;
     }
+
     width:100%;
 }
+
 ::v-deep .el-table__fixed {
     height: 100% !important;
     z-index: 50;
 }
+
 ::v-deep .el-table__body-wrapper {
     overflow: scroll !important;
 }
+
 ::v-deep .el-table__fixed:before {
     width: 0;
     height: 0;

@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 @Mapper
-public interface UserMapper extends BaseMapper<User> {
+public interface IUserMapper extends BaseMapper<User> {
     // 用户注册
     @Insert("insert into users(id,name, password, email) values(#{id},#{name},#{password},#{email})")
     void registerUser(String id,String name, String password, String email, String salt);

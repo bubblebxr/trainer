@@ -1,20 +1,18 @@
 package com.example.se_project.controller;
 
 import com.example.se_project.entity.User;
-import com.example.se_project.service.UserService;
+import com.example.se_project.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private IUserService IUserService;
     @Autowired
     private User user;
 
@@ -28,10 +26,10 @@ public class UserController {
 
         System.out.println(id);
 
-        if (userService.findUserById(id) > 0) {
+        if (IUserService.findUserById(id) > 0) {
             map.put("message", "用户已注册");
         } else {
-            userService.registerUser(id, name, password, email);
+            IUserService.registerUser(id, name, password, email);
             map.put("message", "注册成功");
         }
         return map;
@@ -39,7 +37,7 @@ public class UserController {
 
     @GetMapping("/users/{id}")
     public Map<String, Object> showUserInfo(@PathVariable String id) {
-        User showuser = userService.findById(id);
+        User showuser = IUserService.findById(id);
         Map<String, Object> map = new HashMap<>();
         map.put("id",showuser.getId());
         map.put("name", showuser.getName());
@@ -52,7 +50,7 @@ public class UserController {
     public Map<String, Object> userLogin(@RequestBody Map<String, String> loginMap){
         String id = loginMap.get("id");
         String password = loginMap.get("password");
-        User loginuser = userService.login(id,password);
+        User loginuser = IUserService.login(id,password);
         Map<String, Object> map = new HashMap<>();
         if(loginuser!=null)
         {
@@ -60,7 +58,7 @@ public class UserController {
             map.put("name", loginuser.getName());
             map.put("email",loginuser.getEmail());
         }
-        else if (userService.findUserById(id) == 0)
+        else if (IUserService.findUserById(id) == 0)
         {
             map.put("id",id);
             map.put("name",password);

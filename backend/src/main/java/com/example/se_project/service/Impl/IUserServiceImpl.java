@@ -1,28 +1,26 @@
 package com.example.se_project.service.Impl;
 
 import com.example.se_project.entity.User;
-import com.example.se_project.mapper.UserMapper;
-import com.example.se_project.service.UserService;
+import com.example.se_project.mapper.IUserMapper;
+import com.example.se_project.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.se_project.util.MD5Util;
 
-import java.util.List;
-
 @Service("userService")
-public class UserServiceImpl implements UserService {
+public class IUserServiceImpl implements IUserService {
     @Autowired
-    private UserMapper userMapper;
+    private IUserMapper IUserMapper;
 
     @Override
     public int findUserById(String id) {
-        return userMapper.findUserById(id);
+        return IUserMapper.findUserById(id);
     }
 
 
     @Override
     public User findById(String id){
-        return userMapper.findById(id);
+        return IUserMapper.findById(id);
     }
 
     @Override
@@ -30,15 +28,15 @@ public class UserServiceImpl implements UserService {
         String salt = "hjgoasjgajg165416565";
         String DBPass = MD5Util.md5(password, salt);
         //String DBPass = password;
-        userMapper.registerUser(id, name, DBPass, email,salt);
-        return userMapper.findById(id);
+        IUserMapper.registerUser(id, name, DBPass, email,salt);
+        return IUserMapper.findById(id);
     }
 
     @Override
     public User login(String id, String password){
         String salt = "hjgoasjgajg165416565";
         String DBPass = MD5Util.md5(password, salt);
-        return userMapper.login(id,DBPass);
+        return IUserMapper.login(id,DBPass);
 
     }
 }

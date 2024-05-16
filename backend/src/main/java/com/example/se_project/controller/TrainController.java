@@ -18,7 +18,7 @@ public class TrainController {
             @PathVariable String date,
             @RequestParam(value = "isGD", defaultValue = "2") Integer isGD,
             @RequestParam(value = "sort_type",defaultValue = "0") Integer sort_type,
-            @RequestParam(value = "seat_type",defaultValue = ),
+
             @RequestParam(value = "isHide",defaultValue = "true") Boolean isHide){
 
     }

@@ -1,4 +1,4 @@
 package com.example.se_project.entity;
 
-public class Train_order extends Order{
+public class FoodOrder extends Order{
 }

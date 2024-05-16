@@ -1,18 +1,16 @@
 package com.example.se_project.service.Impl;
 
 import com.example.se_project.entity.User;
-import com.example.se_project.mapper.UserMapper;
-import com.example.se_project.service.UserService;
+import com.example.se_project.mapper.IUserMapper;
+import com.example.se_project.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.se_project.util.MD5Util;
 
-import java.util.List;
-
 @Service("userService")
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements IUserService {
     @Autowired
-    private UserMapper userMapper;
+    private IUserMapper userMapper;
 
     @Override
     public int findUserById(String id) {

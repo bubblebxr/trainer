@@ -1,20 +1,18 @@
 package com.example.se_project.controller;
 
 import com.example.se_project.entity.User;
-import com.example.se_project.service.UserService;
+import com.example.se_project.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private IUserService userService;
     @Autowired
     private User user;
 

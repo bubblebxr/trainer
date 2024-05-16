@@ -14,4 +14,6 @@ public interface UserService {
 
     public User findById(String id);
 
+    public User login(String id, String password);
+
 }

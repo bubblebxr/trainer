@@ -1,8 +1,10 @@
 import { createApp } from 'vue'
 import App from './App.vue'
+import Antd from 'ant-design-vue'
 import router from './router'
 import store from './store'
 import ElementPlus from 'element-plus'
+import 'ant-design-vue/dist/reset.css'
 import 'element-plus/dist/index.css'
 import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
@@ -20,4 +22,5 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 app.use(store).use(router)
 app.use(ElementPlus)
 app.use(vuetify)
+app.use(Antd)
 app.mount('#app')

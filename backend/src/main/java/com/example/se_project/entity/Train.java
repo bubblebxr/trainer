@@ -1,22 +1,27 @@
 package com.example.se_project.entity;
 
+import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.util.Date;
 import java.util.List;
 
+@TableName("trains")
 public class Train {
     private String trainId;
 
     private Date date;
 
-    private Stopover startStopover;
+    private Station startStation;
 
-    private Stopover arrivalStopover;
+    private Station arrivalStation;
 
     private Date startTime;
 
     private Date arrivalTime;
 
     private long duration;
+    // 0高铁 1火车
+    private Integer type;
 
     private int businessSeatSurplus;
 
@@ -37,8 +42,26 @@ public class Train {
     private int hardSleeperSurplus;
 
     private double hardSleeperPrice;
+    private int hardSeatplus;
+    private double hardSeatPrice;
 
-    private List<Stopover> stopover;
+    private List<Station> stopover;
+
+    public int getHardSeatplus() {
+        return hardSeatplus;
+    }
+
+    public void setHardSeatplus(int hardSeatplus) {
+        this.hardSeatplus = hardSeatplus;
+    }
+
+    public double getHardSeatPrice() {
+        return hardSeatPrice;
+    }
+
+    public void setHardSeatPrice(double hardSeatPrice) {
+        this.hardSeatPrice = hardSeatPrice;
+    }
 
     public String getTrainId() {
         return trainId;
@@ -56,20 +79,20 @@ public class Train {
         this.date = date;
     }
 
-    public Stopover getStartStation() {
-        return startStopover;
+    public Station getStartStation() {
+        return startStation;
     }
 
-    public void setStartStation(Stopover startStopover) {
-        this.startStopover = startStopover;
+    public void setStartStation(Station startStation) {
+        this.startStation = startStation;
     }
 
-    public Stopover getArrivalStation() {
-        return arrivalStopover;
+    public Station getArrivalStation() {
+        return arrivalStation;
     }
 
-    public void setArrivalStation(Stopover arrivalStopover) {
-        this.arrivalStopover = arrivalStopover;
+    public void setArrivalStation(Station arrivalStation) {
+        this.arrivalStation = arrivalStation;
     }
 
     public Date getStartTime() {
@@ -176,11 +199,11 @@ public class Train {
         this.hardSleeperPrice = hardSleeperPrice;
     }
 
-    public List<Stopover> getStopover() {
+    public List<Station> getStopover() {
         return stopover;
     }
 
-    public void setStopover(List<Stopover> stopover) {
+    public void setStopover(List<Station> stopover) {
         this.stopover = stopover;
     }
 }

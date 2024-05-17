@@ -8,19 +8,19 @@ import org.springframework.stereotype.Service;
 import com.example.se_project.util.MD5Util;
 
 @Service("userService")
-public class IUserServiceImpl implements IUserService {
+public class UserServiceImpl implements IUserService {
     @Autowired
-    private IUserMapper IUserMapper;
+    private IUserMapper userMapper;
 
     @Override
     public int findUserById(String id) {
-        return IUserMapper.findUserById(id);
+        return userMapper.findUserById(id);
     }
 
 
     @Override
     public User findById(String id){
-        return IUserMapper.findById(id);
+        return userMapper.findById(id);
     }
 
     @Override
@@ -28,15 +28,15 @@ public class IUserServiceImpl implements IUserService {
         String salt = "hjgoasjgajg165416565";
         String DBPass = MD5Util.md5(password, salt);
         //String DBPass = password;
-        IUserMapper.registerUser(id, name, DBPass, email,salt);
-        return IUserMapper.findById(id);
+        userMapper.registerUser(id, name, DBPass, email,salt);
+        return userMapper.findById(id);
     }
 
     @Override
     public User login(String id, String password){
         String salt = "hjgoasjgajg165416565";
         String DBPass = MD5Util.md5(password, salt);
-        return IUserMapper.login(id,DBPass);
+        return userMapper.login(id,DBPass);
 
     }
 }

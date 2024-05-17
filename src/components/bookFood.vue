@@ -12,15 +12,20 @@
         "
       >
         <div class="select">
-          <el-autocomplete
+          <el-select
             v-model="tid"
-            :fetch-suggestions="queryTid"
             placeholder="车次"
             class="item"
-            @select="handleStart"
-            clearable
             :popper-class="popperClass"
-          />
+          >
+            <el-option
+              v-for="item in Paidticket"
+              :key="item"
+              :label="item"
+              :value="item"
+            >
+            </el-option>
+          </el-select>
           <el-date-picker
             class="item"
             v-model="date"
@@ -93,97 +98,69 @@
     </div>
   </div>
   <div style="position: fixed; bottom: 2%; right: 1%">
-    <foodCart v-model="order_foods" />
+    <foodCart v-model="order_foods" @getPaid="submitBill"/>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, watch } from "vue";
 import foodCart from "./foodCart.vue";
+import { getFoods, getThisTicket } from "@/api/api";
+import { ElMessage } from "element-plus";
+const userID = 0; //当前用户ID
 const tid = ref("");
 const date = ref("");
-const time = ref("");
+const time = ref("lunch");
+const foodList = ref([]);
 
-const foodList = ref([
-  {
-    photo:
-      "https://c-ssl.duitang.com/uploads/blog/202206/13/20220613194502_b7bab.jpeg",
-    name: "冰淇淋",
-    price: "18",
-    num: 0,
-  },
-  {
-    photo:
-      "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
-    name: "煎蛋",
-    price: "30",
-    num: 0,
-  },
-  {
-    photo:
-      "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122042_a68d8.jpeg",
-    name: "水果坚果",
-    price: "180.00",
-    num: 0,
-  },
-  {
-    photo:
-      "https://c-ssl.duitang.com/uploads/blog/202206/13/20220613194502_b7bab.jpeg",
-    name: "冰淇淋",
-    price: "18",
-    num: 0,
-  },
-  {
-    photo:
-      "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
-    name: "煎蛋",
-    price: "30",
-    num: 0,
-  },
-  {
-    photo:
-      "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122042_a68d8.jpeg",
-    name: "水果坚果",
-    price: "180",
-    num: 0,
-  },
-  {
-    photo:
-      "https://c-ssl.duitang.com/uploads/blog/202206/13/20220613194502_b7bab.jpeg",
-    name: "冰淇淋",
-    price: "18",
-    num: 0,
-  },
-  {
-    photo:
-      "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
-    name: "煎蛋",
-    price: "30",
-    num: 0,
-  },
-  {
-    photo:
-      "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122042_a68d8.jpeg",
-    name: "水果坚果",
-    price: "180",
-    num: 0,
-  },
-  {
-    photo:
-      "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
-    name: "煎蛋",
-    price: "30",
-    num: 0,
-  },
-  {
-    photo:
-      "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122042_a68d8.jpeg",
-    name: "水果坚果",
-    price: "180",
-    num: 0,
-  },
-]);
 const order_foods = ref([]); //已点的食物
+const Paidticket = ref([]);
+
+const search = () => {
+  if (tid.value === "" || time.value === "" || date.value === "") {
+    ElMessage({
+      message: "还有没填写的信息",
+      type: "error",
+      plain: true,
+    });
+  } else {
+    fetchFoods();
+    ElMessage({
+      message: "查询成功",
+      type: "success",
+    });
+  }
+};
+const fetchFoods = async () => {
+  try {
+    const response = await getFoods(tid, date, time);
+    foodList.value = response.data.result;
+  } catch (error) {
+    console.error("获取食物数组失败:", error);
+  }
+};
+
+const fetchTids = async () => {
+  try {
+    const response = await getThisTicket(userID, "paid");
+    var ticket = response.data.result;
+    var tempList = [];
+    for (var item of ticket) {
+      tempList.push(item.tid);
+    }
+    Paidticket.value = tempList;
+  } catch (error) {
+    console.error("获取车站数组失败：", error);
+  }
+};
+const submitBill=()=>{
+  //todo 向后端提交表单
+
+  ElMessage({
+      message: "下单成功",
+      type: "success",
+    });
+};
 
 watch(
   foodList,
@@ -195,6 +172,9 @@ watch(
   { deep: true },
   { immediate: true }
 );
+onMounted(() => {
+  fetchTids();
+});
 </script>
 
 <style scoped>
@@ -208,5 +188,7 @@ watch(
   display: flex;
   flex-wrap: wrap; /* 设置子元素自动换行 */
   justify-content: center;
+  position: absolute;
+  z-index: 0;
 }
 </style>

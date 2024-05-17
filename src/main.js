@@ -9,7 +9,9 @@ import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
-import axios from "./api/request.js";
+import axios from "./api/request.js"; 
+import Antd from 'ant-design-vue';
+import 'ant-design-vue/dist/reset.css';
 const vuetify = createVuetify({
   components,
   directives
@@ -22,4 +24,5 @@ app.use(store).use(router)
 app.provide("$axios", axios)
 app.use(ElementPlus)
 app.use(vuetify)
+app.use(Antd)
 app.mount('#app')

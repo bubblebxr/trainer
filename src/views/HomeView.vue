@@ -2,14 +2,13 @@
   <el-container class="home-container">
     <el-header style="display: flex; align-items: center; justify-content: space-between;">
       <div style="display: flex; align-items: center;">
-        <img src="../assets/logo.png" style="width:55px;height:55px;margin-top:3%;" />
-
+        <img src="../assets/logo2.png" style="width:100px;height:55px;margin-top:3%;" />
         <el-menu :default-active="activeIndex" class="menu" mode="horizontal" :ellipsis="false" @select="selectMenu"
           style="color:black;margin-top:2%;">
           <el-menu-item index="1" style="color: black;font-weight: bold;font-size:17px;">火车订票</el-menu-item>
           <el-menu-item index="2" style="color: black;font-weight: bold;font-size:17px;">酒店预订</el-menu-item>
           <el-menu-item index="3" style="color: black;font-weight: bold;font-size:17px;">火车订餐</el-menu-item>
-          <el-menu-item index="4" style="color: black;font-weight: bold;font-size:17px;">我的订单</el-menu-item>
+          <el-menu-item index="4" style="color: black;font-weight: bold;font-size:17px;">我的</el-menu-item>
         </el-menu>
       </div>
       <div style="display: flex; align-items: center;">
@@ -18,7 +17,7 @@
       </div>
     </el-header>
     <div class="main">
-      <el-main width="80%" style="height:96vh;">
+      <el-main width="80%" style="height:97vh;">
         <router-view />
       </el-main>
     </div>

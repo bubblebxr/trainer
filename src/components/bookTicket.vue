@@ -80,7 +80,7 @@
             </el-row>
         </div>
         <div style="margin-top:0.2%;  width:100%;display: block;padding-left:1%;margin-bottom:3%;">
-            <el-table :data="searchResult" height="500" :header-cell-style="{ background: '#8abbe7', color: 'white', }"
+            <el-table :data="searchResult" height="600" :header-cell-style="{ background: '#8abbe7', color: 'white', }"
                 empty-text="没有列车信息">
                 <el-table-column prop="tid" label="车次" width="100">
                     <template #default="scope">
@@ -102,45 +102,45 @@
                 <el-table-column prop="station" :label="'出发站\n到达站'" width="220" />
                 <el-table-column prop="startEnd" :label="'出发时间\n到达时间'" width="200" />
                 <el-table-column prop="time" label="历时" width="125" />
-                <el-table-column prop="business" label="商务座" width="125">
+                <el-table-column prop="business" label="商务座" width="130">
                     <template #default="scope">
                         <span v-if="scope.row.business === '无票'" style="color:gray">{{ scope.row.business }}</span>
                         <span v-else style="color: #37B328">{{ scope.row.business }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="one" label="一等座" width="125">
+                <el-table-column prop="one" label="一等座" width="130">
                     <template #default="scope">
                         <span v-if="scope.row.one === '无票'" style="color:gray">{{ scope.row.one }}</span>
                         <span v-else style="color: #37B328">{{ scope.row.one }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="two" label="二等座" width="125">
+                <el-table-column prop="two" label="二等座" width="130">
                     <template #default="scope">
                         <span v-if="scope.row.two === '无票'" style="color:gray">{{ scope.row.two }}</span>
                         <span v-else style="color: #37B328">{{ scope.row.two }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="soft_sleeper" label="软卧" width="125">
+                <el-table-column prop="soft_sleeper" label="软卧" width="130">
                     <template #default="scope">
                         <span v-if="scope.row.soft_sleeper === '无票'" style="color:gray">{{ scope.row.soft_sleeper
                             }}</span>
                         <span v-else style="color: #37B328">{{ scope.row.soft_sleeper }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="hard_sleeper" label="硬卧" width="125">
+                <el-table-column prop="hard_sleeper" label="硬卧" width="130">
                     <template #default="scope">
                         <span v-if="scope.row.hard_sleeper === '无票'" style="color:gray">{{ scope.row.hard_sleeper
                             }}</span>
                         <span v-else style="color: #37B328">{{ scope.row.hard_sleeper }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="hard_seat" label="硬座" width="125">
+                <el-table-column prop="hard_seat" label="硬座" width="130">
                     <template #default="scope">
                         <span v-if="scope.row.hard_seat === '无票'" style="color:gray">{{ scope.row.hard_seat }}</span>
                         <span v-else style="color: #37B328">{{ scope.row.hard_seat }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column fixed="right" label="备注" width="125">
+                <el-table-column fixed="right" label="备注">
                     <template #default="scope">
                         <el-button type="success" plain @click="submitTicket(scope.$index)">预订</el-button>
                     </template>

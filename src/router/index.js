@@ -5,6 +5,12 @@ import hotelComponent from '../components/bookHotel.vue'
 import foodComponent from '../components/bookFood.vue'
 import ordersComponent from '../components/myOrders.vue'
 import ticketDetail from '../components/ticketDetail.vue'
+import personalCenter from '../components/personalCenter.vue'
+import passengersInfo from '../components/passengersInfo.vue'
+import ticketOrders from '../components/orders/ticket.vue'
+import hotelOrders from '../components/orders/hotel.vue'
+import foodOrders from '../components/orders/food.vue'
+import myTicket from '../components/orders/myTicket.vue'
 const routes = [
   {
     path: '/', 
@@ -29,7 +35,33 @@ const routes = [
       },
       {
         path: 'orders',
-        component: ordersComponent
+        component: ordersComponent,
+        children:[
+          {
+            path:'personalCenter',
+            component: personalCenter,
+          },
+          {
+            path: 'passengersInfo',
+            component: passengersInfo,
+          },
+          {
+            path: 'ticketOrders',
+            component: ticketOrders,
+          },
+          {
+            path: 'hotelOrders',
+            component: hotelOrders,
+          },
+          {
+            path: 'foodOrders',
+            component: foodOrders,
+          },
+          {
+            path: 'myTicket',
+            component: myTicket,
+          },
+        ],
       },
       {
         path: 'ticketDetail',

@@ -21,4 +21,6 @@ public interface IUserMapper extends BaseMapper<User> {
     //@Select("select * from users where id=#{id} and password=#{password}")
     User login(String id, String password);
 
+    String getUserSalt(String id);
+
 }

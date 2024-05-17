@@ -3,6 +3,7 @@ package com.example.se_project.controller;
 import com.example.se_project.entity.Station;
 import com.example.se_project.service.IStationService;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,14 +22,14 @@ public class StationController {
 
     @GetMapping("/station")
     public Map<String, Object> inquireAllStations() {
-        JSONObject jsonObject = new JSONObject();
-        JSONArray stations = new JSONArray();
+        List<Object> list = new ArrayList<>();
         stationService.inquireAllStations().forEach(e->{
-            JSONObject j = new JSONObject();
-            j.put("value", e.getStationName());
-            stations.put(j);
+            list.add(new HashMap<>(){{
+                put("value", e);
+            }});
         });
-        jsonObject.put("station", stations);
-        return jsonObject.toMap();
+        return new HashMap<>(){{
+            put("station", list);
+        }};
     }
 }

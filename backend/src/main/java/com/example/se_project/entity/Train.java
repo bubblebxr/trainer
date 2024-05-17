@@ -11,15 +11,15 @@ public class Train {
 
     private Date date;
 
-    private Station startStation;
+    private String startStation;
 
-    private Station arrivalStation;
+    private String arrivalStation;
 
     private Date startTime;
 
     private Date arrivalTime;
 
-    private long duration;
+    private Date duration;
     // 0高铁 1火车
     private Integer type;
 
@@ -42,17 +42,17 @@ public class Train {
     private int hardSleeperSurplus;
 
     private double hardSleeperPrice;
-    private int hardSeatplus;
+    private int hardSeatSurplus;
     private double hardSeatPrice;
 
     private List<Station> stopover;
 
-    public int getHardSeatplus() {
-        return hardSeatplus;
+    public int getHardSeatSurplus() {
+        return hardSeatSurplus;
     }
 
-    public void setHardSeatplus(int hardSeatplus) {
-        this.hardSeatplus = hardSeatplus;
+    public void setHardSeatSurplus(int hardSeatSurplus) {
+        this.hardSeatSurplus = hardSeatSurplus;
     }
 
     public double getHardSeatPrice() {
@@ -79,19 +79,19 @@ public class Train {
         this.date = date;
     }
 
-    public Station getStartStation() {
+    public String getStartStation() {
         return startStation;
     }
 
-    public void setStartStation(Station startStation) {
+    public void setStartStation(String startStation) {
         this.startStation = startStation;
     }
 
-    public Station getArrivalStation() {
+    public String getArrivalStation() {
         return arrivalStation;
     }
 
-    public void setArrivalStation(Station arrivalStation) {
+    public void setArrivalStation(String arrivalStation) {
         this.arrivalStation = arrivalStation;
     }
 
@@ -111,11 +111,11 @@ public class Train {
         this.arrivalTime = arrivalTime;
     }
 
-    public long getDuration() {
+    public Date getDuration() {
         return duration;
     }
 
-    public void setDuration(long duration) {
+    public void setDuration(Date duration) {
         this.duration = duration;
     }
 

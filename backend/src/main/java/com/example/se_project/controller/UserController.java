@@ -50,23 +50,20 @@ public class UserController {
     public Map<String, Object> userLogin(@RequestBody Map<String, String> loginMap){
         String id = loginMap.get("id");
         String password = loginMap.get("password");
-        User loginuser = userService.login(id,password);
         Map<String, Object> map = new HashMap<>();
-        if(loginuser!=null)
-        {
-            map.put("id",loginuser.getId());
-            map.put("name", loginuser.getName());
-            map.put("email",loginuser.getEmail());
-        }
-        else if (userService.findUserById(id) == 0)
-        {
-            map.put("id",id);
-            map.put("name",password);
+        if(userService.findUserById(id) == 0){
             map.put("message","用户未注册");
         }
-        else
-        {
-            map.put("message","密码错误");
+        else{
+            User loginuser = userService.login(id, password);
+
+            if (loginuser != null) {
+                map.put("id", loginuser.getId());
+                map.put("name", loginuser.getName());
+                map.put("email", loginuser.getEmail());
+            } else {
+                map.put("message", "密码错误");
+            }
         }
         return map;
     }

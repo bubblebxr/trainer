@@ -3,6 +3,7 @@ package com.example.se_project.service.Impl;
 import com.example.se_project.entity.User;
 import com.example.se_project.mapper.IUserMapper;
 import com.example.se_project.service.IUserService;
+import com.example.se_project.util.SaltGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.se_project.util.MD5Util;
@@ -25,7 +26,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public User registerUser(String id, String name, String password, String email) {
-        String salt = "hjgoasjgajg165416565";
+        String salt = SaltGenerator.generateSalt();
         String DBPass = MD5Util.md5(password, salt);
         //String DBPass = password;
         userMapper.registerUser(id, name, DBPass, email,salt);
@@ -34,10 +35,9 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public User login(String id, String password){
-        String salt = "hjgoasjgajg165416565";
+        String salt = userMapper.getUserSalt(id);
         String DBPass = MD5Util.md5(password, salt);
         return userMapper.login(id,DBPass);
-
     }
 }
 

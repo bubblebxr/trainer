@@ -1,20 +1,26 @@
 <template>
   <el-container class="home-container">
-    <el-header style="display: flex; align-items: center; justify-content: space-between;">
-      <div style="display: flex; align-items: center;">
-        <img src="../assets/logo.png" style="width:55px;height:55px;margin-top:3%;" />
-        <el-menu :default-active="activeIndex" class="menu" mode="horizontal" :ellipsis="false" @select="selectMenu"
-          style="color:black;margin-top:2%;">
-          <el-menu-item index="1" style="color: black;font-weight: bold;font-size:17px;">火车订票</el-menu-item>
-          <el-menu-item index="2" style="color: black;font-weight: bold;font-size:17px;">酒店预订</el-menu-item>
-          <el-menu-item index="3" style="color: black;font-weight: bold;font-size:17px;">火车订餐</el-menu-item>
-          <el-menu-item index="4" style="color: black;font-weight: bold;font-size:17px;">我的订单</el-menu-item>
-        </el-menu>
-      </div>
-      <div style="display: flex; align-items: center;">
-        <el-button type="primary" round plain size="large" style="margin-top:12%;margin-right:3%;">登录/注册</el-button>
-        <img src="../assets/message.png" style="width: 55px; height: 55px; margin-top: 8%;" />
-      </div>
+    <el-header>
+      <el-row :gutter="30" class="header-content">
+        <el-col :span="2">
+          <img src="../assets/logo2.png" style="width:100%;max-height:3.6em;margin-top:10%;" />
+        </el-col>
+        <!-- <el-col :span="3">
+          <h1>汪汪旅途</h1>
+        </el-col> -->
+        <el-col :span="7.5">
+          <el-menu :default-active="activeIndex" class="menu" mode="horizontal" :ellipsis="false" @select="selectMenu"
+            style="color:black">
+            <el-menu-item index="1" style="color: black;font-weight: bold;font-size:17px;">火车订票</el-menu-item>
+            <el-menu-item index="2" style="color: black;font-weight: bold;font-size:17px;">酒店预订</el-menu-item>
+            <el-menu-item index="3" style="color: black;font-weight: bold;font-size:17px;">火车订餐</el-menu-item>
+            <el-menu-item index="4" style="color: black;font-weight: bold;font-size:17px;">我的订单</el-menu-item>
+          </el-menu>
+        </el-col>
+        <el-col :span="2" :offset="10">
+          <el-button type="primary" round plain size="large">登录/注册</el-button>
+        </el-col>
+      </el-row>
     </el-header>
     <div class="main">
       <el-main width="80%" style="height:95vh;">

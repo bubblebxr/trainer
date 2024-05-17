@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 @Mapper
-public interface ITrainMapper extends BaseMapper {
+public interface ITrainMapper extends BaseMapper<Train> {
 //    @Select("select * from trains where start_station = #{start_station}"+
 //"and arrive_station =#{arrive_station} and date =#{date} ORDER BY " + CASE WHEN #{sort_type} = 2 THEN start_time END DESC,"+
 //"CASE WHEN #{sort_type} = 3 THEN duration END ASC,"+

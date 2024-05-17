@@ -1,10 +1,17 @@
 package com.example.se_project.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.stereotype.Component;
+
+@Component
 public class Food {
+    @JsonIgnore
     private String trainId;
+    @JsonIgnore
     private String date;
+    @JsonIgnore
     private String type;
-    private String image;
+    private String photo;
     private String name;
     private String price;
     private Integer num;
@@ -33,12 +40,12 @@ public class Food {
         this.type = type;
     }
 
-    public String getImage() {
-        return image;
+    public String getPhoto() {
+        return photo;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
     public String getName() {

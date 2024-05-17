@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 @Mapper
-public interface IFoodMapper extends BaseMapper {
+public interface IFoodMapper extends BaseMapper<Food> {
     @Select("select * from food where trainId=#{trainId} and date = #{date} and type = #{type}")
     public List<Food> getAllFood(String trainId, String date, String type);
 }

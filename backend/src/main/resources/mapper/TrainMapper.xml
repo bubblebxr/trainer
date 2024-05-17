@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.se_project.mapper.ITrainMapper">
-    <select id="searchTrain" resultType="java.util.List&lt;Train&gt;">
+    <select id="searchTrain" resultType="com.example.se_project.entity.Train">
         select * from trains
         where start_station = #{start_station}
         and arrive_station =#{arrive_station}

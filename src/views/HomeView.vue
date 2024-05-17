@@ -47,7 +47,20 @@ import ticketComponent from '../components/bookTicket.vue'
 import hotelComponent from '../components/bookHotel.vue'
 import foodComponent from '../components/bookFood.vue'
 import ordersComponent from '../components/myOrders.vue'
-const activeIndex = ref('1')
+const activeIndex = ref('1');
+const selectMenu = (key) => {
+ console.log('当前选中为' + key);
+ activeIndex.value = key;
+ // if(activeIndex.value==="1"){
+ //   router.push('/home/ticket');
+ // }else if (activeIndex.value === "2") {
+ //   router.push('/home/hotel');
+ // } else if (activeIndex.value === "3") {
+ //   router.push('/home/dining');
+ // } else if (activeIndex.value === "4") {
+ //   router.push('/home/orders');
+ // }
+}
 </script>
 
 <style>

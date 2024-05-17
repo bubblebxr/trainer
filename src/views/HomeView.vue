@@ -2,12 +2,12 @@
   <el-container class="home-container">
     <el-header>
       <el-row :gutter="30" class="header-content">
-        <el-col :span="1">
-          <img src="../assets/logo.png" style="width:100%;height:100%;margin-top:20%;" />
+        <el-col :span="2">
+          <img src="../assets/logo2.png" style="width:100%;max-height:3.6em;margin-top:10%;" />
         </el-col>
-        <el-col :span="3">
+        <!-- <el-col :span="3">
           <h1>汪汪旅途</h1>
-        </el-col>
+        </el-col> -->
         <el-col :span="7.5">
           <el-menu :default-active="activeIndex" class="menu" mode="horizontal" :ellipsis="false" @select="selectMenu"
             style="color:black">

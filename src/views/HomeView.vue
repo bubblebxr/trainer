@@ -3,6 +3,7 @@
     <el-header style="display: flex; align-items: center; justify-content: space-between;">
       <div style="display: flex; align-items: center;">
         <img src="../assets/logo.png" style="width:55px;height:55px;margin-top:3%;" />
+
         <el-menu :default-active="activeIndex" class="menu" mode="horizontal" :ellipsis="false" @select="selectMenu"
           style="color:black;margin-top:2%;">
           <el-menu-item index="1" style="color: black;font-weight: bold;font-size:17px;">火车订票</el-menu-item>
@@ -17,31 +18,34 @@
       </div>
     </el-header>
     <div class="main">
-      <el-main width="80%" style="height:95vh;">
-        <el-container v-if="activeIndex === '1'" class="menu-change">
-          <ticket-component></ticket-component>
-        </el-container>
-        <el-container v-if="activeIndex === '2'" class="menu-change">
-          <hotel-component></hotel-component>
-        </el-container>
-        <el-container v-if="activeIndex === '3'" class="menu-change">
-          <food-component></food-component>
-        </el-container>
-        <el-container v-if="activeIndex === '4'" class="menu-change">
-          <orders-component></orders-component>
-        </el-container>
+      <el-main width="80%" style="height:96vh;">
+        <router-view />
       </el-main>
     </div>
   </el-container>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import ticketComponent from '../components/bookTicket.vue'
-import hotelComponent from '../components/bookHotel.vue'
-import foodComponent from '../components/bookFood.vue'
-import ordersComponent from '../components/myOrders.vue'
+import { ref, onMounted } from 'vue'
+import { useRouter } from "vue-router";
+const router = useRouter();
 const activeIndex = ref('1')
+const selectMenu = (key) => {
+  console.log('当前选中为' + key);
+  activeIndex.value = key;
+  if(activeIndex.value==="1"){
+    router.push('/home/ticket');
+  }else if (activeIndex.value === "2") {
+    router.push('/home/hotel');
+  } else if (activeIndex.value === "3") {
+    router.push('/home/dining');
+  } else if (activeIndex.value === "4") {
+    router.push('/home/orders');
+  }
+}
+onMounted(() => {
+  router.push('/home/ticket');
+});
 </script>
 
 <style>

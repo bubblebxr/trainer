@@ -70,11 +70,11 @@
             </el-row>
         </div>
         <div style="margin-top:0.7%;  width:100%; height:3%;display: block;padding-left:1%;">
-            <el-row>
+            <el-row :gutter="40">
                 <el-col :span="9">
                     <el-text tag="i" style="color:gray;">{{ startStation }}到{{ destinationStation }}共{{ }}个车次</el-text>
                 </el-col>
-                <el-col :span="2" style="margin-top:-0.7%;" :offset="13">
+                <el-col :span="2" style="margin-top:-0.7%;" :offset="12">
                     <el-checkbox v-model="isHide" label="隐藏冲突列车信息" size="large" />
                 </el-col>
             </el-row>
@@ -142,7 +142,7 @@
                 </el-table-column>
                 <el-table-column fixed="right" label="备注" width="125">
                     <template #default="scope">
-                        <el-button type="success" plain @click="submitTicket(scope.row)">预订</el-button>
+                        <el-button type="success" plain @click="submitTicket(scope.$index)">预订</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -155,6 +155,9 @@
 import { ref, onMounted, watch } from 'vue'
 import { getStation, getSearchResult } from '../api/api';
 import { ElMessage } from 'element-plus'
+import { useRouter, useRoute } from "vue-router";
+const router = useRouter();
+const route = useRoute()
 const date = ref('');/**出发时间 */
 const train = ref(true);/**高铁 */
 const normalTrain = ref(true);/**正常火车 */
@@ -172,6 +175,14 @@ const startStationOptions = ref([]);/**所有站点信息 */
 const stations = ref([]);/*车站信息*/
 const searchValid = ref(false);
 const searchResult = ref([]);
+const submitTicket = (lineIndex) => {
+    router.push({
+        path: "/home/ticketDetail",
+        query: {
+            line: JSON.stringify(searchResult.value[lineIndex]),
+        },
+    });
+};
 const handleStart = item => {
     console.log('Selected start station:', item);
 };
@@ -386,11 +397,12 @@ const selectAllSeat = () => {
 
 <style>
 .select {
-    margin-top: 1.4%;
+    margin-top: 1%;
     margin-left: 2%;
     display: flex;
     align-items: center;
     margin-right: 2%;
+    margin-bottom: 1%;
 }
 
 .item {

@@ -3,7 +3,7 @@ package com.example.se_project.entity;
 public class Food {
     private String trainId;
     private String date;
-    private String time;
+    private String type;
     private String image;
     private String name;
     private String price;
@@ -25,12 +25,12 @@ public class Food {
         this.date = date;
     }
 
-    public String getTime() {
-        return time;
+    public String getType() {
+        return type;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getImage() {

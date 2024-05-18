@@ -18,4 +18,21 @@ export const getThisTicket = (userID,status) =>{
     return api.get(`/getTid/${userID}${queryString}`);
 };
 
+export const getPassengers = (id) => {
+    return api.post(`/passengersInfo/${id}`);
+};
 
+export const deletePassengers = (id,identification) => {
+    const queryString = `?identification=${identification}`;
+    return api.delete(`/deletePassengers/${id}${queryString}`);
+};
+
+export const updatePassengers = (id, oldidentification,newname,newidentification,newphone) => {
+    const queryString = `?oldidentification=${oldidentification}&newname=${newname}&newidentification=${newidentification}&newphone=${newphone}`;
+    return api.post(`/updatePassengers/${id}${queryString}`);
+};
+
+export const insertPassengers = (id, name,identification,phone) => {
+    const queryString = `?name=${name}&identification=${identification}&phone=${phone}`;
+    return api.post(`/insertPassengers/${id}${queryString}`);
+};

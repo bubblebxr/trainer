@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.se_project.mapper.IHotelMapper">
+    <select id="searchHotel">
+        SELECT * FROM hotels
+        WHERE id=#{id}
+        ORDER BY
+            CASE
+                WHEN #{sort_type} = 'price' THEN CAST(price AS DECIMAL)
+                ELSE null
+                END ASC,
+            CASE
+                WHEN #{sort_type} = 'grade' THEN CAST(grade AS DECIMAL)
+                ELSE null
+                END DESC
+    </select>
+    <select id="searchComment">
+        select * from comments
+        where hotel_id=#{id}
+    </select>
+    <select id="searchRoom">
+        select * from rooms
+        where hotel_id=#{id}
+    </select>
+    <select id="searchAvailableHotel" resultType="java.util.Map">
+        SELECT hotel_id
+        FROM (
+                 SELECT
+                     hotel_id,
+                     MIN(num) AS min_available
+                 FROM rooms
+                 WHERE city = #{city}
+                   AND date BETWEEN #{arrive_date} AND #{ldeparture_date}
+                 GROUP BY hotel_id, name
+             ) AS available_rooms
+        GROUP BY hotel_id
+        HAVING MAX(min_available) > 0;
+    </select>
+    <update id="updatemin">
+        update hotels
+        set miniprice=#{miniprice}
+        where id=#{id}
+    </update>
+</mapper>

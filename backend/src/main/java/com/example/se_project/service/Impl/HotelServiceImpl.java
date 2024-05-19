@@ -16,8 +16,8 @@ public class HotelServiceImpl implements IHotelService {
     IHotelMapper hotelMapper;
 
     @Override
-    public List<Integer> searchAvailableHotelId(String city, String arrive_date, String Ideparture_date) {
-        return hotelMapper.searchAvailableHotel(city, arrive_date, Ideparture_date);
+    public List<Integer> searchAvailableHotelId(String city, String arrive_date, String ldeparture_date) {
+        return hotelMapper.searchAvailableHotel(city, arrive_date, ldeparture_date);
     }
 
     @Override

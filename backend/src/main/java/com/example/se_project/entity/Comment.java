@@ -1,10 +1,14 @@
 package com.example.se_project.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Comment {
+    @JsonIgnore
     private Integer hotel_id;
     private String person;
     private String time;
     private String content;
+    @JsonIgnore
     private Double rank_score;
 
     public Integer getHotel_id() {

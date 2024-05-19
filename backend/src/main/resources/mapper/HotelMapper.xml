@@ -3,7 +3,11 @@
 <mapper namespace="com.example.se_project.mapper.IHotelMapper">
     <select id="searchHotel">
         SELECT * FROM hotels
+<<<<<<< Updated upstream
         WHERE hid=#{id}
+=======
+        WHERE id=#{id}
+>>>>>>> Stashed changes
     </select>
     <select id="searchComment">
         select * from comments
@@ -12,20 +16,21 @@
     <select id="searchRoom">
         select * from rooms
         where hotel_id=#{id}
+        and date >= #{arrive_date}
+        and date &lt; #{ldeparture_date}
     </select>
-    <select id="searchAvailableHotel" resultType="java.util.Map">
+    <select id="searchAvailableHotel" resultType="java.lang.Integer">
         SELECT hotel_id
-        FROM (
-                 SELECT
-                     hotel_id,
-                     MIN(num) AS min_available
-                 FROM rooms
-                 WHERE city = #{city}
-                   AND date BETWEEN #{arrive_date} AND #{ldeparture_date}
-                 GROUP BY hotel_id, name
-             ) AS available_rooms
+        FROM (SELECT hotel_id,
+                     date,
+                     MAX(num) AS max_available
+              FROM rooms
+              WHERE city = #{city}
+                AND date >= #{arrive_date}
+                AND date &lt; #{ldeparture_date}
+              GROUP BY hotel_id, date) AS available_rooms_per_day
         GROUP BY hotel_id
-        HAVING MAX(min_available) > 0;
+        HAVING MIN(max_available) > 0;
     </select>
     <update id="updatemin">
         update hotels
@@ -36,4 +41,8 @@
     <select id="getPlaces">
         select distinct city from hotels
     </select>
+    <update id="updateRoomNum">
+
+    </update>
+
 </mapper>

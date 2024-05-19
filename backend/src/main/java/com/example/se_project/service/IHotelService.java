@@ -11,9 +11,13 @@ import java.util.Map;
 @Component
 public interface IHotelService {
     public List<Integer> searchAvailableHotelId(String city, String arrive_date, String Ideparture_date);
-public Hotel searchHotel(Integer id);
-public List<Room> searchRoom(Integer id);
+
+    public Hotel searchHotel(Integer id);
+
+    public List<Room> searchRoom(Integer id);
+
     public List<Comment> searchComment(Integer id);
+
     void updateMin(Integer id, String miniprice);
 
     List<String> getPlaces();

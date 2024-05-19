@@ -1,12 +1,28 @@
 package com.example.se_project.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonAppend;
+import org.springframework.stereotype.Component;
+
+@Component
 public class Room {
+    @JsonIgnore
     private Integer hotel_id;
     private String name;
     private String photo;
     private String price;
     private Integer num;
+    @JsonIgnore
     private String city;
+    private String date;
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
 
     public Integer getHotel_id() {
         return hotel_id;

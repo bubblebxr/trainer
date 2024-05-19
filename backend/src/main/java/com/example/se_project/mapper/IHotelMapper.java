@@ -17,7 +17,7 @@ public interface IHotelMapper {
 
     // 查询订购期间有可用房型的酒店编号
     List<Integer> searchAvailableHotel(String city, String arrive_date, String Ideparture_date);
-    void updatemin(Integer id,String price);
+    void updatemin(Integer id,String miniprice);
 
     List<String> getPlaces();
 }

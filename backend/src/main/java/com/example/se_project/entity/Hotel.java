@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class Hotel implements Comparable<Hotel>{
+public class Hotel{
     private Integer id;
     @TableField(value="city")
     private String arrive_station;
@@ -23,7 +23,7 @@ public class Hotel implements Comparable<Hotel>{
     private String content;
     private List<Comment> comments;
     private List<Room> rooms;
-    private Map<String, Integer> date_num;
+    //private Map<String, Integer> date_num;
 
     public String getArrive_station() {
         return arrive_station;
@@ -121,17 +121,12 @@ public class Hotel implements Comparable<Hotel>{
         this.rooms = rooms;
     }
 
-    public Map<String, Integer> getDate_num() {
-        return date_num;
-    }
+//    public Map<String, Integer> getDate_num() {
+//        return date_num;
+//    }
 
-    public void setDate_num(Map<String, Integer> date_num) {
-        this.date_num = date_num;
-    }
+//    public void setDate_num(Map<String, Integer> date_num) {
+//        this.date_num = date_num;
+//    }
 
-
-    @Override
-    public int compareTo(Hotel o) {
-        return 0;
-    }
 }

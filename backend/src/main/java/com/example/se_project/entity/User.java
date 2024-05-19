@@ -18,6 +18,7 @@ public class User {
 
     private Integer isLogin;
     private List<Order> orders;
+    // 乘车人
     private List<Passenger> passengers;
 
     public Integer getIsLogin() {

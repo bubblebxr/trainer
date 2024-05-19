@@ -15,4 +15,6 @@ public Hotel searchHotel(Integer id);
 public List<Room> searchRoom(Integer id);
     public List<Comment> searchComment(Integer id);
     void updateMin(Integer id, String miniprice);
+
+    List<String> getPlaces();
 }

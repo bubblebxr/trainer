@@ -1,6 +1,5 @@
 package com.example.se_project.service.Impl;
 
-import com.example.se_project.controller.HotelController;
 import com.example.se_project.entity.Comment;
 import com.example.se_project.entity.Hotel;
 import com.example.se_project.entity.Room;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Service("hotelService")
 public class HotelServiceImpl implements IHotelService {
@@ -40,5 +38,10 @@ public class HotelServiceImpl implements IHotelService {
     @Override
     public void updateMin(Integer id, String miniprice) {
         hotelMapper.updatemin(id, miniprice);
+    }
+
+    @Override
+    public List<String> getPlaces() {
+        return hotelMapper.getPlaces();
     }
 }

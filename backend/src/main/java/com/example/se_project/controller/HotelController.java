@@ -70,4 +70,16 @@ public class HotelController {
         }};
     }
 
+    @GetMapping("getPlaces")
+    public Map<String, Object> getPlaces() {
+        List<Object> places = new ArrayList<>();
+        hotelService.getPlaces().forEach(e->{
+            places.add(new HashMap<>(){{
+                put("place", e);
+            }});
+        });
+        return new HashMap<>(){{
+            put("places", places);
+        }};
+    }
 }

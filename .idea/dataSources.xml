@@ -10,6 +10,9 @@
         <property name="com.intellij.clouds.kubernetes.db.enabled" value="false" />
       </jdbc-additional-properties>
       <working-dir>$ProjectFileDir$</working-dir>
+      <driver-properties>
+        <property name="allowPublicKeyRetrieval" value="TRUE" />
+      </driver-properties>
     </data-source>
     <data-source source="LOCAL" name="tencentdb" uuid="092a3a4c-01e4-4ef8-8cf3-8045751707cb">
       <driver-ref>mysql.8</driver-ref>

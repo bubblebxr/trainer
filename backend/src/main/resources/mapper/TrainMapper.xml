@@ -10,84 +10,84 @@
             select stationName from stations where (stationName = #{arrive_station} or cityName = #{arrive_station})
         )
         and date =#{date}
-<!--        <choose>-->
-<!--            <when test="is_GD == 2">-->
-<!--                AND (type = 0 OR type = 1)-->
-<!--            </when>-->
-<!--            <when test="is_GD}== 1">-->
-<!--                AND type = 1-->
-<!--            </when>-->
-<!--            <when test="is_GD == 0">-->
-<!--                AND type = 0-->
-<!--            </when>-->
-<!--        </choose>-->
-<!--        AND (-->
-<!--        <choose>-->
-<!--            <when test="seat_type[0] == true">-->
-<!--                businessSeatSurplus &gt; 0-->
-<!--            </when>-->
-<!--            <otherwise>-->
-<!--                businessSeatSurplus &lt; 0-->
-<!--            </otherwise>-->
-<!--        </choose>-->
-<!--        OR-->
-<!--        <choose>-->
-<!--            <when test="seat_type[1] == true">-->
-<!--                firstClassSeatSurplus &gt; 0-->
-<!--            </when>-->
-<!--            <otherwise>-->
-<!--                firstClassSeatSurplus &lt; 0-->
-<!--            </otherwise>-->
-<!--        </choose>-->
-<!--        OR-->
-<!--        <choose>-->
-<!--            <when test="seat_type[2] == true">-->
-<!--                secondClassSeatSurplus &gt; 0-->
-<!--            </when>-->
-<!--            <otherwise>-->
-<!--                secondClassSeatSurplus &lt; 0-->
-<!--            </otherwise>-->
-<!--        </choose>-->
-<!--        OR-->
-<!--        <choose>-->
-<!--            <when test="seat_type[3] == true">-->
-<!--                softSleeperSurplus &gt; 0-->
-<!--            </when>-->
-<!--            <otherwise>-->
-<!--                softSleeperSurplus &lt; 0-->
-<!--            </otherwise>-->
-<!--        </choose>-->
-<!--        OR-->
-<!--        <choose>-->
-<!--            <when test="seat_type[4] == true">-->
-<!--                hardSleeperSurplus &gt; 0-->
-<!--            </when>-->
-<!--            <otherwise>-->
-<!--                hardSleeperSurplus &lt; 0-->
-<!--            </otherwise>-->
-<!--        </choose>-->
-<!--        OR-->
-<!--        <choose>-->
-<!--            <when test="seat_type[5] == true">-->
-<!--                hardSeatSurplus &gt; 0-->
-<!--            </when>-->
-<!--            <otherwise>-->
-<!--                hardSeatSurplus &lt; 0-->
-<!--            </otherwise>-->
-<!--        </choose>-->
-<!--        )-->
-<!--        ORDER BY-->
-<!--        <choose>-->
-<!--            <when test="sort_type == 2">-->
-<!--                start_time DESC-->
-<!--            </when>-->
-<!--            <when test="sort_type == 3">-->
-<!--                duration ASC-->
-<!--            </when>-->
-<!--            <when test="sort_type == 1">-->
-<!--                start_time ASC-->
-<!--            </when>-->
-<!--        </choose>-->
+        <choose>
+            <when test="is_GD == 2">
+                AND (type = 0 OR type = 1)
+            </when>
+            <when test="is_GD}== 1">
+                AND type = 1
+            </when>
+            <when test="is_GD == 0">
+                AND type = 0
+            </when>
+        </choose>
+        AND (
+        <choose>
+            <when test="seat_type[0] == true">
+                businessSeatSurplus &gt; 0
+            </when>
+            <otherwise>
+                businessSeatSurplus &lt; 0
+            </otherwise>
+        </choose>
+        OR
+        <choose>
+            <when test="seat_type[1] == true">
+                firstClassSeatSurplus &gt; 0
+            </when>
+            <otherwise>
+                firstClassSeatSurplus &lt; 0
+            </otherwise>
+        </choose>
+        OR
+        <choose>
+            <when test="seat_type[2] == true">
+                secondClassSeatSurplus &gt; 0
+            </when>
+            <otherwise>
+                secondClassSeatSurplus &lt; 0
+            </otherwise>
+        </choose>
+        OR
+        <choose>
+            <when test="seat_type[3] == true">
+                softSleeperSurplus &gt; 0
+            </when>
+            <otherwise>
+                softSleeperSurplus &lt; 0
+            </otherwise>
+        </choose>
+        OR
+        <choose>
+            <when test="seat_type[4] == true">
+                hardSleeperSurplus &gt; 0
+            </when>
+            <otherwise>
+                hardSleeperSurplus &lt; 0
+            </otherwise>
+        </choose>
+        OR
+        <choose>
+            <when test="seat_type[5] == true">
+                hardSeatSurplus &gt; 0
+            </when>
+            <otherwise>
+                hardSeatSurplus &lt; 0
+            </otherwise>
+        </choose>
+        )
+        ORDER BY
+        <choose>
+            <when test="sort_type == 2">
+                start_time DESC
+            </when>
+            <when test="sort_type == 3">
+                duration ASC
+            </when>
+            <when test="sort_type == 1">
+                start_time ASC
+            </when>
+        </choose>
     </select>
     <select id="searchStopover" resultType="com.example.se_project.entity.Stopover">
         select * from stopovers

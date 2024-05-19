@@ -41,4 +41,8 @@
         set miniprice=#{miniprice}
         where id=#{id}
     </update>
+
+    <select id="getPlaces">
+        select distinct city from hotels
+    </select>
 </mapper>

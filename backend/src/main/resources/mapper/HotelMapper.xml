@@ -4,15 +4,6 @@
     <select id="searchHotel">
         SELECT * FROM hotels
         WHERE id=#{id}
-        ORDER BY
-            CASE
-                WHEN #{sort_type} = 'price' THEN CAST(price AS DECIMAL)
-                ELSE null
-                END ASC,
-            CASE
-                WHEN #{sort_type} = 'grade' THEN CAST(grade AS DECIMAL)
-                ELSE null
-                END DESC
     </select>
     <select id="searchComment">
         select * from comments

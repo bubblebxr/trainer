@@ -34,18 +34,26 @@
             :shortcuts="shortcuts"
             :size="20"
           />
-          <el-radio-group
-            v-model="time"
-            style="
-              margin-right: 10px;
-              margin-left: 10px;
-              flex: 0.3;
-              justify-content: center;
-            "
+          <el-popover
+            placement="top-start"
+            width="13em"
+            trigger="hover"
+            content="午餐点为12:00--14:00  晚餐点为17:00--19:00"
           >
-            <el-radio-button label="午餐" value="lunch" />
-            <el-radio-button label="晚餐" value="dinner" />
-          </el-radio-group>
+            <template #reference>
+              <el-radio-group
+                v-model="time"
+                style="
+                  margin-right: 10px;
+                  margin-left: 10px;
+                  flex: 0.3;
+                  justify-content: center;
+                "
+              >
+                <el-radio-button label="午餐" value="lunch" />
+                <el-radio-button label="晚餐" value="dinner" /> </el-radio-group
+            ></template>
+          </el-popover>
           <el-icon style="flex: 0.1">
             <Search
               @click="search"
@@ -98,24 +106,23 @@
     </div>
   </div>
   <div style="position: fixed; bottom: 2%; right: 1%">
-    <foodCart v-model="order_foods" @getPaid="submitBill"/>
+    <foodCart v-model="order_foods" @getPaid="submitBill" />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, watch } from "vue";
 import foodCart from "./foodCart.vue";
-import { getFoods, getThisTicket } from "@/api/api";
+import { getFoods, getThisTicket, postFoodBill } from "@/api/api";
 import { ElMessage } from "element-plus";
-const userID = 0; //当前用户ID
+const userID = "00000"; //当前用户ID
 const tid = ref("");
-const date = ref("");
+const date = ref(""); //TODO date自动填充逻辑！
 const time = ref("lunch");
 const foodList = ref([]);
 
 const order_foods = ref([]); //已点的食物
 const Paidticket = ref([]);
-
 const search = () => {
   if (tid.value === "" || time.value === "" || date.value === "") {
     ElMessage({
@@ -125,16 +132,21 @@ const search = () => {
     });
   } else {
     fetchFoods();
-    ElMessage({
-      message: "查询成功",
-      type: "success",
-    });
   }
 };
 const fetchFoods = async () => {
   try {
     const response = await getFoods(tid, date, time);
-    foodList.value = response.data.result;
+    if (response.data.haveTicket) {
+      foodList.value = response.data.result;
+      ElMessage({
+        message: "查询成功",
+        type: "success",
+      });
+    } else {
+      ElMessage.error("查询失败T^T" + response.data.info);
+      foodList.value = [];
+    }
   } catch (error) {
     console.error("获取食物数组失败:", error);
   }
@@ -153,13 +165,29 @@ const fetchTids = async () => {
     console.error("获取车站数组失败：", error);
   }
 };
-const submitBill=()=>{
-  //todo 向后端提交表单
-
-  ElMessage({
-      message: "下单成功",
-      type: "success",
-    });
+const submitBill = async (sum_price) => {
+  try {
+    const responce = await postFoodBill(
+      order_foods.value,
+      userID,
+      tid,
+      date,
+      time,
+      sum_price
+    );
+    var info = responce.data.info;
+    if (responce.data.result) {
+      ElMessage({
+        message: "下单成功",
+        type: "success",
+      });
+    } else {
+      ElMessage.error("下单失败，" + info);
+    }
+  } catch (error) {
+    console.error("提交食物表单失败", error);
+  }
+  //TODO 通知消息
 };
 
 watch(
@@ -190,5 +218,6 @@ onMounted(() => {
   justify-content: center;
   position: absolute;
   z-index: 0;
+  background-color: white;
 }
 </style>

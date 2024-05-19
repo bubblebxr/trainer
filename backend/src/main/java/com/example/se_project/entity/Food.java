@@ -5,6 +5,16 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Food {
+    private Integer fid;
+
+    public Integer getFid() {
+        return fid;
+    }
+
+    public void setFid(Integer fid) {
+        this.fid = fid;
+    }
+
     @JsonIgnore
     private String trainId;
     @JsonIgnore
@@ -13,7 +23,7 @@ public class Food {
     private String type;
     private String photo;
     private String name;
-    private String price;
+    private Double price;
     private Integer num;
 
     public String getTrainId() {
@@ -56,11 +66,11 @@ public class Food {
         this.name = name;
     }
 
-    public String getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

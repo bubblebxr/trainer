@@ -3,7 +3,7 @@
 <mapper namespace="com.example.se_project.mapper.IHotelMapper">
     <select id="searchHotel">
         SELECT * FROM hotels
-        WHERE id=#{id}
+        WHERE hid=#{id}
     </select>
     <select id="searchComment">
         select * from comments
@@ -30,7 +30,7 @@
     <update id="updatemin">
         update hotels
         set miniprice=#{miniprice}
-        where id=#{id}
+        where hid=#{id}
     </update>
 
     <select id="getPlaces">

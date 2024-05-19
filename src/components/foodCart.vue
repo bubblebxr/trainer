@@ -126,7 +126,7 @@
             <el-button type="primary" @click="changePay"
               >换一种支付方式</el-button
             >
-            <el-button type="success" @click="$emit('getPaid');resetValue();clear()"
+            <el-button type="success" @click="$emit('getPaid',sum_price);resetValue();clear();"
               >已完成支付</el-button
             >
           </div>

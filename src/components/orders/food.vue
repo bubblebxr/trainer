@@ -21,8 +21,8 @@
               <el-col :span="6">
                 <div style="font-size: 1.1em; color: #73767a">
                   {{ item.date }} {{ item.time }}
-                </div></el-col
-              >
+                </div>
+              </el-col>
               <el-col :span="10">
                 <div style="font-size: 1.1em; color: #c8c9cc">
                   下单时间：{{ item.order_time }}
@@ -30,13 +30,11 @@
               </el-col>
               <el-col :span="4">
                 <div>
-                  <span style="font-size: 1.1em; color: #73767a"
-                    >订单状态：</span
-                  >
-                  <span style="font-size: 1.2em; color: #79bbff"
-                    >{{ item.status }}
+                  <span style="font-size: 1.1em; color: #73767a">订单状态：</span>
+                  <span style="font-size: 1.2em; color: #79bbff" :style="{ color: getStatusColor(item.status) }">{{
+                    item.status }}
                   </span>
-                  
+
                 </div>
               </el-col>
             </el-row>
@@ -47,64 +45,51 @@
             <el-main style="padding:0">
               <el-scrollbar>
                 <div class="scrollbar-flex-content">
-                  <p
-                    v-for="(food, index2) in item.foods"
-                    :key="index2"
-                    class="scrollbar-demo-item"
-                  >
-                    <div>
-                      <img
-                        loading="lazy"
-                        referrerpolicy="no-referrer"
-                        object-fit="contain"
-                        :src="food.photo"
-                        style="
+                  <p v-for="(food, index2) in item.foods" :key="index2" class="scrollbar-demo-item">
+                  <div>
+                    <img loading="lazy" referrerpolicy="no-referrer" object-fit="contain" :src="food.photo" style="
                           width: 8em;
                           height: 8em;
                           display: block;
                           margin: auto;
-                        "
-                      />
-                      <div>
-                        <span>{{ food.food_name }}</span>
-                        <span style="font-weight: bold; color: #ffa31a">
-                          ×{{ food.count }}
-                        </span>
-                      </div>
+                        " />
+                    <div>
+                      <span>{{ food.food_name }}</span>
+                      <span style="font-weight: bold; color: #ffa31a">
+                        ×{{ food.count }}
+                      </span>
                     </div>
+                  </div>
                   </p>
                 </div>
               </el-scrollbar>
             </el-main>
-            <el-aside
-              style="
+            <el-aside style="
                 width: 45%;
                 padding-left: 2%;
                 text-align: left;
                 align-content: center;
-              "
-              >
+              ">
               <span style="font-size: 1.2em; color: #c8c9cc;margin-right:2%;">总价</span>
               <span style="font-size: 2.5em; color: #ffa31a">￥{{ item.sum_price }}</span>
-              <div  class="mb-4" style="text-align: right">
-              <span v-if="item.status === '已支付'" style="margin-right: 1%">
-                <el-popconfirm title="确定要取消这个订单吗？" @confirm="cancelOrder(item.oid)">
-                  <template #reference>
-                    <el-button type="info" text bg >取消订单</el-button>
-                  </template>
-                </el-popconfirm>
-              </span>       
+              <div class="mb-4" style="text-align: right">
+                <span v-if="item.status === '已支付'" style="margin-right: 1%">
+                  <el-popconfirm title="确定要取消这个订单吗？" @confirm="cancelOrder(item.oid)">
+                    <template #reference>
+                      <el-button type="info" text bg>取消订单</el-button>
+                    </template>
+                  </el-popconfirm>
+                </span>
 
-              <span>
-                <el-popconfirm title="确定要删除这个订单吗？删除后将不可恢复。" @confirm="deleteOrder(item.oid)">
-                  <template #reference>
-                    <el-button type="info" text bg >删除订单</el-button>
-                  </template>
-                </el-popconfirm>
-              </span>
-               </div>
-              </el-aside
-            >
+                <span>
+                  <el-popconfirm title="确定要删除这个订单吗？删除后将不可恢复。" @confirm="deleteOrder(item.oid)">
+                    <template #reference>
+                      <el-button type="info" text bg>删除订单</el-button>
+                    </template>
+                  </el-popconfirm>
+                </span>
+              </div>
+            </el-aside>
           </el-container>
         </tempalte>
       </el-collapse-item>
@@ -120,6 +105,15 @@ const activeNames = ref(["1"]);
 const foodOrders = ref([]);
 const status = ref("all");
 const userID = "0000";
+const getStatusColor = (status) => {
+  if (status === '已完成') {
+    return '#60B2FF';
+  } else if (status === '已支付') {
+    return '#24D36F';
+  } else if (status === '已取消') {
+    return '#FC604F';
+  }
+};
 const handleChange = (val) => {
   console.log("展开了", val);
 };

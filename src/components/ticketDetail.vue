@@ -151,8 +151,8 @@
 <script setup>
 import { useRouter } from "vue-router";
 import { ref, onMounted, watch } from 'vue';
-import { getPassengers } from '../api/api';
-import { ElNotification } from 'element-plus';
+import { getPassengers, postTicketBill } from '../api/api';
+import { ElNotification, ElMessage } from 'element-plus';
 const router = useRouter();
 const line = ref(null);
 const start_station = ref('');
@@ -179,15 +179,38 @@ const value = ref([]);//多选框选中的
 const total = ref(0);
 const billVisible = ref(false);
 const payPicture = ref(require("../assets/vxPay.jpg"));
-const ordersCommit=()=>{
+const ordersCommit=async()=>{
     billVisible.value=false;
     var info=[];
-    const regex = /(.+?)\uFFE5/;
+    const regex = /^(.*?)（/;
     for (var i = 0; i < passengersTable.value.length;i++){
         var temp = value.value[i].match(regex)[1];
         info.push({ name: passengersTable.value[i]['name'], identification: passengersTable.value[i]['identification'],seat_type:temp });
     }
-    
+    try{
+        const responce = await postTicketBill(
+            info,
+            id.value,
+            tid.value,
+            start_date.value,
+            total.value,
+        );
+        var result = responce.data.result;
+        if(result){
+            ElMessage({
+                message: "下单成功",
+                type: "success",
+            });
+            //todo:页面跳转
+        }else{
+            ElMessage({
+                message: "下单成功",
+                type: "error",
+            });
+        }
+    }catch(error){
+        console.log('提交火车票订单失败',error);
+    }
 }
 const changePay = () => {
     if (payPicture.value === require("../assets/vxPay.jpg"))

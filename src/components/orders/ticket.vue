@@ -1,7 +1,166 @@
 <template>
-    <h1>火车票界面</h1>
+    <el-radio-group v-model="status">
+        <el-radio-button label="全部订单" value="all"></el-radio-button>
+        <el-radio-button label="已支付" value="paid"></el-radio-button>
+        <el-radio-button label="已取消" value="cancle"></el-radio-button>
+        <el-radio-button label="已完成" value="done"></el-radio-button>
+    </el-radio-group>
+    <div v-for="(item, index) in ticketOrders" :key="index">
+        <el-card style="width: 100%;border-radius: 25px;margin-top:1%;margin-bottom:1%;">
+            <template #header>
+                <el-row>
+                    <el-col :span="7">
+                        <el-text tag="b" size="large">订单号: {{ item.oid }}</el-text>
+                    </el-col>
+                    <el-col :span="7">
+                        <el-text tag="b" size="large">下单时间: {{ item.order_time }}</el-text>
+                    </el-col>
+                    <el-col :span="7">
+                        <el-text tag="b" size="large">出发日期: {{ item.date }}</el-text>
+                    </el-col>
+                    <el-col :span="3">
+                        <el-text tag="b" size="large">订单状态: <span :style="{ color: getStatusColor(item.status) }">{{
+                                item.status }}</span></el-text>
+                    </el-col>
+                </el-row>
+            </template>
+            <div style="display:block;">
+                <el-text size="large" style="margin-bottom:1%;">车次信息</el-text>
+                <el-row>
+                    <el-col :span="6" style="display: flex;flex-direction: column;justify-content: center;">
+                        <el-text tag="b" style="font-size: 25px;">{{ item.start_time }}</el-text>
+                        <el-text size="large" style="width">{{ item.start_station }}</el-text>
+                    </el-col>
+                    <el-col :span="6" style="display: flex;flex-direction: column;justify-content: center;">
+                        <el-divider content-position="center"><el-text tag="b" size="large"
+                                style="font-size:20px;padding:5px 35px;border:1.5px solid #DDDCDC;border-radius: 10px;">{{
+                                item.tid }}</el-text></el-divider>
+                    </el-col>
+                    <el-col :span="6"
+                        style="display: flex;flex-direction: column;justify-content: center;border-right:1.5px solid #DDDCDC;">
+                        <el-text tag="b" style="font-size: 25px;">{{ item.arrive_time }}</el-text>
+                        <el-text size="large" style="width">{{ item.arrive_station }}</el-text>
+                    </el-col>
+                    <el-col :span="6" style="display: flex;flex-direction: column;justify-content: center;">
+                        <el-text tag="b" style="font-size: 25px;">{{ item.time }}</el-text>
+                    </el-col>
+                </el-row>
+            </div>
+            <el-divider border-style="dashed" />
+            <div>
+                <el-text size="large">旅客信息</el-text>
+                <el-scrollbar>
+                    <div class="scrollbar-flex-content">
+                        <el-card shadow="never" v-for="(p, i) in item.person" :key="i" class="scrollbar-demo-item">
+                            <div
+                                style="display:flex; flex-direction: column; align-items: center; justify-content: center;">
+                                <el-text tag="b">{{ p.name }}</el-text>
+                                <el-tag type="primary" style="margin-top:5%;margin-bottom:10%;">中国居民身份证</el-tag>
+                                <el-text style="margin-top:5%;margin-bottom:30%;">{{ p.seat_type }}</el-text>
+                                <el-text style="flex: 1;">{{ hideMiddle(p.identification) }}</el-text>
+                            </div>
+                        </el-card>
+                    </div>
+                </el-scrollbar>
+            </div>
+            <template #footer>
+                <el-row>
+                    <el-col :span="4">
+                        <el-text class="mx-1" size="large">总张数: {{ item.person.length }}</el-text>
+                    </el-col>
+                    <el-col :span="3">
+                        <el-text class="mx-1" size="large">总金额: <span style="color:#ffa31a;font-weight: bold;">￥{{
+    item.sum_price
+                                }}元</span></el-text>
+                    </el-col>
+                    <el-col :span="2" v-if="item.status === '已支付'" :offset="15">
+                        <el-popconfirm title="确定要取消这个订单吗？" @confirm="cancelOrders(item.oid)">
+                            <template #reference>
+                                <el-button size="large" type="warning" plain style="margin-top:-1%;">取消订单</el-button>
+                            </template>
+                        </el-popconfirm>
+                    </el-col>
+                </el-row>
+            </template>
+        </el-card>
+    </div>
 </template>
 <script setup>
-
+import { onMounted, ref, watch } from "vue";
+import { getTicketOrders, cancelTicketOrder } from "../../api/api.js";
+import { ElMessage } from "element-plus";
+const status = ref("all");
+const userID = "0000";
+const ticketOrders = ref([]);
+const cancelOrders=async(oid)=>{
+    try {
+        const responce = await cancelTicketOrder(userID, oid);
+        if (responce.data.result) {
+            ElMessage({
+                message: '取消订单成功，退款将原路返回。',
+                type: "success",
+            });
+            //TODO 通知消息弹窗
+        }
+        else {
+            ElMessage.error("取消订单失败");
+        }
+    } catch (error) {
+        console.error("取消订单失败", error);
+        ElMessage.error("取消订单失败");
+    }
+    getOrders();
+}
+const getStatusColor = (status) => {
+    if (status === '已完成') {
+        return '#60B2FF';
+    } else if (status === '已支付') {
+        return '#24D36F';
+    } else if (status === '已取消') {
+        return '#FC604F';
+    }
+};
+const hideMiddle = (val) => {
+    return `${val.substring(0, 3)}************${val.substring(val.length - 3)}`
+}
+const getOrders = async () => {
+    try {
+        const response = await getTicketOrders(userID, status.value);
+        console.log(status.value);
+        ticketOrders.value = response.data.result;
+    } catch (error) {
+        console.error("获取火车票订单数组失败:", error);
+    }
+};
+watch(status, (newValue) => {
+    console.log("状态切换为", newValue);
+    getOrders();
+});
+onMounted(() => {
+    getOrders();
+});
 </script>
-<style></style>
+<style>
+.el-card .el-card__header {
+    background-color: #f0f8ff;
+}
+
+.scrollbar-flex-content {
+    display: flex;
+    margin-top: 1%;
+    justify-content: center;
+}
+
+.scrollbar-demo-item {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 300px;
+    height: 50px;
+    margin: 15px;
+    text-align: center;
+    border-radius: 4px;
+    background-color: #f0f8ff !important;
+}
+</style>

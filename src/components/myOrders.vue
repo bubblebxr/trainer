@@ -1,16 +1,16 @@
 <template>
     <el-container width="100%" style="display:flex;">
-        <el-aside width="15%" >
+        <el-aside width="15%">
             <a-menu id="dddddd" v-model:openKeys="openKeys" v-model:selectedKeys="selectedKeys"
                 style="width:100%;height:100%;" mode="inline" :items="items" @click="handleClick"></a-menu>
         </el-aside>
-        <el-main width="85%" style="height:88vh;margin-top:0.3%; ">
+        <el-main width="85%" style="height:97vh;margin-top:-1%; ">
             <router-view />
         </el-main>
     </el-container>
 </template>
 <script setup>
-import { reactive, ref, watch, h,onMounted } from 'vue';
+import { reactive, ref, watch, h, onMounted } from 'vue';
 import { MailOutlined, SettingOutlined, AppstoreOutlined, CalendarOutlined } from '@ant-design/icons-vue';
 import { useRouter } from "vue-router";
 const router = useRouter();
@@ -37,15 +37,15 @@ const items = reactive([
 ]);
 const handleClick = e => {
     console.log('click', e);
-    if(e.key==='1'){
+    if (e.key === '1') {
         router.push('/home/orders/personalCenter');
-    }else if(e.key==='2'){
+    } else if (e.key === '2') {
         router.push('/home/orders/passengersInfo');
     } else if (e.key === '3') {
         router.push('/home/orders/ticketOrders');
     } else if (e.key === '4') {
         router.push('/home/orders/hotelOrders');
-    }else if (e.key === '5') {
+    } else if (e.key === '5') {
         router.push('/home/orders/foodOrders');
     } else if (e.key === '6') {
         router.push('/home/orders/myTicket');

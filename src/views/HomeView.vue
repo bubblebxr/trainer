@@ -1,29 +1,23 @@
 <template>
   <el-container class="home-container">
-    <el-header>
-      <el-row :gutter="30" class="header-content">
-        <el-col :span="1">
-          <img src="../assets/logo.png" style="width:100%;height:100%;margin-top:20%;"/>
-        </el-col>
-        <el-col :span="3">
-          <h1>汪汪旅途</h1>
-        </el-col>
-        <el-col :span="7.5">
-          <el-menu :default-active="activeIndex" class="menu" mode="horizontal" :ellipsis="false" @select="selectMenu"
-            style="color:black">
-            <el-menu-item index="1" style="color: black;font-weight: bold;font-size:17px;">火车订票</el-menu-item>
-            <el-menu-item index="2" style="color: black;font-weight: bold;font-size:17px;">酒店预订</el-menu-item>
-            <el-menu-item index="3" style="color: black;font-weight: bold;font-size:17px;">火车订餐</el-menu-item>
-            <el-menu-item index="4" style="color: black;font-weight: bold;font-size:17px;">我的订单</el-menu-item>
-          </el-menu>
-        </el-col>
-        <el-col :span="2" :offset="10">
-          <el-button type="primary" round plain size="large">登录/注册</el-button>
-        </el-col>
-      </el-row>
+    <el-header style="display: flex; align-items: center; justify-content: space-between;">
+      <div style="display: flex; align-items: center;">
+        <img src="../assets/logo.png" style="width:55px;height:55px;margin-top:3%;" />
+        <el-menu :default-active="activeIndex" class="menu" mode="horizontal" :ellipsis="false" @select="selectMenu"
+          style="color:black;margin-top:2%;">
+          <el-menu-item index="1" style="color: black;font-weight: bold;font-size:17px;">火车订票</el-menu-item>
+          <el-menu-item index="2" style="color: black;font-weight: bold;font-size:17px;">酒店预订</el-menu-item>
+          <el-menu-item index="3" style="color: black;font-weight: bold;font-size:17px;">火车订餐</el-menu-item>
+          <el-menu-item index="4" style="color: black;font-weight: bold;font-size:17px;">我的订单</el-menu-item>
+        </el-menu>
+      </div>
+      <div style="display: flex; align-items: center;">
+        <el-button type="primary" round plain size="large" style="margin-top:12%;margin-right:3%;">登录/注册</el-button>
+        <img src="../assets/message.png" style="width: 55px; height: 55px; margin-top: 8%;" />
+      </div>
     </el-header>
     <div class="main">
-      <el-main width="80%">
+      <el-main width="80%" style="height:95vh;">
         <el-container v-if="activeIndex === '1'" class="menu-change">
           <ticket-component></ticket-component>
         </el-container>
@@ -37,11 +31,6 @@
           <orders-component></orders-component>
         </el-container>
       </el-main>
-      <el-aside width="18%">
-        <v-card hover style="background-color: #f8fafb;border-radius: 25px;width:100%;height:95%;margin-top:6%;">
-          <h1>消息通知（占地）</h1>
-        </v-card>
-      </el-aside>
     </div>
   </el-container>
 </template>
@@ -54,8 +43,8 @@ import foodComponent from '../components/bookFood.vue'
 import ordersComponent from '../components/myOrders.vue'
 const activeIndex = ref('1')
 const selectMenu = (key) => {
-  console.log('当前选中为' + key)
-  activeIndex.value = key
+  console.log('当前选中为' + key);
+  activeIndex.value = key;
 }
 </script>
 
@@ -82,9 +71,6 @@ const selectMenu = (key) => {
   align-items: stretch;
 }
 
-.el-aside {
-  margin-right: 1%;
-}
 
 .header-content {
   display: flex;
@@ -100,7 +86,8 @@ const selectMenu = (key) => {
 .menu {
   margin-left: 10%;
 }
-.menu-change{
-  height:100%;
+
+.menu-change {
+  height: 100%;
 }
 </style>

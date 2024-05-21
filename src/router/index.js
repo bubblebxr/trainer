@@ -7,20 +7,21 @@ import ordersComponent from '../components/myOrders.vue'
 import ticketDetail from '../components/ticketDetail.vue'
 import personalCenter from '../components/personalCenter.vue'
 import passengersInfo from '../components/passengersInfo.vue'
+import myCollect from '../components/myCollect.vue'
 import ticketOrders from '../components/orders/ticket.vue'
 import hotelOrders from '../components/orders/hotel.vue'
 import foodOrders from '../components/orders/food.vue'
 import myTicket from '../components/orders/myTicket.vue'
 const routes = [
   {
-    path: '/', 
+    path: '/',
     redirect: '/home'
   },
   {
     path: '/home',
     name: 'home',
     component: HomeView,
-    children: [ 
+    children: [
       {
         path: 'ticket',
         component: ticketComponent
@@ -36,40 +37,44 @@ const routes = [
       {
         path: 'orders',
         component: ordersComponent,
-        children:[
+        children: [
           {
-            path:'personalCenter',
-            component: personalCenter,
+            path: 'personalCenter',
+            component: personalCenter
           },
           {
             path: 'passengersInfo',
-            component: passengersInfo,
+            component: passengersInfo
           },
           {
             path: 'ticketOrders',
-            component: ticketOrders,
+            component: ticketOrders
           },
           {
             path: 'hotelOrders',
-            component: hotelOrders,
+            component: hotelOrders
           },
           {
             path: 'foodOrders',
-            component: foodOrders,
+            component: foodOrders
           },
           {
             path: 'myTicket',
-            component: myTicket,
+            component: myTicket
           },
-        ],
+          {
+            path: 'myCollect',
+            component: myCollect
+          }
+        ]
       },
       {
         path: 'ticketDetail',
         name: 'detail',
-        component: ticketDetail,
-      },
+        component: ticketDetail
+      }
     ]
-  },
+  }
 ]
 
 const router = createRouter({

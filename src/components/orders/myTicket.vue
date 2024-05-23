@@ -20,7 +20,7 @@
                     </el-col>
                     <el-col :span="3">
                         <el-text tag="b" size="large">订单状态: <span :style="{ color: getStatusColor(item.status) }">{{
-                                item.status }}</span></el-text>
+        item.status }}</span></el-text>
                     </el-col>
                 </el-row>
             </template>
@@ -34,7 +34,7 @@
                     <el-col :span="6" style="display: flex;flex-direction: column;justify-content: center;">
                         <el-divider content-position="center"><el-text tag="b" size="large"
                                 style="font-size:20px;padding:5px 35px;border:1.5px solid #DDDCDC;border-radius: 10px;">{{
-                                item.tid }}</el-text></el-divider>
+        item.tid }}</el-text></el-divider>
                     </el-col>
                     <el-col :span="6"
                         style="display: flex;flex-direction: column;justify-content: center;border-right:1.5px solid #DDDCDC;">
@@ -51,13 +51,13 @@
                 <el-row>
                     <el-col :span="3">
                         <el-text class="mx-1" size="large">总金额: <span style="color:#ffa31a;font-weight: bold;">￥{{
-                                item.price
-                                }}元</span></el-text>
+        item.price
+    }}元</span></el-text>
                     </el-col>
                     <el-col :span="2" v-if="item.status === '已支付'" :offset="19">
                         <el-popconfirm title="确定要取消这个订单吗？" @confirm="cancelOrders(item.oid)">
                             <template #reference>
-                                <el-button size="large" type="warning" plain style="margin-top:-1%;">取消订单</el-button>
+                                <el-button type="warning" plain style="margin-top:-1%;">取消订单</el-button>
                             </template>
                         </el-popconfirm>
                     </el-col>
@@ -117,4 +117,8 @@ onMounted(() => {
     getOrders();
 });
 </script>
-<style></style>
+<style scoped>
+.el-card /deep/ .el-card__header {
+    background-color: #f0f8ff;
+}
+</style>

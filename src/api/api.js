@@ -44,7 +44,13 @@ export const getFoodOrders = (userID, status) => {
 
 /*取消火车餐订单*/
 export const cancelFoodOrder = (userID, oid) => {
-    return api.post(`/food/cancel/${userID}/${oid}`);
+    // return api.post(`/food/cancel/${userID}/${oid}`);
+    var nowtime = new Date();
+    return api.post(`/food/cancel/${userID}/${oid}`,
+        {
+            "cancel_time": nowtime,
+        }
+    );
 }
 
 /*删除火车餐订单*/

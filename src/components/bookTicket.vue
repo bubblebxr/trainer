@@ -69,10 +69,11 @@
                 </el-col>
             </el-row>
         </div>
-        <div style="margin-top:0.7%;  width:100%; height:3%;display: block;padding-left:1%;">
+        <div style="margin-top:0.7%;  width:100%; height:3%;display: block;padding-left:1%;" v-if="show===true">
             <el-row :gutter="40">
                 <el-col :span="9">
-                    <el-text tag="i" style="color:gray;">{{ startStation }}到{{ destinationStation }}共{{ }}个车次</el-text>
+                    <el-text tag="i" style="color:gray;">{{ startStation }}到{{ destinationStation }}共{{
+                        searchResult.length}}个车次</el-text>
                 </el-col>
                 <el-col :span="2" style="margin-top:-0.7%;" :offset="12">
                     <el-checkbox v-model="isHide" label="隐藏冲突列车信息" size="large" />
@@ -80,7 +81,7 @@
             </el-row>
         </div>
         <div style="margin-top:0.2%;  width:100%;display: block;padding-left:1%;margin-bottom:3%;">
-            <el-table :data="searchResult" height="600" :header-cell-style="{ background: '#8abbe7', color: 'white', }"
+            <el-table :data="searchResult" height="480" :header-cell-style="{ background: '#8abbe7', color: 'white', }"
                 empty-text="没有列车信息">
                 <el-table-column prop="tid" label="车次" width="160">
                     <template #default="scope">
@@ -134,7 +135,7 @@
                         <span v-else style="color: #37B328">{{ scope.row.hard_sleeper }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="hard_seat" label="硬座" >
+                <el-table-column prop="hard_seat" label="硬座">
                     <template #default="scope">
                         <span v-if="scope.row.hard_seat === '无票'" style="color:gray">{{ scope.row.hard_seat }}</span>
                         <span v-else style="color: #37B328">{{ scope.row.hard_seat }}</span>
@@ -145,6 +146,7 @@
                         <el-button type="success" plain @click="submitTicket(scope.$index)">预订</el-button>
                     </template>
                 </el-table-column>
+
             </el-table>
         </div>
     </div>
@@ -156,6 +158,7 @@ import { ref, onMounted, watch } from 'vue'
 import { getStation, getSearchResult } from '../api/api';
 import { ElMessage } from 'element-plus'
 import { useRouter, useRoute } from "vue-router";
+const show=ref(false);
 const router = useRouter();
 const route = useRoute()
 const date = ref('');/**出发时间 */
@@ -176,13 +179,15 @@ const stations = ref([]);/*车站信息*/
 const searchValid = ref(false);
 const searchResult = ref([]);
 const submitTicket = (lineIndex) => {
-    router.push({
+    const url = router.resolve({
         path: "/home/ticketDetail",
         query: {
             line: JSON.stringify(searchResult.value[lineIndex]),
         },
     });
+    window.open(url.href, '_blank');
 };
+
 const handleStart = item => {
     console.log('Selected start station:', item);
 };
@@ -313,6 +318,7 @@ const search = () => {
             message: '查询成功',
             type: 'success',
         })
+        show.value=true;
     }
 }
 const startInvalid = ref(false);

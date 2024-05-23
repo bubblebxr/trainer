@@ -50,8 +50,8 @@
             <div>
                 <el-text size="large">旅客信息</el-text>
                 <el-scrollbar>
-                    <div class="scrollbar-flex-content">
-                        <el-card shadow="never" v-for="(p, i) in item.person" :key="i" class="scrollbar-demo-item">
+                    <div class="scrollbar">
+                        <el-card shadow="never" v-for="(p, i) in item.person" :key="i" class="scrollbar-demo">
                             <div
                                 style="display:flex; flex-direction: column; align-items: center; justify-content: center;">
                                 <el-text tag="b">{{ p.name }}</el-text>
@@ -63,6 +63,56 @@
                     </div>
                 </el-scrollbar>
             </div>
+            <el-divider border-style="dashed" />
+            <div style="display:block;justify-content: center;">
+                <el-text size="large" style="margin-bottom:1%;">订单状态</el-text>
+                <v-timeline direction="horizontal" side="end" style="width:90%;margin-left:5%;">
+                    <v-timeline-item dot-color="green-lighten-1" size="x-small">
+                        <div style="display:flex;justify-content: center;flex-direction: column;">
+                            <el-text size="large" style="color:black;" tag="b">已创建</el-text>
+                            <div class="text-caption mb-2">
+                                {{ item.order_time }}
+                            </div>
+                        </div>
+                    </v-timeline-item>
+                    <v-timeline-item dot-color="green-lighten-1" size="x-small">
+                        <div style="display:flex;justify-content: center;flex-direction: column;">
+                            <el-text size="large" style="color:black;" tag="b">已支付</el-text>
+                            <div class="text-caption mb-2">
+                                {{ item.order_time }}
+                            </div>
+                        </div>
+                    </v-timeline-item>
+
+                    <v-timeline-item
+                        :dot-color="item.status === '已支付' ? 'grey' : (item.status === '已完成' ? 'green-lighten-1' : 'red')"
+                        size="x-small">
+                        <div style="display:flex;justify-content: center;flex-direction: column;">
+                            <el-text size="large" style="color:black;" tag="b"
+                                v-if="item.status === '已支付'">待使用</el-text>
+                            <el-text size="large" style="color:black;" tag="b"
+                                v-else-if="item.status === '已完成'">已使用</el-text>
+                            <el-text size="large" style="color:black;" tag="b"
+                                v-else-if="item.status === '已取消'">已取消</el-text>
+                            <div class="text-caption mb-2">
+                                <div v-if="item.status === '已完成'">{{ item.date }}</div>
+                                <div v-else-if="item.status === '已取消'">{{ item.cancel_time }}</div>
+                                <div v-else-if="item.status === '已支付'">{{ item.date }}</div>
+                            </div>
+                        </div>
+                    </v-timeline-item>
+
+                    <v-timeline-item
+                        dot-color="green-lighten-1" size="x-small" v-if="item.status === '已完成'">
+                        <div style="display:flex;justify-content: center;flex-direction: column;">
+                            <el-text size="large" style="color:black;" tag="b">已完成</el-text>
+                            <div class="text-caption mb-2">
+                                <div>{{ item.date }}</div>
+                            </div>
+                        </div>
+                    </v-timeline-item>
+                </v-timeline>
+            </div>
             <template #footer>
                 <el-row>
                     <el-col :span="4">
@@ -70,13 +120,13 @@
                     </el-col>
                     <el-col :span="3">
                         <el-text class="mx-1" size="large">总金额: <span style="color:#ffa31a;font-weight: bold;">￥{{
-    item.sum_price
+                                item.sum_price
                                 }}元</span></el-text>
                     </el-col>
                     <el-col :span="2" v-if="item.status === '已支付'" :offset="15">
                         <el-popconfirm title="确定要取消这个订单吗？" @confirm="cancelOrders(item.oid)">
                             <template #reference>
-                                <el-button size="large" type="warning" plain style="margin-top:-1%;">取消订单</el-button>
+                                <el-button type="warning" plain style="margin-top:-1%;">取消订单</el-button>
                             </template>
                         </el-popconfirm>
                     </el-col>
@@ -92,7 +142,7 @@ import { ElMessage } from "element-plus";
 const status = ref("all");
 const userID = "0000";
 const ticketOrders = ref([]);
-const cancelOrders=async(oid)=>{
+const cancelOrders = async (oid) => {
     try {
         const responce = await cancelTicketOrder(userID, oid);
         if (responce.data.result) {
@@ -140,25 +190,25 @@ onMounted(() => {
     getOrders();
 });
 </script>
-<style>
-.el-card .el-card__header {
+<style scoped>
+.el-card /deep/ .el-card__header {
     background-color: #f0f8ff;
 }
 
-.scrollbar-flex-content {
+.scrollbar {
     display: flex;
     margin-top: 1%;
-    justify-content: center;
+    /* justify-content: center; */
 }
 
-.scrollbar-demo-item {
+.scrollbar-demo {
     flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 300px;
-    height: 50px;
-    margin: 15px;
+    width: 15%;
+    height: 5%;
+    margin: 10px;
     text-align: center;
     border-radius: 4px;
     background-color: #f0f8ff !important;

@@ -16,48 +16,49 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 const selectedKeys = ref(['1'])
 const openKeys = ref(['sub1'])
-function getItem (label, key, icon, children, type) {
-  return {
-    key,
-    icon,
-    children,
-    label,
-    type
-  }
+function getItem(label, key, icon, children, type) {
+    return {
+        key,
+        icon,
+        children,
+        label,
+        type
+    }
 }
 const items = reactive([
-  getItem('个人中心', '1', h(SettingOutlined)),
-  getItem('乘车人信息', '2', h(CalendarOutlined)),
-  getItem('我的订单', 'sub1', () => h(MailOutlined), [
-    getItem('车票订单', '3'),
-    getItem('酒店订单', '4'),
-    getItem('餐饮订单', '5')
-  ]),
-  getItem('本人车票', '6', h(AppstoreOutlined)),
-  getItem('我的收藏', '7', h(PieChartOutlined))
+    getItem('个人中心', '1', h(SettingOutlined)),
+    getItem('乘车人信息', '2', h(CalendarOutlined)),
+    getItem('我的订单', 'sub1', () => h(MailOutlined), [
+        getItem('车票订单', '3'),
+        getItem('酒店订单', '4'),
+        getItem('餐饮订单', '5')
+    ]),
+    getItem('本人车票', '6', h(AppstoreOutlined)),
+    getItem('我的收藏', '7', h(PieChartOutlined))
 ])
 const handleClick = e => {
-  console.log('click', e)
-  if (e.key === '1') {
-    router.push('/home/orders/personalCenter')
-  } else if (e.key === '2') {
-    router.push('/home/orders/passengersInfo')
-  } else if (e.key === '3') {
-    router.push('/home/orders/ticketOrders')
-  } else if (e.key === '4') {
-    router.push('/home/orders/hotelOrders')
-  } else if (e.key === '5') {
-    router.push('/home/orders/foodOrders')
-  } else if (e.key === '6') {
-    router.push('/home/orders/myTicket')
-  } else if (e.key === '7') {
-    router.push('/home/orders/myCollect')
-  }
+    console.log('click', e)
+    if (e.key === '1') {
+        router.push('/home/orders/personalCenter')
+    } else if (e.key === '2') {
+        router.push('/home/orders/passengersInfo')
+    } else if (e.key === '3') {
+        router.push('/home/orders/ticketOrders')
+    } else if (e.key === '4') {
+        router.push('/home/orders/hotelOrders')
+    } else if (e.key === '5') {
+        router.push('/home/orders/foodOrders')
+    } else if (e.key === '6') {
+        router.push('/home/orders/myTicket')
+    } else if (e.key === '7') {
+        router.push('/home/orders/myCollect')
+    }
 }
 watch(openKeys, val => {
-  console.log('openKeys', val)
+    console.log('openKeys', val)
 })
 onMounted(() => {
-  router.push('/home/orders/personalCenter')
+    router.push('/home/orders/personalCenter')
 })
 </script>
+<style scoped></style>

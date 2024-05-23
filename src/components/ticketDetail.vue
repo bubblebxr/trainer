@@ -24,7 +24,7 @@
                     </el-col>
                 </el-row>
             </el-card>
-            <el-card style="width:100%;margin-top:2%;height:25%;padding-top: 1%;">
+            <el-card style="width:100%;margin-top:1%;height:27%;padding-top: 1%;">
                 <h1 style="margin-top:-1%;margin-bottom: 1%;">剩余座席</h1>
                 <div style="display:flex;text-align:center;">
                     <el-card style="flex:1;margin:0% 1%;" shadow="never" v-if="business != '无票'">
@@ -53,7 +53,7 @@
                     </el-card>
                 </div>
             </el-card>
-            <el-card style="width:100%;margin-top:2%;height:49%;">
+            <el-card style="width:100%;margin-top:1%;height:49%;">
                 <h1>乘客信息</h1>
                 <div style="display: flex;justify-content: center;">
                     <el-checkbox-group v-model="selectedPerson" @change="handleChecked" :min="1">

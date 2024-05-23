@@ -39,6 +39,11 @@ public class UserServiceImpl implements IUserService {
         String DBPass = MD5Util.md5(password, salt);
         return userMapper.login(id,DBPass);
     }
+
+    @Override
+    public boolean updatePassword(String userId,String newpassword){
+        return userMapper.updatePassword(userId,newpassword);
+    }
 }
 
 

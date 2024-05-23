@@ -93,4 +93,13 @@ public class UserController {
         }
         return map;
     }
+
+    @PostMapping("/updatepassword")
+    public Map<String, Object> updatePassword(@RequestBody Map<String, String> map){
+        String userId = map.get("id");
+        String newpassword = map.get("newpassword");
+        return new HashMap<>(){{
+        put("info",userService.updatePassword(userId,newpassword));
+        }};
+    }
 }

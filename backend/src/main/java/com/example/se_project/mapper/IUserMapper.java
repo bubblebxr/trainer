@@ -23,4 +23,6 @@ public interface IUserMapper extends BaseMapper<User> {
 
     String getUserSalt(String id);
 
+    boolean updatePassword(String userId, String newpassword);
+
 }

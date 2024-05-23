@@ -13,4 +13,6 @@ public interface IUserService {
 
     public User login(String id, String password);
 
+    boolean updatePassword(String userId,String newpassword);
+
 }

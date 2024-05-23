@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="box">
+  <div style="overflow: hidden;">
     <el-radio-group v-model="status">
       <el-radio-button label="全部订单" value="all"></el-radio-button>
       <el-radio-button label="已支付" value="paid"></el-radio-button>
@@ -8,10 +9,12 @@
     </el-radio-group>
   </div>
   <div>
+    <el-scrollbar id="outer">
     <el-collapse v-model="activeNames" @change="handleChange">
-      <el-collapse-item v-for="(item, index) in foodOrders" :name="index">
+      <el-collapse-item v-for="(item, index) in foodOrders"
+        :id="item.oid" :name="index" >
         <template #title>
-          <div style="width: 100%">
+          <div style="width: 100%;">
             <el-row>
               <el-col :span="4">
                 <div style="font-size: 1.5em; color: #79bbff">
@@ -94,24 +97,253 @@
         </tempalte>
       </el-collapse-item>
     </el-collapse>
-  </div>
+  </el-scrollbar>
+  </div></div>
 </template>
 
 <script setup>
 import { onMounted, ref, watch } from "vue";
-import { getFoodOrders, cancelFoodOrder ,deleteFoodOrder} from "../../api/api.js";
-import { ElMessage } from "element-plus";
-const activeNames = ref(["1"]);
+import {
+  getFoodOrders,
+  cancelFoodOrder,
+  deleteFoodOrder,
+} from "../../api/api.js";
+import { ElMessage, ElNotification } from "element-plus";
+import { useRoute } from "vue-router";
+
+const activeNames = ref([]);
 const foodOrders = ref([]);
+
+// const foodOrders = ref([
+//   {
+//     tid: "strin1",
+//     oid: "string1",
+//     date: "string",
+//     time: "午餐",
+//     order_time: "string",
+//     status: "已支付",
+//     sum_price: 100,
+//     foods: [
+//       {
+//         food_name: "string",
+//         count: 1,
+//         photo:
+//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
+//       },
+//       {
+//         food_name: "string",
+//         count: 1,
+//         photo:
+//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
+//       },
+//       {
+//         food_name: "string",
+//         count: 1,
+//         photo:
+//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
+//       },
+//       {
+//         food_name: "string",
+//         count: 1,
+//         photo:
+//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
+//       },
+//       {
+//         food_name: "string",
+//         count: 1,
+//         photo:
+//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
+//       },
+//     ],
+//   },
+//   {
+//     tid: "strin2",
+//     oid: "string2",
+//     date: "string",
+//     time: "午餐",
+//     order_time: "string",
+//     status: "已支付",
+//     sum_price: 100,
+//     foods: [
+//       {
+//         food_name: "string",
+//         count: 1,
+//         photo:
+//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
+//       },
+//       {
+//         food_name: "string",
+//         count: 1,
+//         photo:
+//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
+//       },
+//       {
+//         food_name: "string",
+//         count: 1,
+//         photo:
+//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
+//       },
+//       {
+//         food_name: "string",
+//         count: 1,
+//         photo:
+//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
+//       },
+//       {
+//         food_name: "string",
+//         count: 1,
+//         photo:
+//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
+//       },
+//     ],
+//   },
+//   {
+//     tid: "strin3",
+//     oid: "string3",
+//     date: "string",
+//     time: "午餐",
+//     order_time: "string",
+//     status: "已支付",
+//     sum_price: 100,
+//     foods: [
+//       {
+//         food_name: "string",
+//         count: 1,
+//         photo:
+//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
+//       },
+//       {
+//         food_name: "string",
+//         count: 1,
+//         photo:
+//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
+//       },
+//       {
+//         food_name: "string",
+//         count: 1,
+//         photo:
+//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
+//       },
+//       {
+//         food_name: "string",
+//         count: 1,
+//         photo:
+//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
+//       },
+//       {
+//         food_name: "string",
+//         count: 1,
+//         photo:
+//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
+//       },
+//     ],
+//   },
+//   {
+//     tid: "strin4",
+//     oid: "string4",
+//     date: "string",
+//     time: "午餐",
+//     order_time: "string",
+//     status: "已支付",
+//     sum_price: 100,
+//     foods: [
+//       {
+//         food_name: "string",
+//         count: 1,
+//         photo:
+//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
+//       },
+//       {
+//         food_name: "string",
+//         count: 1,
+//         photo:
+//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
+//       },
+//       {
+//         food_name: "string",
+//         count: 1,
+//         photo:
+//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
+//       },
+//       {
+//         food_name: "string",
+//         count: 1,
+//         photo:
+//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
+//       },
+//       {
+//         food_name: "string",
+//         count: 1,
+//         photo:
+//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
+//       },
+//     ],
+//   },
+//   {
+//     tid: "strin",
+//     oid: "string5",
+//     date: "string",
+//     time: "午餐",
+//     order_time: "string",
+//     status: "已支付",
+//     sum_price: 100,
+//     foods: [
+//       {
+//         food_name: "string",
+//         count: 1,
+//         photo:
+//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
+//       },
+//       {
+//         food_name: "string",
+//         count: 1,
+//         photo:
+//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
+//       },
+//       {
+//         food_name: "string",
+//         count: 1,
+//         photo:
+//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
+//       },
+//       {
+//         food_name: "string",
+//         count: 1,
+//         photo:
+//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
+//       },
+//       {
+//         food_name: "string",
+//         count: 1,
+//         photo:
+//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
+//       },
+//     ],
+//   },
+// ]);
+
 const status = ref("all");
 const userID = "0000";
+const route = useRoute();
+const scrollToOrder = (orderId) => {
+  const orderElement = document.getElementById(orderId);
+  console.log("滚动到：", orderId);
+  if (orderElement) {
+    orderElement.scrollIntoView({ behavior: "smooth", block: "center" });
+    setTimeout(() => {
+      const tempActiveNames = [orderElement.__vueParentComponent.props.name];
+      activeNames.value = tempActiveNames;
+      console.log("模拟点击展开", activeNames.value);
+    }, 300); // 延迟一段时间，确保滚动完成
+  }
+};
 const getStatusColor = (status) => {
-  if (status === '已完成') {
-    return '#60B2FF';
-  } else if (status === '已支付') {
-    return '#24D36F';
-  } else if (status === '已取消') {
-    return '#FC604F';
+  if (status === "已完成") {
+    return "#60B2FF";
+  } else if (status === "已支付") {
+    return "#24D36F";
+  } else if (status === "已取消") {
+    return "#FC604F";
   }
 };
 const handleChange = (val) => {
@@ -130,14 +362,17 @@ const cancelOrder = async (oid) => {
   try {
     const responce = await cancelFoodOrder(userID, oid);
     if (responce.data.result) {
-      ElMessage({
-        message: '取消订单成功',
+      ElNotification({
+        title: "订单取消提醒",
+        message: "您刚刚取消了一个火车餐订单，订单号为" + oid,
         type: "success",
       });
-      //TODO 通知消息弹窗
-    }
-    else{
-      ElMessage.error("取消订单失败"+responce.data.info);
+    } else {
+      ElNotification({
+        title: "取消订单失败",
+        message: responce.data.info,
+        type: "error",
+      });
     }
   } catch (error) {
     console.error("取消订单失败", error);
@@ -150,11 +385,10 @@ const deleteOrder = async (oid) => {
     const responce = await deleteFoodOrder(userID, oid);
     if (responce.data.result) {
       ElMessage({
-        message: '删除订单成功',
+        message: "删除订单成功",
         type: "success",
       });
-    }
-    else{
+    } else {
       ElMessage.error("删除订单失败，订单不存在");
     }
   } catch (error) {
@@ -163,8 +397,13 @@ const deleteOrder = async (oid) => {
   }
   getOrders();
 };
+
 onMounted(() => {
   getOrders();
+  const orderId = route.query.orderId;
+  if (orderId) {
+    scrollToOrder(orderId);
+  }
 });
 watch(status, (newValue) => {
   console.log("状态切换为", newValue);
@@ -173,7 +412,7 @@ watch(status, (newValue) => {
 //setInterval(getOrders,1000);
 </script>
 
-<style>
+<style scoped>
 .scrollbar-flex-content {
   display: flex;
 }
@@ -189,5 +428,12 @@ watch(status, (newValue) => {
   border-radius: 4px;
   background: #fff5e5;
   color: var(--el-color-danger);
+}
+
+.el-collapse-item:focus {
+  outline: 2px solid #409eff; /* 示例聚焦样式 */
+}
+.box {
+  overflow-y: scroll;
 }
 </style>

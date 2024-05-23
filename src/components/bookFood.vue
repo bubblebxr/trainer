@@ -114,12 +114,12 @@
 import { ref, onMounted, watch } from "vue";
 import foodCart from "./foodCart.vue";
 import { getFoods, getThisTicket, postFoodBill } from "@/api/api";
-import { ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
 const router = useRouter();
+import { ElMessage,ElNotification  } from "element-plus";
 const userID = "00000"; //当前用户ID
 const tid = ref("");
-const date = ref(""); //TODO date自动填充逻辑！
+const date = ref(""); 
 const time = ref("lunch");
 const foodList = ref([]);
 
@@ -138,7 +138,7 @@ const search = () => {
 };
 const fetchFoods = async () => {
   try {
-    const response = await getFoods(tid, date, time);
+    const response = await getFoods(userID,tid, date, time);
     if (response.data.haveTicket) {
       foodList.value = response.data.result;
       ElMessage({
@@ -167,7 +167,31 @@ const fetchTids = async () => {
     console.error("获取车站数组失败：", error);
   }
 };
-
+const submitBill = async (sum_price) =>{
+  try{
+  const responce = await (order_foods, userID, tid, date, time, sum_price);
+  if(responce.data.result)
+  {ElNotification({
+    title: '订单已提交',
+    message: '您成功预订了火车餐！预祝您用餐愉快~',
+    type: 'success',
+  })}
+  else{
+    ElNotification({
+    title: '提交订单失败T^T',
+    message: responce.data.info,
+    type: 'error',
+  })
+  }
+}catch (error){
+    console.log("提交订单失败：",error);
+    ElNotification({
+    title: '提交订单失败T^T',
+    message: '网络似乎开小差了~',
+    type: 'error',
+  })
+  }
+};
 
 watch(
   foodList,

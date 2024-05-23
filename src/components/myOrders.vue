@@ -4,7 +4,7 @@
             <a-menu id="dddddd" v-model:openKeys="openKeys" v-model:selectedKeys="selectedKeys"
                 style="width:100%;height:100%;" mode="inline" :items="items" @click="handleClick"></a-menu>
         </el-aside>
-        <el-main width="85%" style="height:97vh;margin-top:-1%; ">
+        <el-main width="85%" style="height:90vh;margin-top:-1%; ">
             <router-view />
         </el-main>
     </el-container>
@@ -13,7 +13,9 @@
 import { reactive, ref, watch, h, onMounted } from 'vue';
 import { MailOutlined, SettingOutlined, AppstoreOutlined, CalendarOutlined } from '@ant-design/icons-vue';
 import { useRouter } from "vue-router";
+import eventBus from '@/eventBus.js';
 const router = useRouter();
+const MyOrdersActiveKey = ref(eventBus.MyOrdersActiveKey);
 const selectedKeys = ref(['1']);
 const openKeys = ref(['sub1']);
 function getItem(label, key, icon, children, type) {
@@ -37,6 +39,8 @@ const items = reactive([
 ]);
 const handleClick = e => {
     console.log('click', e);
+    eventBus.MyOrdersActiveKey = e.key;
+    selectedKeys.value = [e.key];
     if (e.key === '1') {
         router.push('/home/orders/personalCenter');
     } else if (e.key === '2') {
@@ -54,7 +58,13 @@ const handleClick = e => {
 watch(openKeys, val => {
     console.log('openKeys', val);
 });
+watch(() => eventBus.MyOrdersActiveKey, (newVal) => {
+    console.log("消息跳转：",newVal);
+    MyOrdersActiveKey.value = newVal;
+    selectedKeys.value =[newVal];
+});
 onMounted(() => {
+    selectedKeys.value = [eventBus.MyOrdersActiveKey];
     router.push('/home/orders/personalCenter');
 });
 </script>

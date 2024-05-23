@@ -136,7 +136,7 @@ const search = () => {
 };
 const fetchFoods = async () => {
   try {
-    const response = await getFoods(tid, date, time);
+    const response = await getFoods(userID,tid, date, time);
     if (response.data.haveTicket) {
       foodList.value = response.data.result;
       ElMessage({

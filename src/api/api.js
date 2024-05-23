@@ -9,8 +9,8 @@ export const getSearchResult = (startCity, arriveCity, date, isGD, sortType, sea
     return api.post(`/trains/${startCity}/${arriveCity}/${date}${queryString}`);
 };
 
-export const getFoods = (tid, date, time) => {
-    return api.get(`/food/${tid}/${date}/${time}`);
+export const getFoods = (userID,tid, date, time) => {
+    return api.get(`/food/${userID}/${tid}/${date}/${time}`);
 };
 
 export const getThisTicket = (userID, status) => {
@@ -100,4 +100,13 @@ export const getTicketOrders = (userID, status) => {
 /*取消火车票订单*/
 export const cancelTicketOrder = (userID, oid) => {
     return api.post(`/ticket/cancel/${userID}/${oid}`);
+}
+/*获取用户所有消息*/
+export const getMessage = (userID)=>{
+    return api.get(`/message/getAll/${userID}`)
+}
+
+/*标记消息已读*/
+export const haveReadMessage = (mid)=>{
+    return api.post(`/message/setRead/${mid}`)
 }

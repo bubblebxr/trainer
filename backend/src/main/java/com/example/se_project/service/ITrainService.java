@@ -6,6 +6,7 @@ import com.example.se_project.entity.TrainOrder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 
 @Component
 public interface ITrainService {
@@ -20,4 +21,7 @@ public interface ITrainService {
     public TrainOrder getTrainOrdersByIdentificationAndDate(String identification, String date);
 
     public void addTrainOrderDetail(String oid,String trainId, String trainDate, String name, String identification, String seatType);
+
+Map<String,Object> getSelfOrderDetail(String oid, String userID);
+Map<String,Object> getTrainByIdAndDate(String trainId,String trainDate);
 }

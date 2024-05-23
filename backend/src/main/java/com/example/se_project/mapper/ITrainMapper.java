@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface ITrainMapper extends BaseMapper<Train> {
@@ -29,6 +30,9 @@ public interface ITrainMapper extends BaseMapper<Train> {
     @Select("select * from trainorders where identification = #{identification} and trainDate = #{date}")
     TrainOrder getTrainOrdersByIdentificationAndDate(String identification, String date);
 
-    void addTrainOrderDetail(String oid, String trainId,String trainDate,String name,String identification,String seatType);
+    void addTrainOrderDetail(String oid, String trainId, String trainDate, String name, String identification, String seatType);
 
+Map<String, Object> getSelfOrderDetail(String oid, String userID);
+
+Map<String, Object> getTrainByIdAndDate(String trainId, String trainDate);
 }

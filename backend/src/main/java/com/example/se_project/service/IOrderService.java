@@ -4,6 +4,7 @@ import com.example.se_project.entity.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 
 @Component
 public interface IOrderService {
@@ -23,4 +24,6 @@ public interface IOrderService {
     public void deleteOrder(Order order);
 
     void setCancelTime(String oid,String cancelTime);
+    List<Map<String,String>> getIdByUid(String userID);
+    List<Map<String,String>> getIdByUidAndStatus(String userID,String status);
 }

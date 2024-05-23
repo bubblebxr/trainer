@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service("orderService")
 public class OrderServiceImpl implements IOrderService {
@@ -48,9 +49,19 @@ public class OrderServiceImpl implements IOrderService {
     public void deleteOrder(Order order) {
         orderMapper.deleteOrder(order);
     }
-@Override
-    public void setCancelTime(String oid,String cancelTime){
-        orderMapper.setCancelTime(oid,cancelTime);
-}
 
+    @Override
+    public void setCancelTime(String oid, String cancelTime) {
+        orderMapper.setCancelTime(oid, cancelTime);
+    }
+
+    @Override
+    public List<Map<String,String>> getIdByUidAndStatus(String userID, String status) {
+        return orderMapper.getIdByUidAndStatus(userID, status);
+    }
+
+    @Override
+    public List<Map<String,String>> getIdByUid(String userID) {
+        return orderMapper.getIdByUid(userID);
+    }
 }

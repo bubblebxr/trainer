@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service("trainService")
 public class TrainServiceImpl implements ITrainService {
@@ -46,4 +47,13 @@ public class TrainServiceImpl implements ITrainService {
         trainMapper.addTrainOrderDetail(oid, trainId, trainDate, name, identification, seatType);
     }
 
+    @Override
+    public Map<String, Object> getSelfOrderDetail(String oid, String userID) {
+        return trainMapper.getSelfOrderDetail(oid, userID);
+    }
+
+    @Override
+    public Map<String, Object> getTrainByIdAndDate(String trainId, String trainDate) {
+        return trainMapper.getTrainByIdAndDate(trainId, trainDate);
+    }
 }

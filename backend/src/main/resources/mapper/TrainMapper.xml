@@ -4,10 +4,10 @@
     <select id="searchTrain" resultType="com.example.se_project.entity.Train">
         select * from trains
         where startStation in (
-            select stationName from stations where (stationName = #{start_station} or cityName = #{start_station})
+        select stationName from stations where (stationName = #{start_station} or cityName = #{start_station})
         )
         and arrivalStation in (
-            select stationName from stations where (stationName = #{arrive_station} or cityName = #{arrive_station})
+        select stationName from stations where (stationName = #{arrive_station} or cityName = #{arrive_station})
         )
         and date =#{date}
         <choose>
@@ -90,13 +90,25 @@
         </choose>
     </select>
     <select id="searchStopover" resultType="com.example.se_project.entity.Stopover">
-        select * from stopovers
+        select *
+        from stopovers
         where trainId = #{trainId}
         order by stationId
     </select>
     <insert id="addTrainOrderDetail">
-        insert into trainorders(oid,trainId,trainDate,name,identification,seatType)
-        values(#{oid},#{trainId},#{trainDate},#{name},#{identification},#{seatType})
+        insert into trainorders(oid, trainId, trainDate, name, identification, seatType)
+        values (#{oid}, #{trainId}, #{trainDate}, #{name}, #{identification}, #{seatType})
     </insert>
+    <select id="getSelfOrderDetail">
+        select *
+        from trainorders
+        where oid = #{oid}
+          and identification = #{userID}
+    </select>
+    <select id="getTrainByIdAndDate">
+        select *
+        from trains
+    where trainId=#{trainId} and date=#{trainDate}
+    </select>
 
 </mapper>

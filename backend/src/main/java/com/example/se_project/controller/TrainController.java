@@ -8,6 +8,7 @@ import com.example.se_project.mapper.IOrderMapper;
 import com.example.se_project.service.IOrderService;
 import com.example.se_project.service.ITrainService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URLDecoder;
@@ -143,7 +144,7 @@ public class TrainController {
     @PostMapping("/ticket/cancel/{userID}/{oid}")
     public Map<String, Object> cancelTrainOrder(@PathVariable String userID,
                                                 @PathVariable String oid,
-                                                @RequestBody Map<String ,Object> map) {
+                                                @RequestBody Map<String, Object> map) {
         Order order = orderService.getOrderByOidAndUid(oid, userID);
         if (order == null) {
             return new HashMap<>() {{
@@ -153,7 +154,7 @@ public class TrainController {
         } else {
             orderService.cancelOrder(order);
             String cancelTime = map.get("cancel_time").toString();
-            orderService.setCancelTime(oid,cancelTime);
+            orderService.setCancelTime(oid, cancelTime);
             return new HashMap<>() {{
                 put("info", "取消成功");
                 put("result", true);
@@ -216,6 +217,49 @@ public class TrainController {
         return new HashMap<>() {{
             put("result", result);
         }};
+    }
+
+    @GetMapping("/getTid/{userID}")
+    public Map<String, Object> getSelfOrder(@PathVariable String userID,
+                                                  @RequestParam(value = "status", defaultValue = "all") String status) {
+        List<Map<String, String>> orders = new ArrayList<>();
+        //List<String>
+        if (status.equals("paid"))
+            status = "Paid";
+        else if (status.equals("cancel"))
+            status = "Canceled";
+        else if (status.equals("done"))
+            status = "Done";
+        if (status.equals("all"))
+            orders = orderService.getIdByUid(userID);
+        else
+            orders = orderService.getIdByUidAndStatus(userID, status);
+        List<Object> result = new ArrayList<>();
+        for (Map<String, String> order : orders) {
+            Map<String, Object> orderMap = trainService.getSelfOrderDetail(order.get("oid"), userID);
+            if (orderMap != null) {
+                result.add(new HashMap<>() {{
+                    put("tid", orderMap.get("trainId"));
+                    put("oid", order);
+                    put("status", order.get("orderStatus"));
+                    Map<String, Object> trainMap = trainService.getTrainByIdAndDate(orderMap.get("trainId").toString(), orderMap.get("trainDate").toString());
+                    put("start_station", trainMap.get("startStation"));
+                    put("start_time", trainMap.get("startTime"));
+                    put("arrive_time", trainMap.get("arrivalTime"));
+                    put("order_time", order.get("billTime"));
+                    put("time", trainMap.get("duration"));
+                    put("arrive_station", trainMap.get("arriveStation"));
+                    put("date", orderMap.get("trainDate"));
+                    put("seat_type", orderMap.get("seatType"));
+                    put("price", order.get("total"));
+                }});
+            }
+
+        }
+        return new HashMap<>(){{
+            put("result",result);
+        }};
+
     }
 
 }

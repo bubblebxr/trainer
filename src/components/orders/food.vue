@@ -108,7 +108,7 @@ import {
   cancelFoodOrder,
   deleteFoodOrder,
 } from "../../api/api.js";
-import { ElMessage } from "element-plus";
+import { ElMessage, ElNotification } from "element-plus";
 import { useRoute } from "vue-router";
 
 const activeNames = ref([]);
@@ -329,7 +329,7 @@ const scrollToOrder = (orderId) => {
   const orderElement = document.getElementById(orderId);
   console.log("滚动到：", orderId);
   if (orderElement) {
-    orderElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    orderElement.scrollIntoView({ behavior: "smooth", block: "center" });
     setTimeout(() => {
       const tempActiveNames = [orderElement.__vueParentComponent.props.name];
       activeNames.value = tempActiveNames;
@@ -362,13 +362,17 @@ const cancelOrder = async (oid) => {
   try {
     const responce = await cancelFoodOrder(userID, oid);
     if (responce.data.result) {
-      ElMessage({
-        message: "取消订单成功",
+      ElNotification({
+        title: "订单取消提醒",
+        message: "您刚刚取消了一个火车餐订单，订单号为" + oid,
         type: "success",
       });
-      //TODO 通知消息弹窗
     } else {
-      ElMessage.error("取消订单失败" + responce.data.info);
+      ElNotification({
+        title: "取消订单失败",
+        message: responce.data.info,
+        type: "error",
+      });
     }
   } catch (error) {
     console.error("取消订单失败", error);
@@ -430,7 +434,6 @@ watch(status, (newValue) => {
   outline: 2px solid #409eff; /* 示例聚焦样式 */
 }
 .box {
-  
   overflow-y: scroll;
 }
 </style>

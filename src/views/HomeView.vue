@@ -379,7 +379,7 @@ const jumpToOrder = (orderType, orderId) => {
     });
   }
 };
-setInterval(getAllMessage,1000);
+// setInterval(getAllMessage,1000);
 </script>
 
 <style>

@@ -2,6 +2,7 @@ package com.example.se_project.service.Impl;
 
 import com.example.se_project.entity.Stopover;
 import com.example.se_project.entity.Train;
+import com.example.se_project.entity.TrainOrder;
 import com.example.se_project.mapper.ITrainMapper;
 import com.example.se_project.service.ITrainService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +21,25 @@ public class TrainServiceImpl implements ITrainService {
     }
 
     @Override
+    public Train getTrainByTidAndDate(String tid, String date) {
+        return trainMapper.getTrainByTidAndDate(tid, date);
+    }
+
+    @Override
     public List<Stopover> searchStopover(String trainId) {
         return trainMapper.searchStopover(trainId);
     }
+
+    @Override
+    public List<TrainOrder> getTrainOrdersByOid(String oid) {
+        return trainMapper.getTrainOrdersByOid(oid);
+    }
+
+    @Override
+    public TrainOrder getTrainOrdersByIdentificationAndDate(String identification, String date) {
+        return  trainMapper.getTrainOrdersByIdentificationAndDate(identification, date);
+    }
+
 
     @Override
     public void addTrainOrderDetail(String oid, String trainId, String trainDate, String name, String identification, String seatType) {

@@ -3,6 +3,7 @@ package com.example.se_project.controller;
 import com.example.se_project.entity.Order;
 import com.example.se_project.entity.Stopover;
 import com.example.se_project.entity.Train;
+import com.example.se_project.entity.TrainOrder;
 import com.example.se_project.mapper.IOrderMapper;
 import com.example.se_project.service.IOrderService;
 import com.example.se_project.service.ITrainService;
@@ -157,6 +158,63 @@ public class TrainController {
                 put("result", true);
             }};
         }
+    }
+
+    @GetMapping("/ticket/orders/{userID}/{status}")
+    Map<String, Object> getOrders(@PathVariable String userID,
+                                  @PathVariable String status) {
+        List<Order> orders = switch (status) {
+            case "paid" -> orderService.getOrdersByUidAndStatus(userID, Order.OrderStatus.Paid, Order.OrderType.Train);
+            case "cancel" ->
+                    orderService.getOrdersByUidAndStatus(userID, Order.OrderStatus.Canceled, Order.OrderType.Train);
+            case "done" -> orderService.getOrdersByUidAndStatus(userID, Order.OrderStatus.Done, Order.OrderType.Train);
+            default -> orderService.getOrderByUid(userID, Order.OrderType.Train);
+        };
+
+        List<Object> result = new ArrayList<>();
+        orders.forEach(order -> {
+            HashMap<String, Object> map = new HashMap<>();
+            String oid = order.getOid();
+            List<TrainOrder> trainOrders = trainService.getTrainOrdersByOid(oid);
+
+            String tid = trainOrders.get(0).getTrainId();
+            String date = trainOrders.get(0).getTrainDate();
+            Train train = trainService.getTrainByTidAndDate(tid, date);
+
+            map.put("tid", tid);
+            map.put("cancel_time", order.getCancelTime());
+            map.put("oid", order.getOid());
+            map.put("start_time", train.getStartTime());
+            map.put("start_station", train.getStartStation());
+            map.put("arrive_station", train.getArrivalStation());
+            map.put("time", train.getDuration());
+            map.put("arrive_time", train.getArrivalTime());
+            map.put("date", date);
+            map.put("order_time", order.getBillTime());
+            map.put("status", switch (order.getOrderStatus()) {
+                case Paid -> "已支付";
+                case Done -> "已完成";
+                case Canceled -> "已取消";
+            });
+            map.put("sum_price", order.getTotal());
+
+            List<Object> person = new ArrayList<>();
+
+            trainOrders.forEach(trainOrder -> {
+                person.add(new HashMap<>() {{
+                    put("name", trainOrder.getName());
+                    put("identification", trainOrder.getIdentification());
+                    put("seat_type", trainOrder.getSeatType());
+                }});
+            });
+
+            map.put("person", person);
+            result.add(map);
+        });
+
+        return new HashMap<>() {{
+            put("result", result);
+        }};
     }
 
 }

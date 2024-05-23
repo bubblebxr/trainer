@@ -8,7 +8,7 @@ public class TrainOrder{
     private String trainId;
     private String trainDate;
     private String name;
-    private String identificaiton;
+    private String identification;
     private String seatType;
 
     public String getOid() {
@@ -43,12 +43,12 @@ public class TrainOrder{
         this.name = name;
     }
 
-    public String getIdentificaiton() {
-        return identificaiton;
+    public String getIdentification() {
+        return identification;
     }
 
-    public void setIdentificaiton(String identificaiton) {
-        this.identificaiton = identificaiton;
+    public void setIdentification(String identification) {
+        this.identification = identification;
     }
 
     public String getSeatType() {

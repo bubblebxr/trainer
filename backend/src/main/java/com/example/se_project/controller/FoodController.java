@@ -1,17 +1,16 @@
 package com.example.se_project.controller;
 
-import com.example.se_project.entity.Food;
-import com.example.se_project.entity.FoodOrder;
-import com.example.se_project.entity.Order;
+import com.example.se_project.entity.*;
 import com.example.se_project.service.IFoodService;
 import com.example.se_project.service.IOrderService;
+import com.example.se_project.service.ITrainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.*;
 
 
 @RestController
@@ -21,16 +20,66 @@ public class FoodController {
     @Autowired
     private IOrderService orderService;
     @Autowired
+    private ITrainService trainService;
+    @Autowired
     private Food food;
 
 
-    @GetMapping("/food/{tid}/{date}/{time}")
-    Map<String, List<Food>> getAllFood(@PathVariable String tid, @PathVariable String date, @PathVariable String time) {
+    @GetMapping("/food/{userID}/{tid}/{date}/{time}")
+    Map<String, Object> getAllFood(@PathVariable String tid,
+                                       @PathVariable String userID,
+                                       @PathVariable String date,
+                                       @PathVariable String time) {
+        TrainOrder trainOrder = trainService.getTrainOrdersByIdentificationAndDate(userID, date);
+        boolean[] haveTicket = {false};
+        String info = "没有购买当日该车次车票";
+        if(orderService.getOrder(trainOrder.getOid()).getOrderStatus() != Order.OrderStatus.Canceled ) {
+            Train train = trainService.getTrainByTidAndDate(tid, date);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            try {
+                LocalTime startTime = LocalTime.parse(train.getStartTime(), formatter);
+                LocalTime arriveTime = LocalTime.parse(train.getArrivalTime(), formatter);
 
-        List<Food> foodList = foodService.getAllFood(tid, date, time);
-        Map<String, List<Food>> resMap = new HashMap<>();
-        resMap.put("result", foodList);
-        return resMap;
+                LocalTime lunchStartTime = LocalTime.of(12, 0, 0);
+                LocalTime lunchEndTime = LocalTime.of(14, 0, 0);
+                LocalTime dinnerStartTime = LocalTime.of(17, 0, 0);
+                LocalTime dinnerEndTime = LocalTime.of(19, 0, 0);
+
+                if(time.equals("lunch")) {
+                    if (!startTime.isBefore(lunchStartTime) && !arriveTime.isAfter(lunchEndTime)) {
+                        haveTicket[0] = true;
+                    }
+                    else {
+                        info = "午餐点您不在车上哦";
+                    }
+                } else {
+                    if (!startTime.isBefore(dinnerStartTime) && !arriveTime.isAfter(dinnerEndTime)) {
+                        haveTicket[0] = true;
+                    }
+                    else {
+                        info = "晚餐点您不在车上哦";
+                    }
+                }
+            } catch (DateTimeParseException e) {
+                System.out.println("时间格式解析错误: " + e.getMessage());
+            }
+        }
+
+        List<Object> result = new ArrayList<>();
+        foodService.getAllFood(tid, date, time).forEach(e->{
+            result.add(new HashMap<>() {{
+                put("name", e.getName());
+                put("price", e.getPrice().toString());
+                put("photo", e.getPhoto());
+                put("number", e.getNum());
+            }});
+        });
+        String finalInfo = info;
+        return new HashMap<>() {{
+            put("result", result);
+            put("haveTicket", haveTicket[0]);
+            put("info", finalInfo);
+        }};
     }
 
     @PostMapping("/food/bill")
@@ -65,19 +114,13 @@ public class FoodController {
     @GetMapping("/food/orders/{userID}/{status}")
     Map<String, Object> getOrders(@PathVariable String userID,
                                   @PathVariable String status) {
-        List<Order> orders;
-        if (status.equals("paid")) {
-            orders = orderService.getOrdersByUidAndStatus(userID, Order.OrderStatus.Paid, Order.OrderType.Food);
-        }
-        else if (status.equals("cancel")) {
-            orders = orderService.getOrdersByUidAndStatus(userID, Order.OrderStatus.Canceled, Order.OrderType.Food);
-        }
-        else if (status.equals("done")) {
-            orders = orderService.getOrdersByUidAndStatus(userID, Order.OrderStatus.Done, Order.OrderType.Food);
-        }
-        else {
-            orders = orderService.getOrderByUid(userID, Order.OrderType.Food);
-        }
+        List<Order> orders = switch (status) {
+            case "paid" -> orderService.getOrdersByUidAndStatus(userID, Order.OrderStatus.Paid, Order.OrderType.Food);
+            case "cancel" ->
+                    orderService.getOrdersByUidAndStatus(userID, Order.OrderStatus.Canceled, Order.OrderType.Food);
+            case "done" -> orderService.getOrdersByUidAndStatus(userID, Order.OrderStatus.Done, Order.OrderType.Food);
+            default -> orderService.getOrderByUid(userID, Order.OrderType.Food);
+        };
 
         List<Object> result = new ArrayList<>();
         orders.forEach(order -> {

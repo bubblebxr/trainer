@@ -30,6 +30,11 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
+    public Order getOrder(String oid) {
+        return orderMapper.getOrder(oid);
+    }
+
+    @Override
     public void addOrder(Order order) {
         orderMapper.addOrder(order);
     }

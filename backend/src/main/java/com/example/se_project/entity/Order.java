@@ -26,7 +26,17 @@ public class Order {
     private String uid;
     private String billTime;
 
-    public Double total;
+    private String cancelTime;
+
+    public String getCancelTime() {
+        return cancelTime;
+    }
+
+    public void setCancelTime(String cancelTime) {
+        this.cancelTime = cancelTime;
+    }
+
+    private Double total;
 
     public Double getTotal() {
         return total;

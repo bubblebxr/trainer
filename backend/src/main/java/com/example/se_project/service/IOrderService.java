@@ -14,6 +14,8 @@ public interface IOrderService {
 
     public Order getOrderByOidAndUid(String oid, String uid);
 
+    public Order getOrder(String oid);
+
     public void addOrder(Order order);
 
     public void cancelOrder(Order order);

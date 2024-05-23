@@ -2,6 +2,7 @@ package com.example.se_project.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 
+import java.time.Duration;
 import java.util.Date;
 import java.util.List;
 
@@ -15,11 +16,11 @@ public class Train {
 
     private String arrivalStation;
 
-    private Date startTime;
+    private String startTime;
 
-    private Date arrivalTime;
+    private String arrivalTime;
 
-    private Date duration;
+    private Duration duration;
     // 0高铁 1火车
     private Integer type;
 
@@ -95,27 +96,27 @@ public class Train {
         this.arrivalStation = arrivalStation;
     }
 
-    public Date getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public Date getArrivalTime() {
+    public String getArrivalTime() {
         return arrivalTime;
     }
 
-    public void setArrivalTime(Date arrivalTime) {
+    public void setArrivalTime(String arrivalTime) {
         this.arrivalTime = arrivalTime;
     }
 
-    public Date getDuration() {
+    public Duration getDuration() {
         return duration;
     }
 
-    public void setDuration(Date duration) {
+    public void setDuration(Duration duration) {
         this.duration = duration;
     }
 

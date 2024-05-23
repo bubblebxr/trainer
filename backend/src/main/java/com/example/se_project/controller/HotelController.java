@@ -127,8 +127,8 @@ public class HotelController {
                 roomInfo.add(new HashMap<>() {{
                     put("name", map.get("name"));
                     put("photo", map.get("photo"));
-                    put("price", map.get("MIN(price)"));
-                    put("num", "余" + map.get("MIN(num)") + "间");
+                    put("price", Double.parseDouble(map.get("MIN(price)").toString()));
+                    put("num",Integer.parseInt(map.get("MIN(num)").toString()));
                     put("size", map.get("size") + "平米");
                     put("others", map.get("others"));
                     put("bed-size", map.get("bedSize"));

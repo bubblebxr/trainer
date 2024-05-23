@@ -35,7 +35,7 @@
             <el-form-item label="身份证号:" :rules="[{ required: true, message: '身份证号不能为空' },]">
                 <el-input v-model="form.identification" />
             </el-form-item>
-            <el-form-item label="电话:" :rules="[{ required: true, message: '电话不能为空' },]">
+            <el-form-item label="联系方式:" :rules="[{ required: true, message: '联系方式不能为空' },]">
                 <el-input v-model="form.phone" />
             </el-form-item>
         </el-form>
@@ -54,7 +54,7 @@
             <el-form-item label="身份证号:" :rules="[{ required: true, message: '身份证号不能为空' },]">
                 <el-input v-model="form.identification" />
             </el-form-item>
-            <el-form-item label="电话:" :rules="[{ required: true, message: '电话不能为空' },]">
+            <el-form-item label="联系方式:" :rules="[{ required: true, message: '联系方式不能为空' },]">
                 <el-input v-model="form.phone" />
             </el-form-item>
         </el-form>
@@ -80,7 +80,7 @@ const form = reactive({
     phone: '',
 });
 const passengers = ref([]);
-const id = ref('1');//暂时代替用户id
+const id =localStorage.getItem('user_id');;//暂时代替用户id
 const multipleSelection = ref([]);
 const dialogFormVisible = ref(false);
 const insertTable = ref(false);
@@ -95,7 +95,7 @@ const selectable = (row, index) => {
 }
 const getInfo = async () => {
     try {
-        const data = await getPassengers(id.value);
+        const data = await getPassengers(id);
         passengers.value = data.data.passenger;
         console.log("获取乘车人数组成功", passengers.value);
     } catch (error) {
@@ -105,7 +105,7 @@ const getInfo = async () => {
 const singleDelete = async (index) => {
     console.log("delete" + passengers.value[index]['name']);
     var identification = passengers.value[index]['identification'];
-    const data = await deletePassengers(id.value, identification);
+    const data = await deletePassengers(id, identification);
     if (data.data.info === true) {
         passengers.value.splice(index, 1);
         ElMessage({
@@ -125,9 +125,8 @@ const insert=()=>{
 };
 const insertFinish=async()=>{
     var p = /^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/;
-    var reg = /^[1][3,4,5,7,8][0-9]{9}$/
-    if (p.test(form.identification) && reg.test(form.phone)) {
-        const data = await insertPassengers(id.value,form.name, form.identification, form.phone);
+    if (p.test(form.identification)) {
+        const data = await insertPassengers(id,form.name, form.identification, form.phone);
         if (data.data.info === true) {
             passengers.value.push({ name: form.name, identification: form.identification, phone: form.phone });
             ElMessage({
@@ -163,8 +162,7 @@ const editInfo = async (index) => {
 };
 const editFinish = async () => {
     var p = /^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/;
-    var reg = /^[1][3,4,5,7,8][0-9]{9}$/
-    if (p.test(form.identification) && reg.test(form.phone)) {
+    if (p.test(form.identification) ) {
         const data = await updatePassengers(id.value, presentEdit.value['identification'], form.name, form.identification, form.phone);
         if (data.data.info === true) {
             getInfo();

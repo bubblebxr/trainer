@@ -90,7 +90,7 @@
           </div>
         </el-popover>
         <div id="loggedInMessage" style="display:none">
-              <div style="marigin-top:30px;">
+              <div style="margin-top:30px;">
               
                 <a-avatar style="margin-top:10px;margin-right:20px;" size="large" :src="'https://m.elongstatic.com/hotel_pc_i18n/product/_nuxt/userHead.0-0-3-213881db..svg'" />
 

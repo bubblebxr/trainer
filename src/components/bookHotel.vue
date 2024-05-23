@@ -91,7 +91,9 @@
 import { StarOutlined, LikeOutlined, MessageOutlined } from '@ant-design/icons-vue'
 import { getHotel,getPlaces } from '../api/api';
 import { ref, onMounted, watch } from 'vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus';
+import { useRouter } from "vue-router";
+const router = useRouter();
 var listData = ref([]); /*酒店信息*/
 const sort_type = ref('likes');/**排序方式 */
 const arrive_station = ref('');/**站 */
@@ -178,6 +180,8 @@ const fetchData = async () => {
 onMounted(() => {
     fetchData();
     first.value = true;
+    arrive_station.value = router.currentRoute.value.query.arrive_station;
+    arrive_date.value = router.currentRoute.value.query.date;
 });
 //选择站
 const queryStation = (queryString, cb) => {

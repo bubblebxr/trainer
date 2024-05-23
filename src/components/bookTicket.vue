@@ -146,7 +146,6 @@
                         <el-button type="success" plain @click="submitTicket(scope.$index)">预订</el-button>
                     </template>
                 </el-table-column>
-
             </el-table>
         </div>
     </div>
@@ -178,14 +177,21 @@ const startStationOptions = ref([]);/**所有站点信息 */
 const stations = ref([]);/*车站信息*/
 const searchValid = ref(false);
 const searchResult = ref([]);
+const url=ref("");
 const submitTicket = (lineIndex) => {
-    const url = router.resolve({
+    // url.value=router.resolve({
+    //     path: "/home/ticketDetail",
+    //     query: {
+    //         line: JSON.stringify(searchResult.value[lineIndex]),
+    //     },
+    // });
+    // window.open(url.value.href,"_blank");
+    router.push({
         path: "/home/ticketDetail",
         query: {
             line: JSON.stringify(searchResult.value[lineIndex]),
         },
     });
-    window.open(url.href, '_blank');
 };
 
 const handleStart = item => {

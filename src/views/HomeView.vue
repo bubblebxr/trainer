@@ -113,10 +113,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted,inject } from 'vue'
+import { ElMessage } from "element-plus";
+import { ref, onMounted, inject, provide } from 'vue'
 import { useRouter } from "vue-router";
 const router = useRouter();
-const activeIndex = ref('1')
+const activeIndex = ref('1');
+provide('activeIndex', activeIndex);
+const isLoggedIn = localStorage.getItem('isLoggedIn');
 const selectMenu = (key) => {
   console.log('当前选中为' + key);
   activeIndex.value = key;
@@ -127,7 +130,16 @@ const selectMenu = (key) => {
   } else if (activeIndex.value === "3") {
     router.push('/home/dining');
   } else if (activeIndex.value === "4") {
-    router.push('/home/orders');
+    console.log(isLoggedIn);
+    if(isLoggedIn==="true"){
+      router.push('/home/orders');
+    }else{
+      ElMessage({
+        message: "请先登录",
+        type: "error",
+        plain: true,
+      });
+    }
   }
 }
 

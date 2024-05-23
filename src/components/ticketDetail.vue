@@ -1,7 +1,7 @@
 <template>
     <el-container width="100%;" style="display: flex;align-items: center;justify-content: center;">
         <el-main width="75%" style="height:88vh;margin-top:-1%;">
-            <el-card style="width:100%;justify-content: center;height:15%;">
+            <el-card style="width:100%;justify-content: center;height:17%;">
                 <el-row>
                     <el-col :span="6" style="display: flex;flex-direction: column;justify-content: center;">
                         <el-text size="large" style="width">{{ start_station }}</el-text>
@@ -11,7 +11,7 @@
                     <el-col :span="6" style="display: flex;flex-direction: column;justify-content: center;">
                         <el-divider content-position="center"><el-text tag="b" size="large"
                                 style="font-size:20px;padding:5px 35px;border:1.5px solid #DDDCDC;border-radius: 10px;">{{
-                                tid }}</el-text></el-divider>
+                        tid }}</el-text></el-divider>
                     </el-col>
                     <el-col :span="6"
                         style="display: flex;flex-direction: column;justify-content: center;border-right:1.5px solid #DDDCDC;">
@@ -24,10 +24,10 @@
                     </el-col>
                 </el-row>
             </el-card>
-            <el-card style="width:100%;margin-top:1%;height:27%;padding-top: 1%;">
-                <h1 style="margin-top:-1%;margin-bottom: 1%;">剩余座席</h1>
+            <el-card style="width:100%;margin-top:1%;height:29%;">
+                <h1 style="margin-top:-1%;margin-bottom: 0.5%;">剩余座席</h1>
                 <div style="display:flex;text-align:center;">
-                    <el-card style="flex:1;margin:0% 1%;" shadow="never" v-if="business != '无票'">
+                    <el-card style="flex:1;margin:0% 0.5%;" shadow="never" v-if="business != '无票'">
                         <el-text tag="b" style="font-size:16px;margin-top:0%;">商务座</el-text><br /><br />
                         <el-text size="large" style="color: #ffa31a;">￥{{ business }}</el-text>
                     </el-card>
@@ -53,7 +53,7 @@
                     </el-card>
                 </div>
             </el-card>
-            <el-card style="width:100%;margin-top:1%;height:49%;">
+            <el-card style="width:100%;margin-top:1%;height:46%;">
                 <h1>乘客信息</h1>
                 <div style="display: flex;justify-content: center;">
                     <el-checkbox-group v-model="selectedPerson" @change="handleChecked" :min="1">
@@ -147,10 +147,19 @@
             </div>
         </div>
     </el-dialog>
+    <el-dialog v-model="change" title="您已成功购买火车票，可以进行如下操作:" width="30em" align-center>
+        <template #footer>
+            <div class="dialog-footer">
+                <el-button type="success" plain @click="bookFood">购买火车餐</el-button>
+                <el-button type="success" plain @click="bookHotel">预订酒店</el-button>
+                <el-button @click="change = false">什么也不做</el-button>
+            </div>
+        </template>
+    </el-dialog>
 </template>
 <script setup>
 import { useRouter } from "vue-router";
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, inject } from 'vue';
 import { getPassengers, postTicketBill } from '../api/api';
 import { ElNotification, ElMessage } from 'element-plus';
 const router = useRouter();
@@ -179,15 +188,39 @@ const value = ref([]);//多选框选中的
 const total = ref(0);
 const billVisible = ref(false);
 const payPicture = ref(require("../assets/vxPay.jpg"));
-const ordersCommit=async()=>{
-    billVisible.value=false;
-    var info=[];
+const change = ref(false);
+const activeIndex = inject('activeIndex');
+/* 页面跳转预订火车餐 */
+const bookFood = () => {
+    activeIndex.value = '3';
+    router.push({
+        path: "/home/dining",
+        query: {
+            tid: tid.value,
+            date: start_date.value,
+        },
+    });
+};
+/*页面跳转预订酒店 */
+const bookHotel = () => {
+    activeIndex.value = '2';
+    router.push({
+        path: "/home/hotel",
+        query: {
+            arrive_station: arrive_station.value,
+            date: start_date.value,
+        },
+    });
+};
+const ordersCommit = async () => {
+    billVisible.value = false;
+    var info = [];
     const regex = /^(.*?)（/;
-    for (var i = 0; i < passengersTable.value.length;i++){
+    for (var i = 0; i < passengersTable.value.length; i++) {
         var temp = value.value[i].match(regex)[1];
-        info.push({ name: passengersTable.value[i]['name'], identification: passengersTable.value[i]['identification'],seat_type:temp });
+        info.push({ name: passengersTable.value[i]['name'], identification: passengersTable.value[i]['identification'], seat_type: temp });
     }
-    try{
+    try {
         const responce = await postTicketBill(
             info,
             id.value,
@@ -196,20 +229,25 @@ const ordersCommit=async()=>{
             total.value,
         );
         var result = responce.data.result;
-        if(result){
+        if (result) {
             ElMessage({
                 message: "下单成功",
                 type: "success",
             });
-            //todo:页面跳转
-        }else{
+            ElNotification({
+                title: '订票成功',
+                message: "您成功预定了" + tid.value + "班次的列车，请注意发车时间，祝您旅途顺利！",
+                type: 'success',
+            })
+            change.value = true;
+        } else {
             ElMessage({
-                message: "下单成功",
+                message: "下单失败，建议您刷新重试",
                 type: "error",
             });
         }
-    }catch(error){
-        console.log('提交火车票订单失败',error);
+    } catch (error) {
+        console.log('提交火车票订单失败', error);
     }
 }
 const changePay = () => {

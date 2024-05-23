@@ -1,9 +1,10 @@
 import api from './request';
 
+/* 车次查询 */
 export const getStation = () => {
     return api.get('/station');
 };
-
+/* 获取车次查询信息 */
 export const getSearchResult = (startCity, arriveCity, date, isGD, sortType, seatType, isHide) => {
     const queryString = `?is_GD=${isGD}&sort_type=${sortType}&seat_type=${seatType}&isHide=${isHide}`;
     return api.post(`/trains/${startCity}/${arriveCity}/${date}${queryString}`);
@@ -139,6 +140,15 @@ export const postLogin = (userID, password) => {
         {
             "id": userID,
             "password": password
+        }
+    )
+}
+
+export const updatePassword = (userID, newPassword) => {
+    return api.post(`/updatepassword`,
+        {
+            "id": userID,
+            "newpassword": newPassword
         }
     )
 }

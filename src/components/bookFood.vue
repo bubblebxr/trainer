@@ -115,6 +115,8 @@ import { ref, onMounted, watch } from "vue";
 import foodCart from "./foodCart.vue";
 import { getFoods, getThisTicket, postFoodBill } from "@/api/api";
 import { ElMessage } from "element-plus";
+import { useRouter } from "vue-router";
+const router = useRouter();
 const userID = "00000"; //当前用户ID
 const tid = ref("");
 const date = ref(""); //TODO date自动填充逻辑！
@@ -179,6 +181,8 @@ watch(
 );
 onMounted(() => {
   fetchTids();
+  tid.value = router.currentRoute.value.query.tid;
+  date.value=router.currentRoute.value.query.date;
 });
 </script>
 

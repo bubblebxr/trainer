@@ -124,7 +124,7 @@
                                 }}元</span></el-text>
                     </el-col>
                     <el-col :span="2" v-if="item.status === '已支付'" :offset="15">
-                        <el-popconfirm title="确定要取消这个订单吗？" @confirm="cancelOrders(item.oid)">
+                        <el-popconfirm title="确定要取消这个订单吗？如您预定了同一班次的火车餐也将一并取消。" @confirm="cancelOrders(item.oid,item.tid)">
                             <template #reference>
                                 <el-button type="warning" plain style="margin-top:-1%;">取消订单</el-button>
                             </template>
@@ -138,11 +138,11 @@
 <script setup>
 import { onMounted, ref, watch } from "vue";
 import { getTicketOrders, cancelTicketOrder } from "../../api/api.js";
-import { ElMessage } from "element-plus";
+import { ElMessage, ElNotification } from "element-plus";
 const status = ref("all");
 const userID = "0000";
 const ticketOrders = ref([]);
-const cancelOrders = async (oid) => {
+const cancelOrders = async (oid,tid) => {
     try {
         const responce = await cancelTicketOrder(userID, oid);
         if (responce.data.result) {
@@ -150,14 +150,17 @@ const cancelOrders = async (oid) => {
                 message: '取消订单成功，退款将原路返回。',
                 type: "success",
             });
-            //TODO 通知消息弹窗
+            ElNotification({
+                title: '退票成功',
+                message: "您成功取消了" + tid + "班次的列车，如果您预定了此班次的火车餐也已自动帮您取消，退款将于1~5个工作日原路返回。",
+                type: 'success',
+            });
         }
         else {
             ElMessage.error("取消订单失败");
         }
     } catch (error) {
         console.error("取消订单失败", error);
-        ElMessage.error("取消订单失败");
     }
     getOrders();
 }

@@ -71,7 +71,7 @@ import { onMounted, ref, watch } from "vue";
 import { getThisTicket, cancelTicketOrder } from "../../api/api.js";
 import { ElMessage } from "element-plus";
 const status = ref("all");
-const userID = "0000";
+const userID = localStorage.getItem('user_id');
 const ticketOrders = ref([]);
 const cancelOrders = async (oid) => {
     try {

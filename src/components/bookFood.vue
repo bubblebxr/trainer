@@ -165,30 +165,7 @@ const fetchTids = async () => {
     console.error("获取车站数组失败：", error);
   }
 };
-const submitBill = async (sum_price) => {
-  try {
-    const responce = await postFoodBill(
-      order_foods.value,
-      userID,
-      tid,
-      date,
-      time,
-      sum_price
-    );
-    var info = responce.data.info;
-    if (responce.data.result) {
-      ElMessage({
-        message: "下单成功",
-        type: "success",
-      });
-    } else {
-      ElMessage.error("下单失败，" + info);
-    }
-  } catch (error) {
-    console.error("提交食物表单失败", error);
-  }
-  //TODO 通知消息
-};
+
 
 watch(
   foodList,

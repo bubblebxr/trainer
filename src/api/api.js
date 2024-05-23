@@ -107,3 +107,38 @@ export const getTicketOrders = (userID, status) => {
 export const cancelTicketOrder = (userID, oid) => {
     return api.post(`/ticket/cancel/${userID}/${oid}`);
 }
+/*城市查询*/
+export const getPlaces = () => {
+    return api.get('/getPlaces');
+};
+/*获取酒店组*/
+export const getHotel = (arrive_station, arrive_date, Ideparture_date, sort_type) => {
+    const queryString = `?sort_type=${sort_type}`;
+    return api.get(`/hotel/${arrive_station}/${arrive_date}/${Ideparture_date}${queryString}`);
+};
+
+export const getHotelDetail = (hotel_id, double_choose, big_choose, family_choose, check_in, check_out) => {
+    const queryString = `?hotel_id=${encodeURIComponent(hotel_id)}&double_choose=${encodeURIComponent(double_choose)}&big_choose=${encodeURIComponent(big_choose)}&family_choose=${encodeURIComponent(family_choose)}&check_in=${encodeURIComponent(check_in)}&check_out=${encodeURIComponent(check_out)}`;
+    return api.get(`/hotel_detail${queryString}`);
+}
+
+/*提交个人注册信息*/
+export const postRegister = (userID, name, password, email) => {
+    return api.post(`/register`,
+        {
+            "id": userID,
+            "name": name,
+            "password": password,
+            "email": email
+        }
+    )
+}
+/*登陆*/
+export const postLogin = (userID, password) => {
+    return api.post(`/login`,
+        {
+            "id": userID,
+            "password": password
+        }
+    )
+}

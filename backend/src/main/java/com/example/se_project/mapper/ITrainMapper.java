@@ -18,4 +18,6 @@ public interface ITrainMapper extends BaseMapper<Train> {
 
     List<Stopover> searchStopover(String trainId);
 
+    void addTrainOrderDetail(String oid, String trainId,String trainDate,String name,String identification,String seatType);
+
 }

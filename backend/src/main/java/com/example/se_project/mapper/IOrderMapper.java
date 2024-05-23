@@ -18,4 +18,7 @@ public interface IOrderMapper {
 
     @Delete("delete from orders where oid = #{oid}")
     void deleteOrder(Order order);
+
+    @Update("update orders set cancelTime = #{cancelTime} where oid=#{oid}")
+    void setCancelTime(String oid,String cancelTime);
 }

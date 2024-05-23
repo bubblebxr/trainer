@@ -1,48 +1,54 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.se_project.mapper.IHotelMapper">
-    <select id="searchHotel">
-        SELECT * FROM hotels
-<<<<<<< Updated upstream
-        WHERE hid=#{id}
-=======
-        WHERE id=#{id}
->>>>>>> Stashed changes
+    <select id="searchHotelByCity">
+        SELECT id
+        FROM hotels
+        WHERE city = #{arrive_station}
+    </select>
+    <select id="getCommentNum">
+        select count(*)
+        from comments
+        where hotel_id = #{id}
     </select>
     <select id="searchComment">
-        select * from comments
-        where hotel_id=#{id}
+        select *
+        from comments
+        where hotel_id = #{id}
     </select>
-    <select id="searchRoom">
-        select * from rooms
-        where hotel_id=#{id}
-        and date >= #{arrive_date}
-        and date &lt; #{ldeparture_date}
+    <select id="getHotelRank">
+        select AVG(grade)
+        from comments
+        where hotel_id = #{id}
     </select>
-    <select id="searchAvailableHotel" resultType="java.lang.Integer">
-        SELECT hotel_id
-        FROM (SELECT hotel_id,
-                     date,
-                     MAX(num) AS max_available
-              FROM rooms
-              WHERE city = #{city}
-                AND date >= #{arrive_date}
-                AND date &lt; #{ldeparture_date}
-              GROUP BY hotel_id, date) AS available_rooms_per_day
-        GROUP BY hotel_id
-        HAVING MIN(max_available) > 0;
-    </select>
-    <update id="updatemin">
-        update hotels
-        set miniprice=#{miniprice}
-        where hid=#{id}
-    </update>
-
     <select id="getPlaces">
-        select distinct city from hotels
+        select distinct city
+        from hotels
     </select>
-    <update id="updateRoomNum">
-
-    </update>
-
+    <select id="getAvailableRoom">
+        select MIN(num), MIN(price), name
+        from se_project.rooms
+        where date >= #{arrive_date}
+          and date &lt; #{ldeparture_date}
+          and hotel_id = #{id}
+        group by name
+    </select>
+    <select id="getRoomDetail">
+        select MIN(num), MIN(price), name,photo,size,others,bedSize
+        from se_project.rooms
+        where date >= #{arrive_date}
+          and date &lt; #{ldeparture_date}
+          and hotel_id = #{id}
+        group by name,photo,size,others,bedSize
+    </select>
+    <select id="getHotelInfo">
+        select *
+        from hotels
+        where id = #{id}
+    </select>
+    <select id="getHotelPhoto">
+        select photoUrl
+        from hotelphotos
+        where id=#{id}
+    </select>
 </mapper>

@@ -11,13 +11,23 @@ import java.util.Map;
 
 @Mapper
 public interface IHotelMapper {
-    Hotel searchHotel(Integer id);
-    List<Comment> searchComment(Integer id);
-    List<Room> searchRoom(Integer id);
 
-    // 查询订购期间有可用房型的酒店编号
-    List<Integer> searchAvailableHotel(String city, String arrive_date, String Ideparture_date);
-    void updatemin(Integer id,String miniprice);
+    List<Comment> searchComment(String id);
+
+    List<String> searchHotelByCity(String city);
+
 
     List<String> getPlaces();
+
+    List<Map<String, Object>> getAvailableRoom(String id, String arrive_date, String ldeparture_date);
+
+    Integer getCommentNum(String id);
+
+    Hotel getHotelInfo(String id);
+
+    List<String> getHotelPhoto(String id);
+
+    Double getHotelRank(String id);
+
+    List<Map<String, Object>> getRoomDetail(String id, String arrive_date, String ldeparture_date);
 }

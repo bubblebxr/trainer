@@ -9,39 +9,58 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service("hotelService")
 public class HotelServiceImpl implements IHotelService {
     @Autowired
     IHotelMapper hotelMapper;
 
+    // 根据city，找出所有该city的hotelId
     @Override
-    public List<Integer> searchAvailableHotelId(String city, String arrive_date, String ldeparture_date) {
-        return hotelMapper.searchAvailableHotel(city, arrive_date, ldeparture_date);
+    public List<String> searchHotelByCity(String city) {
+        return hotelMapper.searchHotelByCity(city);
     }
 
-    @Override
-    public Hotel searchHotel(Integer id) {
-        return hotelMapper.searchHotel(id);
-    }
 
     @Override
-    public List<Room> searchRoom(Integer id) {
-        return hotelMapper.searchRoom(id);
-    }
-
-    @Override
-    public List<Comment> searchComment(Integer id) {
+    public List<Comment> searchComment(String id) {
         return hotelMapper.searchComment(id);
     }
 
-    @Override
-    public void updateMin(Integer id, String miniprice) {
-        hotelMapper.updatemin(id, miniprice);
-    }
 
     @Override
     public List<String> getPlaces() {
         return hotelMapper.getPlaces();
+    }
+
+    @Override
+    public List<Map<String, Object>> getAvailableRoom(String id, String arrive_date, String ldeparture_date) {
+        return hotelMapper.getAvailableRoom(id, arrive_date, ldeparture_date);
+    }
+
+    @Override
+    public Integer getCommentNum(String id) {
+        return hotelMapper.getCommentNum(id);
+    }
+
+    @Override
+    public Hotel getHotelInfo(String id) {
+        return hotelMapper.getHotelInfo(id);
+    }
+
+    @Override
+    public List<String> getHotelPhoto(String id) {
+        return hotelMapper.getHotelPhoto(id);
+    }
+
+    @Override
+    public Double getHotelRank(String id) {
+        return hotelMapper.getHotelRank(id);
+    }
+
+    @Override
+    public List<Map<String, Object>> getRoomDetail(String id, String arrive_date, String ldeparture_date) {
+        return hotelMapper.getRoomDetail(id, arrive_date, ldeparture_date);
     }
 }

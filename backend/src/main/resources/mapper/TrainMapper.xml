@@ -94,5 +94,9 @@
         where trainId = #{trainId}
         order by stationId
     </select>
+    <insert id="addTrainOrderDetail">
+        insert into trainorders(oid,trainId,trainDate,name,identification,seatType)
+        values(#{oid},#{trainId},#{trainDate},#{name},#{identification},#{seatType})
+    </insert>
 
 </mapper>

@@ -11,4 +11,6 @@ public interface ITrainService {
     public List<Train> searchTrain(String start_station, String arrive_station, String date, Integer isGD, Integer sort_type, List<Boolean> seat_type, Boolean isHide);
 
     public List<Stopover> searchStopover(String trainId);
+
+    public void addTrainOrderDetail(String oid,String trainId, String trainDate, String name, String identification, String seatType);
 }

@@ -15,6 +15,33 @@ public class Room {
     @JsonIgnore
     private String city;
     private String date;
+    private Double size;
+    private String bedSize;
+    private String others;
+
+    public Double getSize() {
+        return size;
+    }
+
+    public void setSize(Double size) {
+        this.size = size;
+    }
+
+    public String getBedSize() {
+        return bedSize;
+    }
+
+    public void setBedSize(String bedSize) {
+        this.bedSize = bedSize;
+    }
+
+    public String getOthers() {
+        return others;
+    }
+
+    public void setOthers(String others) {
+        this.others = others;
+    }
 
     public String getDate() {
         return date;

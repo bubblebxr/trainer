@@ -10,15 +10,23 @@ import java.util.Map;
 
 @Component
 public interface IHotelService {
-    public List<Integer> searchAvailableHotelId(String city, String arrive_date, String Ideparture_date);
+    List<String> searchHotelByCity(String city);
 
-    public Hotel searchHotel(Integer id);
 
-    public List<Room> searchRoom(Integer id);
+    List<Comment> searchComment(String id);
 
-    public List<Comment> searchComment(Integer id);
-
-    void updateMin(Integer id, String miniprice);
 
     List<String> getPlaces();
+
+    List<Map<String, Object>> getAvailableRoom(String id, String arrive_date, String ldeparture_date);
+
+    Integer getCommentNum(String id);
+
+    Hotel getHotelInfo(String id);
+
+    List<String> getHotelPhoto(String id);
+
+    Double getHotelRank(String id);
+
+    List<Map<String, Object>> getRoomDetail(String id, String arrive_date, String ldeparture_date);
 }

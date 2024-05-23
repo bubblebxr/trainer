@@ -31,4 +31,9 @@ public class OrderServiceImpl implements IOrderService {
     public void deleteOrder(Order order) {
         orderMapper.deleteOrder(order);
     }
+@Override
+    public void setCancelTime(String oid,String cancelTime){
+        orderMapper.setCancelTime(oid,cancelTime);
+}
+
 }

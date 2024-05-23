@@ -7,23 +7,95 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class Hotel{
-    private Integer id;
-    @TableField(value="city")
+public class Hotel {
+    private String id;
+    @TableField(value = "city")
     private String arrive_station;
     private String name;
-    @TableField(value = "rank_score")
-    private double rank;
+    //private Double grade;
     private Integer stars;
     private Integer likes;
-    private Integer messages;
-    private String miniprice;
     private String photo;
-    private String description;
+    private String position;
     private String content;
     private List<Comment> comments;
     private List<Room> rooms;
-    //private Map<String, Integer> date_num;
+
+    private String phone;
+    private String setTime;
+    private String description;
+    private String breakfastDescription;
+    private String ageNotion;
+    private String checkinTime;
+    private String checkoutTime;
+
+    public String getSetTime() {
+        return setTime;
+    }
+
+    public void setSetTime(String setTime) {
+        this.setTime = setTime;
+    }
+
+    public String getBreakfastDescription() {
+        return breakfastDescription;
+    }
+
+    public void setBreakfastDescription(String breakfastDescription) {
+        this.breakfastDescription = breakfastDescription;
+    }
+
+    public String getAgeNotion() {
+        return ageNotion;
+    }
+
+    public void setAgeNotion(String ageNotion) {
+        this.ageNotion = ageNotion;
+    }
+
+    public String getCheckinTime() {
+        return checkinTime;
+    }
+
+    public void setCheckinTime(String checkinTime) {
+        this.checkinTime = checkinTime;
+    }
+
+    public String getCheckoutTime() {
+        return checkoutTime;
+    }
+
+    public void setCheckoutTime(String checkoutTime) {
+        this.checkoutTime = checkoutTime;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getArrive_station() {
         return arrive_station;
@@ -41,13 +113,13 @@ public class Hotel{
         this.name = name;
     }
 
-    public double getRank() {
-        return rank;
-    }
-
-    public void setRank(double rank) {
-        this.rank = rank;
-    }
+//    public Double getGrade() {
+//        return grade;
+//    }
+//
+//    public void setGrade(Double grade) {
+//        this.grade = grade;
+//    }
 
     public Integer getStars() {
         return stars;
@@ -65,22 +137,6 @@ public class Hotel{
         this.likes = likes;
     }
 
-    public Integer getMessages() {
-        return messages;
-    }
-
-    public void setMessages(Integer messages) {
-        this.messages = messages;
-    }
-
-    public String getMiniprice() {
-        return miniprice;
-    }
-
-    public void setMiniprice(String miniprice) {
-        this.miniprice = miniprice;
-    }
-
     public String getPhoto() {
         return photo;
     }
@@ -89,12 +145,12 @@ public class Hotel{
         this.photo = photo;
     }
 
-    public String getDescription() {
-        return description;
+    public String getPosition() {
+        return position;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setPosition(String position) {
+        this.position = position;
     }
 
     public String getContent() {
@@ -120,13 +176,4 @@ public class Hotel{
     public void setRooms(List<Room> rooms) {
         this.rooms = rooms;
     }
-
-//    public Map<String, Integer> getDate_num() {
-//        return date_num;
-//    }
-
-//    public void setDate_num(Map<String, Integer> date_num) {
-//        this.date_num = date_num;
-//    }
-
 }

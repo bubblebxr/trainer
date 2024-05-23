@@ -12,4 +12,6 @@ public interface IOrderService {
     public void cancelOrder(Order order);
 
     public void deleteOrder(Order order);
+
+    void setCancelTime(String oid,String cancelTime);
 }

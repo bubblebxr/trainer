@@ -133,7 +133,7 @@ public class TrainController {
         orderService.addOrder(new Order(oid, userId, billTime, total, Order.OrderStatus.Paid, Order.OrderType.Train));
 
         for (Map<String, String> person : persons) {
-            trainService.addTrainOrderDetail(oid, trainId, trainDate, person.get("name"), person.get("identification"), person.get("seatType"));
+            trainService.addTrainOrderDetail(oid, trainId, trainDate, person.get("name"), person.get("identification"), person.get("seat_type"));
         }
         return new HashMap<>() {{
             put("info", "下单成功！");
@@ -143,7 +143,7 @@ public class TrainController {
     @PostMapping("/ticket/cancel/{userID}/{oid}")
     public Map<String, Object> cancelTrainOrder(@PathVariable String userID,
                                                 @PathVariable String oid,
-                                                @RequestBody String cancelTime) {
+                                                @RequestBody Map<String ,Object> map) {
         Order order = orderService.getOrderByOidAndUid(oid, userID);
         if (order == null) {
             return new HashMap<>() {{
@@ -152,6 +152,7 @@ public class TrainController {
             }};
         } else {
             orderService.cancelOrder(order);
+            String cancelTime = map.get("cancel_time").toString();
             orderService.setCancelTime(oid,cancelTime);
             return new HashMap<>() {{
                 put("info", "取消成功");

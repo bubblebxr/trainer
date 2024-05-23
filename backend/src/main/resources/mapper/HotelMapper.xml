@@ -51,4 +51,8 @@
         from hotelphotos
         where id=#{id}
     </select>
+    <insert id="addHotelorderDetail">
+        insert into hotelorders(oid,checkinTime,checkoutTime,roomNum,roomType,customerName,customerId)
+        values(#{oid},#{checkinTime},#{checkoutTime},#{roomNum},#{roomType},#{customerName},#{customerId})
+    </insert>
 </mapper>

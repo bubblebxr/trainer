@@ -3,14 +3,17 @@ package com.example.se_project.controller;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.se_project.entity.Comment;
 import com.example.se_project.entity.Hotel;
+import com.example.se_project.entity.Order;
 import com.example.se_project.entity.Room;
 import com.example.se_project.service.IHotelService;
+import com.example.se_project.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -21,7 +24,7 @@ public class HotelController {
     @Autowired
     private Hotel current_hotel;
     @Autowired
-    private Room room1, room2, room3;
+    private IOrderService orderService;
 
     // 在Controller中查询最低价
     @GetMapping("/hotel/{arrive_station}/{arrive_date}/{ldeparture_date}")
@@ -127,8 +130,8 @@ public class HotelController {
                 roomInfo.add(new HashMap<>() {{
                     put("name", map.get("name"));
                     put("photo", map.get("photo"));
-                    put("price", map.get("MIN(price)"));
-                    put("num", "余" + map.get("MIN(num)") + "间");
+                    put("price", Double.parseDouble(map.get("MIN(price)").toString()));
+                    put("num",Integer.parseInt(map.get("MIN(num)").toString()));
                     put("size", map.get("size") + "平米");
                     put("others", map.get("others"));
                     put("bed-size", map.get("bedSize"));
@@ -220,5 +223,38 @@ public class HotelController {
         return new HashMap<>() {{
             put("places", places);
         }};
+    }
+
+    @PostMapping("/hotel/bill")
+    public Map<String,Object> submitHotelOrder(@RequestBody Map<String ,Object> map){
+        List<Map<String, String>> customers = (List<Map<String, String>>) map.get("customers");
+        String userId = (String) map.get("id");
+        String checkinTime = (String) map.get("checkin_time");
+        String checkoutTime = (String) map.get("checkout_time");
+        Integer roomNum = (Integer)map.get("room_num");
+        Integer type = (Integer)map.get("room_type");
+        String roomType = "";
+        if(type == 1)
+            roomType="标准双人间";
+        else if(type == 2)
+            roomType="大床房";
+        else if(type== 3)
+            roomType = "家庭房";
+        Double total = (Double) map.get("money");
+
+        String oid = Order.generateOrderId();
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        String formattedDate = formatter.format(date);
+
+        orderService.addOrder(new Order(oid, userId, formattedDate, total, Order.OrderStatus.Paid, Order.OrderType.Hotel));
+        for (Map<String, String> customer:customers) {
+           hotelService.addHotelorderDetail(oid,checkinTime,checkoutTime,roomNum,roomType,customer.get("name"),customer.get("id"));
+        }
+        return new HashMap<>() {{
+            put("result", true);
+        }};
+
     }
 }

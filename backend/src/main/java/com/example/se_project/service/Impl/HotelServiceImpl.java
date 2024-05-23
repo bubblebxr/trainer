@@ -63,4 +63,9 @@ public class HotelServiceImpl implements IHotelService {
     public List<Map<String, Object>> getRoomDetail(String id, String arrive_date, String ldeparture_date) {
         return hotelMapper.getRoomDetail(id, arrive_date, ldeparture_date);
     }
+
+    @Override
+    public void addHotelorderDetail(String oid,String checkinTime, String checkoutTime,Integer roomNum,String roomType,String customerName,String customerId){
+        hotelMapper.addHotelorderDetail(oid,checkinTime,checkoutTime,roomNum,roomType,customerName,customerId);
+    }
 }

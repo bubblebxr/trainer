@@ -67,16 +67,16 @@ public class FoodController {
                                   @PathVariable String status) {
         List<Order> orders;
         if (status.equals("paid")) {
-            orders = foodService.getOrdersByUidAndStatus(userID, Order.OrderStatus.Paid);
+            orders = orderService.getOrdersByUidAndStatus(userID, Order.OrderStatus.Paid, Order.OrderType.Food);
         }
         else if (status.equals("cancel")) {
-            orders = foodService.getOrdersByUidAndStatus(userID, Order.OrderStatus.Canceled);
+            orders = orderService.getOrdersByUidAndStatus(userID, Order.OrderStatus.Canceled, Order.OrderType.Food);
         }
         else if (status.equals("done")) {
-            orders = foodService.getOrdersByUidAndStatus(userID, Order.OrderStatus.Done);
+            orders = orderService.getOrdersByUidAndStatus(userID, Order.OrderStatus.Done, Order.OrderType.Food);
         }
         else {
-            orders = foodService.getOrderByUid(userID);
+            orders = orderService.getOrderByUid(userID, Order.OrderType.Food);
         }
 
         List<Object> result = new ArrayList<>();

@@ -31,15 +31,7 @@ public class FoodServiceImpl implements IFoodService {
     }
 
 
-    @Override
-    public List<Order> getOrdersByUidAndStatus(String uid, Order.OrderStatus status) {
-        return foodMapper.getOrdersByUidAndStatus(uid, status);
-    }
 
-    @Override
-    public List<Order> getOrderByUid(String uid) {
-        return foodMapper.getOrderByUid(uid);
-    }
 
     @Override
     public List<FoodOrder> getFoodOrdersByOid(String oid) {

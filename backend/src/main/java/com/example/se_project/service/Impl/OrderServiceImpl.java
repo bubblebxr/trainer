@@ -6,11 +6,23 @@ import com.example.se_project.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service("orderService")
 public class OrderServiceImpl implements IOrderService {
 
     @Autowired
     IOrderMapper orderMapper;
+
+    @Override
+    public List<Order> getOrdersByUidAndStatus(String uid, Order.OrderStatus status, Order.OrderType type) {
+        return orderMapper.getOrdersByUidAndStatus(uid, status, type);
+    }
+
+    @Override
+    public List<Order> getOrderByUid(String uid, Order.OrderType type) {
+        return orderMapper.getOrderByUid(uid, type);
+    }
 
     @Override
     public Order getOrderByOidAndUid(String oid, String uid) {

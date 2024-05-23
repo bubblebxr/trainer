@@ -3,8 +3,15 @@ package com.example.se_project.service;
 import com.example.se_project.entity.Order;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public interface IOrderService {
+
+    public List<Order> getOrdersByUidAndStatus(String uid, Order.OrderStatus status, Order.OrderType type);
+
+    public List<Order> getOrderByUid(String uid, Order.OrderType type);
+
     public Order getOrderByOidAndUid(String oid, String uid);
 
     public void addOrder(Order order);

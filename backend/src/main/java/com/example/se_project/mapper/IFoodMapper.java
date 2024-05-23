@@ -19,12 +19,6 @@ public interface IFoodMapper extends BaseMapper<Food> {
 
     void addFoodOrder(FoodOrder foodOrder);
 
-    @Select("select * from orders where uid = #{uid} and orderStatus = #{status} and orderType = 0")
-    List<Order> getOrdersByUidAndStatus(String uid, Order.OrderStatus status);
-
-    @Select("select * from orders where uid = #{uid}")
-    List<Order> getOrderByUid(String uid);
-
     @Select("select * from foodOrders where oid = #{oid}")
     List<FoodOrder> getFoodOrdersByOid(String oid);
 }

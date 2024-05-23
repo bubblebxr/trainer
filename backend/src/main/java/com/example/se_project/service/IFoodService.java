@@ -16,9 +16,5 @@ public interface IFoodService {
 
     public void addFoodOrder(FoodOrder foodOrder);
 
-    public List<Order> getOrdersByUidAndStatus(String uid, Order.OrderStatus status);
-
-    public List<Order> getOrderByUid(String uid);
-
     public List<FoodOrder> getFoodOrdersByOid(String oid);
 }

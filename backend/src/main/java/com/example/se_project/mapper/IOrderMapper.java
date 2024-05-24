@@ -33,9 +33,9 @@ public interface IOrderMapper {
     @Update("update orders set cancelTime = #{cancelTime} where oid=#{oid}")
     void setCancelTime(String oid,String cancelTime);
 
-    @Select("select oid,orderStatus,total from orders where uid=#{userID} and orderType='Train'")
-    List<Map<String,String>> getIdByUid(String userID);
+    @Select("select oid,orderStatus,total,billTime from orders where uid=#{userID} and orderType='Train'")
+    List<Map<String,Object>> getIdByUid(String userID);
 
     @Select("select oid from orders where uid=#{userID} and orderStatus=#{status} and orderType='Train'")
-    List<Map<String,String>> getIdByUidAndStatus(String userID,String status);
+    List<Map<String,Object>> getIdByUidAndStatus(String userID,String status);
 }

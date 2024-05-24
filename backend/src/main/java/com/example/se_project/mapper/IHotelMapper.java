@@ -30,6 +30,7 @@ public interface IHotelMapper {
     Double getHotelRank(String id);
 
     List<Map<String, Object>> getRoomDetail(String id, String arrive_date, String ldeparture_date);
-void addHotelorderDetail(String oid,String checkinTime, String checkoutTime,Integer roomNum,String roomType,String customerName,String customerId);
-
+void addHotelorderDetail(String id,String oid,String checkinTime, String checkoutTime,Integer roomNum,String roomType,String customerName,String customerId);
+Map<String,String> getHotelName(String id);
+List<Map<String,Object>> getHotelOrderDetail(String oid);
 }

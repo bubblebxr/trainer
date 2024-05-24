@@ -1,11 +1,11 @@
 package com.example.se_project.controller;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.example.se_project.entity.Comment;
-import com.example.se_project.entity.Hotel;
-import com.example.se_project.entity.Order;
-import com.example.se_project.entity.Room;
+import com.example.se_project.entity.*;
+import com.example.se_project.mapper.IHotelMapper;
+import com.example.se_project.mapper.IMessageMapper;
 import com.example.se_project.service.IHotelService;
+import com.example.se_project.service.IMessageService;
 import com.example.se_project.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +25,8 @@ public class HotelController {
     private Hotel current_hotel;
     @Autowired
     private IOrderService orderService;
+    @Autowired
+    private IMessageService messageService;
 
     // 在Controller中查询最低价
     @GetMapping("/hotel/{arrive_station}/{arrive_date}/{ldeparture_date}")
@@ -131,7 +133,7 @@ public class HotelController {
                     put("name", map.get("name"));
                     put("photo", map.get("photo"));
                     put("price", Double.parseDouble(map.get("MIN(price)").toString()));
-                    put("num",Integer.parseInt(map.get("MIN(num)").toString()));
+                    put("num", Integer.parseInt(map.get("MIN(num)").toString()));
                     put("size", map.get("size") + "平米");
                     put("others", map.get("others"));
                     put("bed-size", map.get("bedSize"));
@@ -226,19 +228,20 @@ public class HotelController {
     }
 
     @PostMapping("/hotel/bill")
-    public Map<String,Object> submitHotelOrder(@RequestBody Map<String ,Object> map){
+    public Map<String, Object> submitHotelOrder(@RequestBody Map<String, Object> map) {
         List<Map<String, String>> customers = (List<Map<String, String>>) map.get("customers");
+        String id = map.get("hotel_id").toString();
         String userId = (String) map.get("id");
         String checkinTime = (String) map.get("checkin_time");
         String checkoutTime = (String) map.get("checkout_time");
-        Integer roomNum = (Integer)map.get("room_num");
-        Integer type = (Integer)map.get("room_type");
+        Integer roomNum = (Integer) map.get("room_num");
+        Integer type = (Integer) map.get("room_type");
         String roomType = "";
-        if(type == 1)
-            roomType="标准双人间";
-        else if(type == 2)
-            roomType="大床房";
-        else if(type== 3)
+        if (type == 1)
+            roomType = "标准双人间";
+        else if (type == 2)
+            roomType = "大床房";
+        else if (type == 3)
             roomType = "家庭房";
         Double total = (Double) map.get("money");
 
@@ -249,12 +252,90 @@ public class HotelController {
         String formattedDate = formatter.format(date);
 
         orderService.addOrder(new Order(oid, userId, formattedDate, total, Order.OrderStatus.Paid, Order.OrderType.Hotel));
-        for (Map<String, String> customer:customers) {
-           hotelService.addHotelorderDetail(oid,checkinTime,checkoutTime,roomNum,roomType,customer.get("name"),customer.get("id"));
+        for (Map<String, String> customer : customers) {
+            hotelService.addHotelorderDetail(id, oid, checkinTime, checkoutTime, roomNum, roomType, customer.get("name"), customer.get("id"));
         }
+
+
+        //Map<String, Object> trainMap = trainService.getTrainByIdAndDate(trainId,trainDate);
+        String content = "您已成功预订" + hotelService.getHotelName(id).get("name") + "，入住时间" + checkinTime + "--" + checkoutTime + "，祝您旅途愉快。";
+        messageService.addMessage(userId, Message.generateMessageId(), oid, "酒店订单支付成功", formattedDate, content, false, 4);
+
         return new HashMap<>() {{
             put("result", true);
         }};
+
+    }
+
+    @GetMapping("/hotel/orders/{userID}/{status}")
+    Map<String, Object> getHotelOrders(@PathVariable String userID,
+                                       @PathVariable String status) {
+        List<Order> orders = switch (status) {
+            case "paid" -> orderService.getOrdersByUidAndStatus(userID, Order.OrderStatus.Paid, Order.OrderType.Hotel);
+            case "cancel" ->
+                    orderService.getOrdersByUidAndStatus(userID, Order.OrderStatus.Canceled, Order.OrderType.Hotel);
+            case "done" -> orderService.getOrdersByUidAndStatus(userID, Order.OrderStatus.Done, Order.OrderType.Hotel);
+            default -> orderService.getOrderByUid(userID, Order.OrderType.Hotel);
+        };
+
+        List<Object> result = new ArrayList<>();
+        orders.forEach(order -> {
+            HashMap<String, Object> map = new HashMap<>();
+            String oid = order.getOid();
+            List<Map<String, Object>> details = hotelService.getHotelOrderDetail(oid);
+
+            String hotelId = details.get(0).get("id").toString();
+            Map<String, String> hotel = hotelService.getHotelName(hotelId);
+            String checkinTime = details.get(0).get("checkinTime").toString();
+            String checkoutTime = details.get(0).get("checkoutTime").toString();
+            map.put("oid", oid);
+            map.put("time", order.getBillTime());
+            map.put("name", hotel.get("name"));
+            map.put("position", map.get("position"));
+            map.put("check_in", checkinTime);
+            map.put("check_out", checkoutTime);
+            map.put("money", order.getTotal());
+            map.put("roomtype", details.get(0).get("roomType"));
+            List<Object> customers = new ArrayList<>();
+
+            details.forEach(detail -> {
+                customers.add(detail.get("name"));
+            });
+            map.put("customers", customers);
+
+            map.put("num", details.get(0).get("roomNum"));
+            map.put("status", switch (order.getOrderStatus()) {
+                case Paid -> "已支付";
+                case Done -> "已完成";
+                case Canceled -> "已取消";
+            });
+            result.add(map);
+        });
+
+        return new HashMap<>() {{
+            put("result", result);
+        }};
+    }
+
+    @PostMapping("/hotel/cancel/{userID}/{oid}")
+    public Map<String, String> cancelHotelOrder(@PathVariable String userID,
+                                                @PathVariable String oid) {
+
+        Order order = orderService.getOrderByOidAndUid(oid, userID);
+        if (order == null) {
+            return new HashMap<>() {{
+                put("info", "订单不存在");
+            }};
+        } else {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = new Date();
+            String formattedDate = formatter.format(date);
+            orderService.cancelOrder(order);
+            orderService.setCancelTime(oid, formattedDate);
+            return new HashMap<>() {{
+                put("cancel_time", formattedDate);
+            }};
+        }
 
     }
 }

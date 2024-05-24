@@ -1,10 +1,8 @@
 package com.example.se_project.controller;
 
-import com.example.se_project.entity.Order;
-import com.example.se_project.entity.Stopover;
-import com.example.se_project.entity.Train;
-import com.example.se_project.entity.TrainOrder;
+import com.example.se_project.entity.*;
 import com.example.se_project.mapper.IOrderMapper;
+import com.example.se_project.service.IMessageService;
 import com.example.se_project.service.IOrderService;
 import com.example.se_project.service.ITrainService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @RestController
 public class TrainController {
@@ -24,6 +22,8 @@ public class TrainController {
     private ITrainService trainService;
     @Autowired
     private IOrderService orderService;
+    @Autowired
+    private IMessageService messageService;
 
     // isGD:0高铁 1火车 2全选
     // sort_type:1start_time升序,2start_tiem降序,3duration升序
@@ -44,16 +44,6 @@ public class TrainController {
 
         List<Train> trains = trainService.searchTrain(start_city, arrive_city, date,
                 is_GD, sort_type, seat_type, isHide);
-//        return new HashMap<>(){{
-//            put("start", start_city);
-//            put("arrive", arrive_city);
-//            put("date", date);
-//            put("is_GD",is_GD);
-//            put("sort", sort_type);
-//            put("seat", seat_type);
-//            put("isHide", isHide);
-//            put("trains", trains);
-//        }};
         List<Object> result = new ArrayList<>();
         trains.forEach(e -> {
             result.add(new HashMap<>() {{
@@ -136,6 +126,15 @@ public class TrainController {
         for (Map<String, String> person : persons) {
             trainService.addTrainOrderDetail(oid, trainId, trainDate, person.get("name"), person.get("identification"), person.get("seat_type"));
         }
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        String formattedDate = formatter.format(date);
+
+        Map<String, Object> trainMap = trainService.getTrainByIdAndDate(trainId,trainDate);
+        String content = "您已购买"+trainDate+"由"+trainMap.get("start_station")+"站发往"+trainMap.get("arrive_station")+"站的"+trainId+"次列车车票，发车时间"+trainMap.get("start_time")+"。请合理安排出行时间。";
+
+        messageService.addMessage(userId,Message.generateMessageId(),oid,"车票订单支付成功",formattedDate,content,false,3);
         return new HashMap<>() {{
             put("info", "下单成功！");
         }};
@@ -221,9 +220,8 @@ public class TrainController {
 
     @GetMapping("/getTid/{userID}")
     public Map<String, Object> getSelfOrder(@PathVariable String userID,
-                                                  @RequestParam(value = "status", defaultValue = "all") String status) {
-        List<Map<String, String>> orders = new ArrayList<>();
-        //List<String>
+                                            @RequestParam(value = "status", defaultValue = "all") String status) {
+        List<Map<String, Object>> orders = new ArrayList<>();
         if (status.equals("paid"))
             status = "Paid";
         else if (status.equals("cancel"))
@@ -235,20 +233,31 @@ public class TrainController {
         else
             orders = orderService.getIdByUidAndStatus(userID, status);
         List<Object> result = new ArrayList<>();
-        for (Map<String, String> order : orders) {
-            Map<String, Object> orderMap = trainService.getSelfOrderDetail(order.get("oid"), userID);
+        String orderStatus;
+        for (Map<String, Object> order : orders) {
+            Map<String, Object> orderMap = trainService.getSelfOrderDetail(order.get("oid").toString(), userID);
             if (orderMap != null) {
+                // System.out.println(order);
+                orderStatus = order.get("orderStatus").toString();
+                if (orderStatus.equals("Paid"))
+                    orderStatus = "已支付";
+                else if (orderStatus.equals("Canceled"))
+                    orderStatus = "已取消";
+                else if (orderStatus.equals("Done"))
+                    orderStatus = "已完成";
+                String finalOrderStatus = orderStatus;
                 result.add(new HashMap<>() {{
                     put("tid", orderMap.get("trainId"));
-                    put("oid", order);
-                    put("status", order.get("orderStatus"));
+                    put("oid", order.get("oid"));
+                    put("status", finalOrderStatus);
                     Map<String, Object> trainMap = trainService.getTrainByIdAndDate(orderMap.get("trainId").toString(), orderMap.get("trainDate").toString());
-                    put("start_station", trainMap.get("startStation"));
-                    put("start_time", trainMap.get("startTime"));
-                    put("arrive_time", trainMap.get("arrivalTime"));
+                    put("start_station", trainMap.get("start_station"));
+                    put("start_time", trainMap.get("start_time"));
+                    put("arrive_time", trainMap.get("arrive_time"));
                     put("order_time", order.get("billTime"));
+                    //put("order_time", time);
                     put("time", trainMap.get("duration"));
-                    put("arrive_station", trainMap.get("arriveStation"));
+                    put("arrive_station", trainMap.get("arrive_station"));
                     put("date", orderMap.get("trainDate"));
                     put("seat_type", orderMap.get("seatType"));
                     put("price", order.get("total"));
@@ -256,8 +265,8 @@ public class TrainController {
             }
 
         }
-        return new HashMap<>(){{
-            put("result",result);
+        return new HashMap<>() {{
+            put("result", result);
         }};
 
     }

@@ -65,7 +65,18 @@ public class HotelServiceImpl implements IHotelService {
     }
 
     @Override
-    public void addHotelorderDetail(String oid,String checkinTime, String checkoutTime,Integer roomNum,String roomType,String customerName,String customerId){
-        hotelMapper.addHotelorderDetail(oid,checkinTime,checkoutTime,roomNum,roomType,customerName,customerId);
+    public void addHotelorderDetail(String id, String oid, String checkinTime, String checkoutTime, Integer roomNum, String roomType, String customerName, String customerId) {
+        hotelMapper.addHotelorderDetail(id, oid, checkinTime, checkoutTime, roomNum, roomType, customerName, customerId);
     }
+
+    @Override
+    public Map<String,String> getHotelName(String id) {
+        return hotelMapper.getHotelName(id);
+    }
+
+    @Override
+    public List<Map<String, Object>> getHotelOrderDetail(String oid) {
+        return hotelMapper.getHotelOrderDetail(oid);
+    }
+
 }

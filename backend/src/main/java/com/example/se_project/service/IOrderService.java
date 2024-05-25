@@ -24,6 +24,6 @@ public interface IOrderService {
     public void deleteOrder(Order order);
 
     void setCancelTime(String oid,String cancelTime);
-    List<Map<String,String>> getIdByUid(String userID);
-    List<Map<String,String>> getIdByUidAndStatus(String userID,String status);
+    List<Map<String,Object>> getIdByUid(String userID);
+    List<Map<String,Object>> getIdByUidAndStatus(String userID,String status);
 }

@@ -28,7 +28,7 @@ public class AuthController {
         verificationCodeService.addVerificationCode(code);
 
         emailService.sendSimpleMail(email, "Verification Code",
-                "Your verification code is" + code.getCode());
+                "【WerwerTrip】Your verification code is " + code.getCode());
 
         if(verificationCodeService.getVerificationCode(email) != null) {
             return new HashMap<>(){{

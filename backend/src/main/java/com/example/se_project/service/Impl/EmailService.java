@@ -17,6 +17,7 @@ public class EmailService {
         message.setTo(to);
         message.setSubject(subject);
         message.setText(text);
+        message.setFrom("werwertrip@163.com");
         mailSender.send(message);
     }
 }

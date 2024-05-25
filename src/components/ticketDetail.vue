@@ -91,7 +91,7 @@
             <div style="display: flex;justify-content: center;margin-top:1%;">
                 <el-button type="info" plain size="large" style="width:10%;" @click="goBack()">返回</el-button>
                 <el-button type="success" plain size="large" style="width:10%;"
-                    @click="billVisible = true; buttonVisible = true">提交</el-button>
+                    @click="finishBook">提交</el-button>
             </div>
         </el-main>
         <el-aside width="25%" style="height:88vh;display: block;">
@@ -190,6 +190,18 @@ const billVisible = ref(false);
 const payPicture = ref(require("../assets/vxPay.jpg"));
 const change = ref(false);
 const activeIndex = inject('activeIndex');
+const finishBook=()=>{
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    if(isLoggedIn==='true'){
+        billVisible.value = true;
+    }else{
+        ElMessage({
+            message: '请先登录',
+            type: 'error',
+            plain: true,
+        })
+    }
+}
 /* 页面跳转预订火车餐 */
 const bookFood = () => {
     activeIndex.value = '3';

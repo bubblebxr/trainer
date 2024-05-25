@@ -18,8 +18,8 @@
     <el-form :model="formLogin" label-width="auto" style="max-width: 600px;margin-top:2%;margin-left:2%;">
         <el-form-item label="联系方式" style="display:flex;">
             <el-input v-model="formLogin.email" disabled style="flex:1;" />
-            <el-button v-if="edit === false" plain style="flex:0.2;margin-left:1%;"
-                @click="getConfirm">获取验证码</el-button>
+            <el-button v-if="edit === false" plain style="flex:0.2;margin-left:1%;" @click="sendVerificationOk">{{
+        buttonText }}</el-button>
         </el-form-item>
         <el-form-item label="验证码" v-if="edit === false">
             <el-input v-model="formLogin.confirm" :disabled="edit" style="width:150px;" />
@@ -43,8 +43,46 @@
 import { ref, reactive, watch } from 'vue';
 import { updatePassword } from '../api/api';
 import { ElMessage } from "element-plus";
+import { postCode } from "@/api/api"
 const edit = ref(true);
 const user_id = localStorage.getItem('user_id');
+const countdownSeconds = 120;
+const countingDown = ref(false);
+const buttonText = ref('发送验证码');
+const my_email = localStorage.getItem('email');
+function startCountdown() {
+    countingDown.value = true;
+    let seconds = countdownSeconds;
+    buttonText.value = `${seconds}s`;
+    const countdownInterval = setInterval(() => {
+        seconds--;
+        buttonText.value = `${seconds}s`;
+        if (seconds <= 0) {
+            clearInterval(countdownInterval);
+            countingDown.value = false;
+            buttonText.value = '发送验证码';
+        }
+    }, 1000);
+}
+const sendVerificationOk = async () => {
+    try {
+        const response = await postCode(my_email);
+        if (response.data.result) {
+            ElMessage({
+                message: "成功发送验证码",
+                type: "success",
+            });
+            if (!countingDown.value) {
+                startCountdown();
+                // 在这里发送验证码的逻辑
+            }
+        } else {
+            ElMessage.error("验证码发送失败");
+        }
+    } catch (error) {
+        console.error("验证码发送失败:", error);
+    }
+};
 // do not use same name with ref
 const formPerson = reactive({
     name: localStorage.getItem('name'),
@@ -80,15 +118,15 @@ const PersonalSubmit = async () => {
             plain: true,
         });
     } else {
-        const data = await updatePassword(user_id,formLogin.password);
-        if (data.data.result){
+        const data = await updatePassword(user_id, formLogin.password, formLogin.confirm);
+        if (data.data.result) {
             ElMessage({
                 message: "更新密码成功",
                 type: "success",
                 plain: true,
             });
             edit.value = true;
-        }else{
+        } else {
             ElMessage({
                 message: "更新密码失败",
                 type: "error",
@@ -96,8 +134,5 @@ const PersonalSubmit = async () => {
             });
         }
     }
-};
-const getConfirm = () => {
-    //TODO:获取验证码
 };
 </script>

@@ -163,7 +163,7 @@
           :max="10"
           style="margin-top: 8%; margin-right: 1em"
         >
-        <img src="../assets/message.png" style="width: 50px; height: 50px;" @click="drawer = true" /> </el-badge>
+        <img src="../assets/message.png" style="width: 50px; height: 50px;" @click="messageOpen()" /> </el-badge>
       </div>
       </div>
     </el-header>
@@ -213,8 +213,19 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 const router = useRouter();
 const activeIndex = ref("1");
 const drawer = ref(false);
+const messageOpen=()=>{
+  const isLoggedIn= localStorage.getItem('isLoggedIn');
+  if (isLoggedIn === "true") {
+    drawer.value = true;
+  } else {
+    ElMessage({
+      message: '请先登录',
+      type: 'error',
+      plain: true,
+    })
+  }
+};
 provide('activeIndex', activeIndex);
-const isLoggedIn = localStorage.getItem('isLoggedIn');
 const selectMenu = (key) => {
   console.log("当前选中为" + key);
   activeIndex.value = key;
@@ -224,9 +235,18 @@ const selectMenu = (key) => {
   } else if (activeIndex.value === "2") {
     router.push("/home/hotel");
   } else if (activeIndex.value === "3") {
-    router.push("/home/dining");
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    if (isLoggedIn === 'true') {
+      router.push("/home/dining");
+    } else {
+      ElMessage({
+        message: '请先登录',
+        type: 'error',
+        plain: true,
+      })
+    }
   } else if (activeIndex.value === "4") {
-    console.log(isLoggedIn);
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
     if(isLoggedIn==="true"){
       router.push('/home/orders');
     }else{
@@ -462,11 +482,16 @@ const quit=()=>{
   localStorage.setItem('password',"");
   localStorage.setItem('name',"");
   updateUI();
+  if(activeIndex.value==='3'||activeIndex.value==='4'){
+    router.push("/home/ticket");
+    activeIndex.value='1';
+  }
 }
 
 onMounted(() => {
   router.push("/home/ticket");
   getAllMessage();
+  updateUI();
 });
 const getAllMessage = async () => {
   //TODO 判断是否登录

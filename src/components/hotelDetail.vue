@@ -443,9 +443,18 @@ const afterOpenChange = (bool) => {
 };
 
 const showDrawer = (item) => {
-  selectedRoom.value = item;
-  money.value=item.price;
-  open.value = true;
+  const isLoggedIn = localStorage.getItem('isLoggedIn');
+  if (isLoggedIn === 'true') {
+    selectedRoom.value = item;
+    money.value = item.price;
+    open.value = true;
+  } else {
+    ElMessage({
+      message: '请先登录',
+      type: 'error',
+      plain: true,
+    })
+  }
 };
 
 const value = ref('')

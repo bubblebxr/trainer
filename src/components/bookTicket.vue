@@ -153,7 +153,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, watchEffect } from 'vue'
 import { getStation, getSearchResult } from '../api/api';
 import { ElMessage } from 'element-plus'
 import { useRouter, useRoute } from "vue-router";
@@ -177,7 +177,7 @@ const startStationOptions = ref([]);/**所有站点信息 */
 const stations = ref([]);/*车站信息*/
 const searchValid = ref(false);
 const searchResult = ref([]);
-const url=ref("");
+const isLoggedIn = ref(localStorage.getItem('isLoggedIn'))
 const submitTicket = (lineIndex) => {
     // url.value=router.resolve({
     //     path: "/home/ticketDetail",
@@ -186,12 +186,21 @@ const submitTicket = (lineIndex) => {
     //     },
     // });
     // window.open(url.value.href,"_blank");
-    router.push({
-        path: "/home/ticketDetail",
-        query: {
-            line: JSON.stringify(searchResult.value[lineIndex]),
-        },
-    });
+    isLoggedIn.value = localStorage.getItem('isLoggedIn');
+    if (isLoggedIn.value === "true"){
+        router.push({
+            path: "/home/ticketDetail",
+            query: {
+                line: JSON.stringify(searchResult.value[lineIndex]),
+            },
+        });
+    }else{
+        ElMessage({
+            message: '请先登录',
+            type: 'error',
+            plain: true,
+        })
+    }
 };
 
 const handleStart = item => {

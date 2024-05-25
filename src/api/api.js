@@ -213,11 +213,16 @@ export const postCodeVeryfication = (code, email) => {
 }
 
 
-export const updatePassword = (userID, newPassword) => {
+export const updatePassword = (userID, newPassword,confirm) => {
     return api.post(`/updatepassword`,
         {
             "id": userID,
-            "newpassword": newPassword
+            "newpassword": newPassword,
+            idCode:confirm
+        }, {
+        headers: {
+            'Content-Type': 'application/json'
         }
+    }
     )
 }

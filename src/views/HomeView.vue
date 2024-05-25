@@ -205,7 +205,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted,inject,computed,provide } from 'vue'
+import { ref, onMounted, computed,inject } from "vue";
 import { useRouter } from "vue-router";
 import eventBus from "@/eventBus.js";
 import { getMessage } from "@/api/api.js";
@@ -214,9 +214,9 @@ const router = useRouter();
 const activeIndex = ref("1");
 const drawer = ref(false);
 const messageOpen=()=>{
-  const isLoggedIn= localStorage.getItem('isLoggedIn');
+  const isLoggedIn = localStorage.getItem('isLoggedIn');
   if (isLoggedIn === "true") {
-    drawer.value = true;
+    drawer = true;
   } else {
     ElMessage({
       message: '请先登录',
@@ -225,7 +225,6 @@ const messageOpen=()=>{
     })
   }
 };
-provide('activeIndex', activeIndex);
 const selectMenu = (key) => {
   console.log("当前选中为" + key);
   activeIndex.value = key;
@@ -236,7 +235,7 @@ const selectMenu = (key) => {
     router.push("/home/hotel");
   } else if (activeIndex.value === "3") {
     const isLoggedIn = localStorage.getItem('isLoggedIn');
-    if (isLoggedIn === 'true') {
+    if (isLoggedIn === "true") {
       router.push("/home/dining");
     } else {
       ElMessage({
@@ -247,14 +246,14 @@ const selectMenu = (key) => {
     }
   } else if (activeIndex.value === "4") {
     const isLoggedIn = localStorage.getItem('isLoggedIn');
-    if(isLoggedIn==="true"){
-      router.push('/home/orders');
-    }else{
+    if (isLoggedIn === "true") {
+      router.push("/home/orders");
+    } else {
       ElMessage({
-        message: "请先登录",
-        type: "error",
+        message: '请先登录',
+        type: 'error',
         plain: true,
-      });
+      })
     }
   }
 };
@@ -309,7 +308,7 @@ const handleLoginOk = (e) => {
 };
 const postmyLogin = async () =>{
   try{
-    const response = await postLogin(my_id,my_password);
+    const response = await postLogin(my_id.value,my_password.value);
     if(response.data.result){
       ElMessage({
         message: "登陆成功",
@@ -349,7 +348,7 @@ const register = () => {
 
 const postmyRegister = async () =>{
   try{
-    const response = await postRegister(my_id, my_name, my_password,my_email);
+    const response = await postRegister(my_id.value, my_name.value, my_password.value,my_email.value);
     if(response.data.result){
       ElMessage({
         message: "提交成功",
@@ -373,7 +372,7 @@ const postmyRegister = async () =>{
 
 const sendVerificationOk = async () =>{
   try{
-    const response = await postCode(my_email);
+    const response = await postCode(my_email.value);
     if(response.data.result){
       ElMessage({
         message: "成功发送验证码",
@@ -393,7 +392,7 @@ const sendVerificationOk = async () =>{
 
 const handleVerificationOk = async () =>{
   try{
-    const response = await postCodeVeryfication(my_code,my_email);
+    const response = await postCodeVeryfication(my_code.value,my_email.value);
     if(response.data.result){
       ElMessage({
         message: "注册成功",
@@ -481,11 +480,11 @@ const quit=()=>{
   localStorage.setItem('email',"");
   localStorage.setItem('password',"");
   localStorage.setItem('name',"");
-  updateUI();
   if(activeIndex.value==='3'||activeIndex.value==='4'){
     router.push("/home/ticket");
     activeIndex.value='1';
   }
+  updateUI();
 }
 
 onMounted(() => {

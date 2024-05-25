@@ -1,12 +1,11 @@
 import api from './request';
 
-/* 车次查询 */
 export const getStation = () => {
     return api.get('/station');
 };
-/* 获取车次查询信息 */
+
 export const getSearchResult = (startCity, arriveCity, date, isGD, sortType, seatType, isHide) => {
-    const queryString = encodeURIComponent(`?is_GD=${isGD}&sort_type=${sortType}&seat_type=${seatType}&isHide=${isHide}`);
+    const queryString = `?is_GD=${isGD}&sort_type=${sortType}&seat_type=${seatType}&isHide=${isHide}`;
     return api.post(`/trains/${startCity}/${arriveCity}/${date}${queryString}`);
 };
 
@@ -212,13 +211,13 @@ export const postCodeVeryfication = (code, email) => {
     return api.post(`/idCode/${code}/${email}`);
 }
 
-
-export const updatePassword = (userID, newPassword,confirm) => {
+/*更新密码 */
+export const updatePassword = (userID, newPassword, confirm) => {
     return api.post(`/updatepassword`,
         {
             "id": userID,
             "newpassword": newPassword,
-            idCode:confirm
+            "idCode": confirm
         }, {
         headers: {
             'Content-Type': 'application/json'

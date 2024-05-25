@@ -278,7 +278,7 @@ const handleLoginOk = (e) => {
 };
 const postmyLogin = async () =>{
   try{
-    const response = await postLogin(my_id,my_password);
+    const response = await postLogin(my_id.value,my_password.value);
     if(response.data.result){
       ElMessage({
         message: "登陆成功",
@@ -318,7 +318,7 @@ const register = () => {
 
 const postmyRegister = async () =>{
   try{
-    const response = await postRegister(my_id, my_name, my_password,my_email);
+    const response = await postRegister(my_id.value, my_name.value, my_password.value,my_email.value);
     if(response.data.result){
       ElMessage({
         message: "提交成功",
@@ -342,7 +342,7 @@ const postmyRegister = async () =>{
 
 const sendVerificationOk = async () =>{
   try{
-    const response = await postCode(my_email);
+    const response = await postCode(my_email.value);
     if(response.data.result){
       ElMessage({
         message: "成功发送验证码",
@@ -362,7 +362,7 @@ const sendVerificationOk = async () =>{
 
 const handleVerificationOk = async () =>{
   try{
-    const response = await postCodeVeryfication(my_code,my_email);
+    const response = await postCodeVeryfication(my_code.value,my_email.value);
     if(response.data.result){
       ElMessage({
         message: "注册成功",

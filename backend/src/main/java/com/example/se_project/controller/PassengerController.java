@@ -35,23 +35,6 @@ public class PassengerController {
                                                 @RequestParam(value = "newidentification", required = false, defaultValue = "") String newidentification,
                                                 @RequestParam(value = "newphone", required = false, defaultValue = "") String newphone) {
 
-//        boolean result1=true,result2=true,result3=true;
-//        if(!Objects.equals(newname, "")){
-//            result1 = passengerService.updatePassengerName(id,oldidentification,newname);
-//        }
-//        if(!Objects.equals(newidentification, "")){
-//            result2 = passengerService.updatePassengerIdentification(id,oldidentification,newidentification);
-//        }
-//        if(!Objects.equals(newphone, "")){
-//            result3 = passengerService.updatePassengerPhone(id,oldidentification,newphone);
-//        }
-//
-//        boolean finalResult = result1;
-//        boolean finalResult1 = result2;
-//        boolean finalResult2 = result3;
-//        return new HashMap<>() {{
-//            put("info", finalResult && finalResult1 && finalResult2);
-//        }};
         if (newname.isEmpty()) newname = null;
         if (newidentification.isEmpty()) newidentification = null;
         if (newphone.isEmpty()) newphone = null;

@@ -201,22 +201,6 @@ public class HotelController {
         result.put("rooms", roomInfo);
         result.put("others", othersInfo);
 
-//        result.add(new HashMap<>() {{
-//            //put("id", id.toString());
-//            put("name", current_hotel.getName());
-//            put("rank", finalRank);
-//            put("stars", current_hotel.getStars());
-//            put("likes", current_hotel.getLikes());
-//            put("messages", messages);
-//            put("photos",photoInfo);
-//            //put("miniprice", finalMinPrice.toString());
-//            //put("photo", current_hotel.getPhoto());
-//            put("position", current_hotel.getPosition());
-//            //put("content", current_hotel.getContent());
-//            put("comments",commentInfo);
-//            put("rooms",roomInfo);
-//            put("others",othersInfo);
-//        }});
         return result;
     }
 

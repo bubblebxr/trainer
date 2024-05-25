@@ -79,13 +79,13 @@
         ORDER BY
         <choose>
             <when test="sort_type == 2">
-                start_time DESC
+                startTime DESC
             </when>
             <when test="sort_type == 3">
                 duration ASC
             </when>
             <when test="sort_type == 1">
-                start_time ASC
+                startTime ASC
             </when>
         </choose>
     </select>

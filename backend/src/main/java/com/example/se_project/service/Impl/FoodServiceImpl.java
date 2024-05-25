@@ -38,5 +38,10 @@ public class FoodServiceImpl implements IFoodService {
         return foodMapper.getFoodOrdersByOid(oid);
     }
 
+    @Override
+    public List<FoodOrder> getFoodOrdersByTrain(String tid, String date) {
+        return foodMapper.getFoodOrdersByTrain(tid, date);
+    }
+
 
 }

@@ -12,6 +12,8 @@ public class FoodOrder{
 
     private String trainId;
 
+    private String trainDate;
+
     private String mealDate;
 
     private String mealTime;
@@ -40,6 +42,14 @@ public class FoodOrder{
 
     public void setFoodName(String foodName) {
         this.foodName = foodName;
+    }
+
+    public String getTrainDate() {
+        return trainDate;
+    }
+
+    public void setTrainDate(String trainDate) {
+        this.trainDate = trainDate;
     }
 
     public Integer getCount() {

@@ -18,4 +18,9 @@
         set password=#{newpassword}
         where id=#{userId}
     </update>
+    <select id="getEmail">
+        select email
+        from users
+        where id=#{userId}
+    </select>
 </mapper>

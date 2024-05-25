@@ -20,8 +20,14 @@ public interface ITrainService {
 
     public TrainOrder getTrainOrdersByIdentificationAndDate(String identification, String date);
 
-    public void addTrainOrderDetail(String oid,String trainId, String trainDate, String name, String identification, String seatType);
+    public void addTrainOrderDetail(String oid, String trainId, String trainDate, String name, String identification, String seatType);
 
-Map<String,Object> getSelfOrderDetail(String oid, String userID);
-Map<String,Object> getTrainByIdAndDate(String trainId,String trainDate);
+    Map<String, Object> getSelfOrderDetail(String oid, String userID);
+
+    Map<String, Object> getTrainByIdAndDate(String trainId, String trainDate);
+
+    String getStartTime(String trainId, String trainDate);
+
+    List<Map<String, Object>> getTrainIdAndDate(String orderId);
+
 }

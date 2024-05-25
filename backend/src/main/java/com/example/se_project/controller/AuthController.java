@@ -30,12 +30,12 @@ public class AuthController {
         emailService.sendSimpleMail(email, "Verification Code",
                 "【WerwerTrip】Your verification code is " + code.getCode());
 
-        if(verificationCodeService.getVerificationCode(email) != null) {
-            return new HashMap<>(){{
+        if (verificationCodeService.getVerificationCode(email) != null) {
+            return new HashMap<>() {{
                 put("result", true);
             }};
         } else {
-            return new HashMap<>(){{
+            return new HashMap<>() {{
                 put("result", false);
             }};
         }
@@ -49,13 +49,13 @@ public class AuthController {
             if (code.getCode().equals(idCode)) {
                 LocalDateTime now = LocalDateTime.now();
                 if (now.isAfter(code.getGeneratedAt()) && now.isBefore(code.getExpiresAt())) {
-                    return new HashMap<>(){{
+                    return new HashMap<>() {{
                         put("result", true);
                     }};
                 }
             }
         }
-        return new HashMap<>(){{
+        return new HashMap<>() {{
             put("result", false);
         }};
     }

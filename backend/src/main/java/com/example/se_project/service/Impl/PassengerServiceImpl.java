@@ -35,9 +35,10 @@ public class PassengerServiceImpl implements IPassengerService {
 //    }
 
     @Override
-    public boolean updatePassenger(String id, String oldidentification, String newname, String newidentification,String newphone){
-        return passengerMapper.updatePassenger(id,oldidentification,newname,newidentification,newphone);
+    public boolean updatePassenger(String id, String oldidentification, String newname, String newidentification, String newphone) {
+        return passengerMapper.updatePassenger(id, oldidentification, newname, newidentification, newphone);
     }
+
     @Override
     public List<Passenger> showPassengerInfo(String userId) {
         return passengerMapper.showPassengerInfo(userId);
@@ -47,8 +48,9 @@ public class PassengerServiceImpl implements IPassengerService {
     public boolean deletePassenger(String userId, String name, String identification) {
         return passengerMapper.deletePassenger(userId, name, identification);
     }
+
     @Override
-    public Passenger getPassengerByUidAndId(String id,String identification){
-        return passengerMapper.getPassengerByUidAndId(id,identification);
+    public Passenger getPassengerByUidAndId(String id, String identification) {
+        return passengerMapper.getPassengerByUidAndId(id, identification);
     }
 }

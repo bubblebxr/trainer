@@ -20,7 +20,7 @@ public class UserServiceImpl implements IUserService {
 
 
     @Override
-    public User findById(String id){
+    public User findById(String id) {
         return userMapper.findById(id);
     }
 
@@ -29,24 +29,24 @@ public class UserServiceImpl implements IUserService {
         String salt = SaltGenerator.generateSalt();
         String DBPass = MD5Util.md5(password, salt);
         //String DBPass = password;
-        userMapper.registerUser(id, name, DBPass, email,salt);
+        userMapper.registerUser(id, name, DBPass, email, salt);
         return userMapper.findById(id);
     }
 
     @Override
-    public User login(String id, String password){
+    public User login(String id, String password) {
         String salt = userMapper.getUserSalt(id);
         String DBPass = MD5Util.md5(password, salt);
-        return userMapper.login(id,DBPass);
+        return userMapper.login(id, DBPass);
     }
 
     @Override
-    public boolean updatePassword(String userId,String newpassword){
-        return userMapper.updatePassword(userId,newpassword);
+    public boolean updatePassword(String userId, String newpassword) {
+        return userMapper.updatePassword(userId, newpassword);
     }
 
     @Override
-    public String getEmail(String userId){
+    public String getEmail(String userId) {
         return userMapper.getEmail(userId);
     }
 }

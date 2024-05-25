@@ -95,11 +95,11 @@ public class UserController {
     }
 
     @PostMapping("/updatepassword")
-    public Map<String, Object> updatePassword(@RequestBody Map<String, Object> map){
+    public Map<String, Object> updatePassword(@RequestBody Map<String, Object> map) {
         String userId = map.get("id").toString();
         String newpassword = map.get("newpassword").toString();
-        return new HashMap<>(){{
-        put("info",userService.updatePassword(userId,newpassword));
+        return new HashMap<>() {{
+            put("info", userService.updatePassword(userId, newpassword));
         }};
     }
 }

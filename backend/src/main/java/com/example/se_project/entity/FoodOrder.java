@@ -3,7 +3,7 @@ package com.example.se_project.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 @TableName("foodOrders")
-public class FoodOrder{
+public class FoodOrder {
     private String oid;
 
     private String foodName;

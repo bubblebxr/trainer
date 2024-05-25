@@ -78,7 +78,6 @@ public class Hotel {
     }
 
 
-
     public String getDescription() {
         return description;
     }
@@ -86,7 +85,6 @@ public class Hotel {
     public void setDescription(String description) {
         this.description = description;
     }
-
 
 
     public String getId() {

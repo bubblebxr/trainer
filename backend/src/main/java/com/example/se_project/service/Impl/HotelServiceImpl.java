@@ -70,7 +70,7 @@ public class HotelServiceImpl implements IHotelService {
     }
 
     @Override
-    public Map<String,String> getHotelName(String id) {
+    public Map<String, String> getHotelName(String id) {
         return hotelMapper.getHotelName(id);
     }
 

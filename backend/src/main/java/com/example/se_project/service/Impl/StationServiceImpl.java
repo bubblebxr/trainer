@@ -7,8 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service("stationService")
-public class StationServiceImpl implements IStationService{
+public class StationServiceImpl implements IStationService {
     @Autowired
     private IStationMapper stationMapper;
 

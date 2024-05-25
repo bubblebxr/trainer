@@ -5,6 +5,7 @@ import com.example.se_project.service.IFoodService;
 import com.example.se_project.service.IMessageService;
 import com.example.se_project.service.IOrderService;
 import com.example.se_project.service.ITrainService;
+import com.example.se_project.service.Impl.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +28,8 @@ public class FoodController {
     private Food food;
     @Autowired
     private IMessageService messageService;
+    @Autowired
+    private EmailService emailService;
 
 
     @GetMapping("/food/{userID}/{tid}/{date}/{time}")
@@ -190,6 +193,16 @@ public class FoodController {
             }};
         } else {
             orderService.cancelOrder(order);
+
+            FoodOrder food = foodService.getFoodOrdersByOid(oid).get(0);
+
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = new Date();
+            String formattedDate = formatter.format(date);
+
+            String content = "您已成功取消" +food.getMealDate() + " " + food.getTrainId()+ "车次的" + food.getMealTime();
+            messageService.addMessage(userID, Message.generateMessageId(), oid, "餐饮订单取消成功", formattedDate, content, false, 5);
+
             return new HashMap<>() {{
                 put("info", "取消订单成功");
                 put("result", true);

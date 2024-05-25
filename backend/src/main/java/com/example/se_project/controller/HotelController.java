@@ -256,8 +256,6 @@ public class HotelController {
             hotelService.addHotelorderDetail(id, oid, checkinTime, checkoutTime, roomNum, roomType, customer.get("name"), customer.get("id"));
         }
 
-
-        //Map<String, Object> trainMap = trainService.getTrainByIdAndDate(trainId,trainDate);
         String content = "您已成功预订" + hotelService.getHotelName(id).get("name") + "，入住时间" + checkinTime + "--" + checkoutTime + "，祝您旅途愉快。";
         messageService.addMessage(userId, Message.generateMessageId(), oid, "酒店订单支付成功", formattedDate, content, false, 4);
 
@@ -332,6 +330,15 @@ public class HotelController {
             String formattedDate = formatter.format(date);
             orderService.cancelOrder(order);
             orderService.setCancelTime(oid, formattedDate);
+            // 发送(酒店)订单取消成功通知
+            Map<String, Object> hotelMap = hotelService.getHotelOrderDetail(oid).get(0);
+            String hotelId = hotelMap.get("id").toString();
+            String checkinTime = hotelMap.get("checkinTime").toString();
+            String checkoutTime = hotelMap.get("checkoutTime").toString();
+
+            String content = "您已成功取消" + hotelService.getHotelName(hotelId).get("name") + "" + checkinTime + "--" + checkoutTime + "的订单";
+            messageService.addMessage(userID, Message.generateMessageId(), oid, "酒店订单取消成功", formattedDate, content, false, 4);
+
             return new HashMap<>() {{
                 put("cancel_time", formattedDate);
             }};

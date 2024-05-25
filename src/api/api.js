@@ -10,7 +10,7 @@ export const getSearchResult = (startCity, arriveCity, date, isGD, sortType, sea
     return api.post(`/trains/${startCity}/${arriveCity}/${date}${queryString}`);
 };
 
-export const getFoods = (userID,tid, date, time) => {
+export const getFoods = (userID, tid, date, time) => {
     return api.get(`/food/${userID}/${tid}/${date}/${time}`);
 };
 
@@ -35,6 +35,10 @@ export const postFoodBill = (foods, userID, tid, date, time, sum_price) => {
             "time": time,
             "bill_time": nowtime,
             "sum_price": sum_price
+        }, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
         }
     );
 }
@@ -50,6 +54,10 @@ export const cancelFoodOrder = (userID, oid) => {
     return api.post(`/food/cancel/${userID}/${oid}`,
         {
             "cancel_time": nowtime,
+        }, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
         }
     );
 }
@@ -95,6 +103,10 @@ export const postTicketBill = (persons, userID, tid, date, sum_price) => {
             "date": date,
             "bill_time": nowtime,
             "sum_price": sum_price
+        }, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
         }
     );
 }
@@ -109,12 +121,12 @@ export const cancelTicketOrder = (userID, oid) => {
     return api.post(`/ticket/cancel/${userID}/${oid}`);
 }
 /*获取用户所有消息*/
-export const getMessage = (userID)=>{
+export const getMessage = (userID) => {
     return api.get(`/message/getAll/${userID}`)
 }
 
 /*标记消息已读*/
-export const haveReadMessage = (mid)=>{
+export const haveReadMessage = (mid) => {
     return api.post(`/message/setRead/${mid}`)
 }
 /*城市查询*/
@@ -127,31 +139,79 @@ export const getHotel = (arrive_station, arrive_date, Ideparture_date, sort_type
     return api.get(`/hotel/${arrive_station}/${arrive_date}/${Ideparture_date}${queryString}`);
 };
 
+/*获取酒店详细信息*/
 export const getHotelDetail = (hotel_id, double_choose, big_choose, family_choose, check_in, check_out) => {
     const queryString = `?hotel_id=${encodeURIComponent(hotel_id)}&double_choose=${encodeURIComponent(double_choose)}&big_choose=${encodeURIComponent(big_choose)}&family_choose=${encodeURIComponent(family_choose)}&check_in=${encodeURIComponent(check_in)}&check_out=${encodeURIComponent(check_out)}`;
     return api.get(`/hotel_detail${queryString}`);
 }
 
-/*提交个人注册信息*/
-export const postRegister = (userID, name, password, email) => {
-    return api.post(`/register`,
+/*酒店支付*/
+export const postHotelBill = (hotelid, id, checkin_time, checkout_time, room_num, room_type, customers, money) => {
+    return api.post(`/hotel/bill`,
         {
-            "id": userID,
-            "name": name,
-            "password": password,
-            "email": email
+            "hotel_id": hotelid,
+            "id": id,
+            "checkin_time": checkin_time,
+            "checkout_time": checkout_time,
+            "room_num": room_num,
+            "room_type": room_type,
+            "customers": customers,
+            "money": money,
+        }, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
         }
+
     )
 }
+/*酒店订单获取*/
+export const getHotelOrders = (userID, status) => {
+    return api.get(`/hotel/orders/${userID}/${status}`)
+}
+/*酒店订单取消*/
+export const cancelHotelOrder = (userID, oid) => {
+    return api.post(`/ticket/cancel/${userID}/${oid}`);
+}
+
+/*提交个人注册信息*/
+export const postRegister = (userID, name, password, email) => {
+    return api.post(`/register`, {
+        "id": userID,
+        "name": name,
+        "password": password,
+        "email": email
+    }, {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
 /*登陆*/
 export const postLogin = (userID, password) => {
     return api.post(`/login`,
         {
             "id": userID,
             "password": password
+        } ,{
+            headers: {
+                'Content-Type': 'application/json'
+            }
         }
     )
 }
+
+/*获取验证码*/
+export const postCode = (email) => {
+    return api.post(`/idCode/${email}`)
+}
+
+/*验证码验证结果*/
+export const postCodeVeryfication = (code, email) => {
+    return api.post(`/idCode/${code}/${email}`);
+}
+
 
 export const updatePassword = (userID, newPassword) => {
     return api.post(`/updatepassword`,

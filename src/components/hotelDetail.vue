@@ -1,105 +1,5 @@
 <template>
   <div class="home-container" style="overflow-y:scroll;overflow-x:hidden;">
-    <el-header style="display: flex; align-items: center; justify-content: space-between;">
-      <div style="display: flex; align-items: center;">
-        <img src="../assets/logo.png" style="width:55px;height:55px;margin-top:3%;" />
-        <div style="margin-left: 20px;margin-top:20px">
-            <a-typography-title :level="4">酒店详细</a-typography-title>         
-        </div>
-      </div>
-      
-      <div style="display: flex; align-items: center;">
-        <el-popover
-          placement="bottom"
-          :width="200"
-          trigger="click"
-          content="this is content, this is content, this is content"
-        >
-          <template #reference >
-            <el-button id="loginButton" type="primary" round plain size="large" style="margin-top:12%;margin-right:3%;" class="log">登录/注册</el-button>
-            
-          </template>
-          <div>
-            <a-button @click="login" style="width:170px;">
-              登录
-            </a-button>
-            <a-modal v-model:open="openLogin" title="登陆" @ok="handleLoginOk">
-              <div style="margin-top:20px;">
-                <el-input
-                  v-model="my_id"
-                  style="max-width: 600px"
-                  placeholder="输入身份证号"
-                >
-                  <template #prepend>ID号</template>
-                </el-input>
-              </div>
-              <div style="margin-top:20px;">
-                <el-input
-                  v-model="my_password"
-                  style="max-width: 600px"
-                  placeholder="输入密码"
-                >
-                  <template #prepend>密码</template>
-                </el-input>
-              </div>
-            </a-modal>
-
-          </div>
-          <div>
-            <a-button @click="register" style="width:170px;margin-top:10px;">
-              注册
-            </a-button>
-            <a-modal v-model:open="openRegister" title="注册" @ok="handleRegisterOk">
-              <div style="margin-top:20px;">
-                <el-input
-                  v-model="my_id"
-                  style="max-width: 600px"
-                  placeholder="输入身份证号"
-                >
-                  <template #prepend>ID号</template>
-                </el-input>
-              </div>
-              <div style="margin-top:20px;">
-                <el-input
-                  v-model="my_name"
-                  style="max-width: 600px"
-                  placeholder="输入姓名"
-                >
-                  <template #prepend>姓名</template>
-                </el-input>
-              </div>
-              <div style="margin-top:20px;">
-                <el-input
-                  v-model="my_password"
-                  style="max-width: 600px"
-                  placeholder="输入密码"
-                >
-                  <template #prepend>密码</template>
-                </el-input>
-              </div>
-              <div style="margin-top:20px;">
-                <el-input
-                  v-model="my_email"
-                  style="max-width: 600px"
-                  placeholder="输入邮箱"
-                >
-                  <template #prepend>邮箱</template>
-                </el-input>
-              </div>
-            </a-modal>
-          </div>
-        </el-popover>
-        <div id="loggedInMessage" style="display:none">
-              <div style="margin-top:30px;">
-              
-                <a-avatar style="margin-top:10px;margin-right:20px;" size="large" :src="'https://m.elongstatic.com/hotel_pc_i18n/product/_nuxt/userHead.0-0-3-213881db..svg'" />
-
-              </div>
-        </div>
-        <img src="../assets/message.png" style="width: 55px; height: 55px; margin-top: 8%;" />
-      </div>
-    </el-header>
-    <a-divider />
     <el-scrollbar style="height: 100%">
         <div class="top">
              <div style="display: flex;border-color:#a3a3a3;border-style: solid;margin: 0 auto;" class="top-info">
@@ -191,7 +91,7 @@
                                 <div style="margin-left: 200px">
                                   <a-typography-title :level="2">¥ {{item.price}}</a-typography-title>         
                                 </div>
-                                <a-button :size="large" style="color:black" @click="showDrawer">点击预订</a-button>
+                                <a-button :size="large" style="color:black" @click="showDrawer(item)">点击预订</a-button>
                                 <a-drawer
                                   v-model:open="open"
                                   class="custom-class"
@@ -220,24 +120,27 @@
                                   
                                   <p>房间数</p>
                                   <el-select
-                                    v-model="value"
+                                    v-model="roomCount"
                                     placeholder="Select"
                                     size="large"
                                     style="width: 300px;margin-bottom:10px;"
-                                    
+                                    @change="updateMoney"
                                    >
                                     <el-scrollbar style="height:100px;">
-                                    <el-option
-                                    v-for="item in roomOptions"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value"
-                                    />
+                                      <el-option
+                                      v-for="index in selectedRoom.num"
+                                      :key="index"
+                                      :label="index+'间'"
+                                      :value="index"
+                                      />
                                     </el-scrollbar>
                                   </el-select>
+                                  <div style="height:50px;width:300px;background-color:#f8e8e2;border-type:solid;border-radius:2px;color:#eb775c;padding-top:4px;padding-left:6px;padding-right:3px;margin-bottom:15px;">
+                                    请输入住客姓名以及身份证号，每间只需填1人，姓名不可重复。
+                                  </div>
                                   <div style="height:300px;">
                                     <el-scrollbar style="height:300px;">
-                                    <template v-for="i in num">
+                                    <template v-for="i in roomCount">
                                       <div style="margin-top:1px;display:flex;">
                                         <div style="margin-top:8px;margin-right:10px;">
                                           <p>住客{{i}}</p>
@@ -253,7 +156,7 @@
                                     <div>
                                      <p style="font-size:20px;margin-top:10px;">{{"需支付: ¥"+money}}</p>
                                     </div>
-                                    <a-button style="margin-left:70px;margin-top:5px;height:40px;width:110px;background-color:#0077ff;border-radius:5px;color:white;font-size:17px;font-weight:bold">
+                                    <a-button style="margin-left:70px;margin-top:5px;height:40px;width:110px;background-color:#0077ff;border-radius:5px;color:white;font-size:17px;font-weight:bold" @click="pay">
                                       点击支付
                                     </a-button>
                                   </div>
@@ -390,9 +293,9 @@
 </template>
 
 <script setup>
-import { getHotelDetail } from "../api/api.js";
+import { getHotelDetail,postHotelBill } from "../api/api.js";
 import { useRoute } from 'vue-router';
-import { ref,onMounted } from 'vue';
+import { ref,onMounted,watch } from 'vue';
 import { BookOutlined,HeartOutlined,StarOutlined, LikeOutlined, MessageOutlined,EnvironmentOutlined } from '@ant-design/icons-vue'
 //标签的选择的
 const activeName = ref('rooms');
@@ -403,9 +306,7 @@ var hotelData= ref();
 var commentData= ref([]);
 
 const hotelid = ref('');
-var double_choose = ref(true);
-var big_choose = ref(true);
-var family_choose = ref(true);
+
 var check_in = ref('');
 var check_out = ref('');
 
@@ -415,13 +316,14 @@ const route = useRoute();
 
 const fetchData = async () => {
     try {
-            const response = await getHotelDetail(hotelid.value,double_choose.value,big_choose.value,family_choose.value,check_in.value,check_out.value);
+            const response = await getHotelDetail(hotelid.value,checked1.value,checked2.value,checked3.value,check_in.value,check_out.value);
             hotelData.value = response.data;
             console.log("获取酒店详细信息成功");
         } catch (error) {
             console.error('获取酒店详细信息失败：', error);
         }
 };
+
 onMounted(() => {
       hotelid.value = route.query.id;
       check_in.value = route.query.checkin;
@@ -521,7 +423,10 @@ const onChange2 = (status) => {
 const onChange3 = (status) => {
   checked3.value = status
 };
-
+watch([checked1, checked2, checked3, check_in, check_out], (oldvalue, newvalue) => {
+    // 检测到值发生变化，执行fetchData
+    fetchData();
+});
 //按钮
 const isPressed = ref(false);
 
@@ -531,170 +436,65 @@ const toggleButton = () => {
 
 //预订房间
 const open = ref(false);
+const selectedRoom = ref(null);
 
 const afterOpenChange = (bool) => {
   console.log('open', bool);
 };
 
-const showDrawer = () => {
+const showDrawer = (item) => {
+  selectedRoom.value = item;
+  money.value=item.price;
   open.value = true;
 };
 
 const value = ref('')
 
-const roomOptions = [
-  {
-    value: '1间',
-    label: '1间',
-  },
-  {
-    value: '2间',
-    label: '2间',
-  },
-  {
-    value: '3间',
-    label: '3间',
-  },
-  {
-    value: '4间',
-    label: '4间',
-  },
-  {
-    value: '5间',
-    label: '5间',
-  },
-]
+
 
 //选择的房间个数
-var num=ref(3);
+const roomCount=ref(1);
 //填写姓名、身份证
 const input_name = ref(['']);
 const input_id = ref(['']);
 
 //支付
 import { ElMessage, ElMessageBox } from 'element-plus'
-const money=ref(231);
-
-//登陆
-import { postLogin } from "@/api/api"
-const openLogin = ref(false);
-const my_id = ref('');
-const my_password = ref('');
-
-const login = () => {
-  openLogin.value = true;
+const money=ref();
+const updateMoney = () => {
+  money.value=selectedRoom.value.price*roomCount.value;
 };
 
-const handleLoginOk = (e) => {
-  console.log(e);
-  if (my_id.value === "" || my_password.value === "") {
-    ElMessage({
-      message: "还有没填写的信息",
-      type: "error",
-      plain: true,
-    });
-  } else {
-    postmyLogin();
-  }
-  openLogin.value = false;
-};
-const postmyLogin = async () =>{
-  try{
-    const response = await postLogin(my_id,my_password);
-    if(response.data.result){
-      ElMessage({
-        message: "登陆成功",
-        type: "success",
-      });
-      localstorage.setItem('user_id',my_id);
-      localStorage.setItem('isLoggedIn',true);
-      localstorage.setItem('email',response.data.email);
-      localStorage.setItem('password',my_password);
-      localStorage.setItem('name',response.data.name);
-      updateUI();
-      //重新加载页面
-      window.location.href = window.location.href;
-    }else{
-      ElMessage.error("登陆失败:用户ID或密码错误");
+const pay = async () =>{
+    
+        const customers = [];
+        if (input_name.value.length === input_id.value.length) {
+          for (let i = 0; i < input_name.value.length; i++) {
+            customers.push({ id: input_id.value[i], name: input_name.value[i] });
+          }
+        } else {
+          console.error('input_name 和 input_id 的长度不一致');
+        }
+        try{
+        const response = await postHotelBill(hotelData.hotel_id,localStorage.getItem("id"),check_in,check_out,roomCount,1,customers,money);
+        var result = response.data.result;
+        if(result){
+            ElMessage({
+                message: "下单成功",
+                type: "success",
+            });
+            //todo:页面跳转
+        }else{
+            ElMessage({
+                message: "下单失败",
+                type: "error",
+            });
+        }
+    }catch(error){
+        console.log('提交酒店订单失败',error);
     }
-  }catch (error) {
-    console.error("登陆失败:", error);
-  }
-}
-
-
-
-//注册
-const my_email = ref('');
-const my_name = ref('');
-
-import { postRegister } from "@/api/api"
-const openRegister = ref(false);
-
-const register = () => {
-  openRegister.value = true;
 };
 
-const postmyRegister = async () =>{
-  try{
-    const response = await postRegister(my_id, my_name, my_password,my_email);
-    if(response.data.result){
-      ElMessage({
-        message: "注册成功",
-        type: "success",
-      });
-      localStorage.setItem('user_id',my_id);
-      localStorage.setItem('isLoggedIn',true);
-      localStorage.setItem('email',my_email);
-      localStorage.setItem('password',my_password);
-      localStorage.setItem('name',my_name);
-      updateUI();
-      
-      //重新加载页面
-      window.location.href = window.location.href;
-    }else{
-      ElMessage.error("注册失败:"+response.data.reason);
-    }
-  }catch (error) {
-    console.error("注册失败:", error);
-  }
-}
-
-const handleRegisterOk = (e) => {
-  console.log(e);
-  if (my_id.value === "" || my_password.value === "" || my_email.value === "" || my_name === "") {
-    ElMessage({
-      message: "还有没填写的信息",
-      type: "error",
-      plain: true,
-    });
-  } else {
-    postmyRegister();
-  }
-  openRegister.value = false;
-};
-
-
-// 页面加载完成时执行
-document.addEventListener('DOMContentLoaded', function() {
-  // 更新页面元素的显示状态
-  updateUI();
-});
-
-// 更新页面元素显示状态的函数
-function updateUI() {
-  var isLoggedIn = localStorage.getItem('isLoggedIn');
-  
-  
-  // 根据 isLoggedIn 的值更新页面元素显示状态
-  if (isLoggedIn === 'true') {
-    document.getElementById('loginButton').style.display = 'none'; // 隐藏登录按钮
-    document.getElementById('loggedInMessage').style.display = 'block'; // 显示已登录的消息
-  } else {
-    document.getElementById('loginButton').style.display = 'block'; // 显示登录按钮
-    document.getElementById('loggedInMessage').style.display = 'none'; // 隐藏已登录的消息
-  }
-}
 
 //计算时间差,防止入住>退房
 const daysDiff = ref(0);
@@ -712,6 +512,7 @@ const recalculateDateDiff = () => {
   const timeDiff = Math.abs(NendDate - NstartDate);
   daysDiff.value = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
 };
+
 
 
 </script>

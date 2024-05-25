@@ -25,7 +25,7 @@ public class StationController {
         List<Object> list = new ArrayList<>();
         stationService.inquireAllStations().forEach(e->{
             list.add(new HashMap<>(){{
-                put("value", e);
+                put("value", e.getStationName());
             }});
         });
         return new HashMap<>(){{

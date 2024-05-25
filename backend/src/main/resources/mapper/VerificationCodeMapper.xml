@@ -2,13 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.se_project.mapper.IVerificationCodeMapper">
     <select id="getVerificationCode">
-        select * from werwerTrip.verificationCodes
+        select * from verificationCodes
         where email = #{email}
     </select>
 
     <insert id="addVerificationCode">
-        insert into werwerTrip.verificationCodes (email, code, generatedAt, expiresAt)
-        values (#{email}, #{code}, #{generateAt}, #{expiresAt})
+        insert into verificationCodes (email, code, generatedAt, expiresAt)
+        values (#{email}, #{code}, #{generatedAt}, #{expiresAt})
         on duplicate key update
                              code = values(code),
                              generatedAt = values(generatedAt),

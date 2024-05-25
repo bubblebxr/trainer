@@ -52,5 +52,12 @@ public class VerificationCode {
     public void setExpiresAt(LocalDateTime expiresAt) {
         this.expiresAt = expiresAt;
     }
+
+    public VerificationCode(String email) {
+        this.email = email;
+        this.code = VerificationCode.generateVerificationCode();
+        this.generatedAt = LocalDateTime.now();
+        this.expiresAt = generatedAt.plusMinutes(5);
+    }
 }
 

@@ -4,6 +4,8 @@ import com.example.se_project.entity.*;
 import com.example.se_project.service.IMessageService;
 import com.example.se_project.service.IOrderService;
 import com.example.se_project.service.ITrainService;
+import com.example.se_project.service.IUserService;
+import com.example.se_project.service.Impl.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +22,10 @@ public class TrainController {
     private IOrderService orderService;
     @Autowired
     private IMessageService messageService;
+    @Autowired
+    private EmailService emailService;
+    @Autowired
+    private IUserService userService;
 
     // isGD:0高铁 1火车 2全选
     // sort_type:1start_time升序,2start_tiem降序,3duration升序
@@ -131,6 +137,8 @@ public class TrainController {
         String content = "您已购买" + trainDate + "由" + trainMap.get("start_station") + "站发往" + trainMap.get("arrive_station") + "站的" + trainId + "次列车车票，发车时间" + trainMap.get("start_time") + "。请合理安排出行时间。";
 
         messageService.addMessage(userId, Message.generateMessageId(), oid, "车票订单支付成功", formattedDate, content, false, 3);
+
+        emailService.sendSimpleMail(userService.getEmail(userId),"火车订单支付成功",content);
         return new HashMap<>() {{
             put("info", "下单成功！");
         }};
@@ -164,6 +172,7 @@ public class TrainController {
             String content = "您已成功取消" + trainDate + "由" + train.get("start_station") + "站发往" + train.get("arrive_station") + "站的" + trainId + "次列车车票";
             messageService.addMessage(userID, Message.generateMessageId(), oid, "火车订单取消成功", formattedDate, content, false, 3);
 
+            emailService.sendSimpleMail(userService.getEmail(userID),"火车订单取消成功",content);
 
             return new HashMap<>() {{
                 put("info", "取消成功");

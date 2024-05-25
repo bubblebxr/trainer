@@ -44,6 +44,11 @@ public class UserServiceImpl implements IUserService {
     public boolean updatePassword(String userId,String newpassword){
         return userMapper.updatePassword(userId,newpassword);
     }
+
+    @Override
+    public String getEmail(String userId){
+        return userMapper.getEmail(userId);
+    }
 }
 
 

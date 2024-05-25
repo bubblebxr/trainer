@@ -7,6 +7,8 @@ import com.example.se_project.mapper.IMessageMapper;
 import com.example.se_project.service.IHotelService;
 import com.example.se_project.service.IMessageService;
 import com.example.se_project.service.IOrderService;
+import com.example.se_project.service.IUserService;
+import com.example.se_project.service.Impl.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +29,10 @@ public class HotelController {
     private IOrderService orderService;
     @Autowired
     private IMessageService messageService;
+    @Autowired
+    private IUserService userService;
+    @Autowired
+    private EmailService emailService;
 
     // 在Controller中查询最低价
     @GetMapping("/hotel/{arrive_station}/{arrive_date}/{ldeparture_date}")
@@ -258,7 +264,7 @@ public class HotelController {
 
         String content = "您已成功预订" + hotelService.getHotelName(id).get("name") + "，入住时间" + checkinTime + "--" + checkoutTime + "，祝您旅途愉快。";
         messageService.addMessage(userId, Message.generateMessageId(), oid, "酒店订单支付成功", formattedDate, content, false, 4);
-
+        emailService.sendSimpleMail(userService.getEmail(userId),"酒店订单支付成功",content);
         return new HashMap<>() {{
             put("result", true);
         }};
@@ -338,7 +344,7 @@ public class HotelController {
 
             String content = "您已成功取消" + hotelService.getHotelName(hotelId).get("name") + "" + checkinTime + "--" + checkoutTime + "的订单";
             messageService.addMessage(userID, Message.generateMessageId(), oid, "酒店订单取消成功", formattedDate, content, false, 4);
-
+            emailService.sendSimpleMail(userService.getEmail(userID),"酒店订单取消成功",content);
             return new HashMap<>() {{
                 put("cancel_time", formattedDate);
             }};

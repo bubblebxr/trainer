@@ -25,4 +25,6 @@ public interface IUserMapper extends BaseMapper<User> {
 
     boolean updatePassword(String userId, String newpassword);
 
+    String getEmail(String userId);
+
 }

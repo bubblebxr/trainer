@@ -70,7 +70,7 @@
                     </el-col>
                     <el-col :span="3">
                         <el-text class="mx-1" size="large">总金额: <span style="color:#ffa31a;font-weight: bold;">￥{{
-    item.sum_price
+                            item.sum_price
                                 }}元</span></el-text>
                     </el-col>
                     <el-col :span="2" v-if="item.status === '已支付'" :offset="15">

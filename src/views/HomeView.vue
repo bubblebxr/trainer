@@ -46,6 +46,9 @@
                   <template #prepend>密码</template>
                 </el-input>
               </div>
+              <button style="margin-top:20px;color:#61bbff;text-decoration:underline;" @click="changeToRegister">
+                先去注册
+              </button>
             </a-modal>
 
           </div>
@@ -90,14 +93,34 @@
                   <template #prepend>邮箱</template>
                 </el-input>
               </div>
+              <div style="margin-top:20px;">
+                <el-button style="width:100px;margin-right:20px;" @click="sendVerificationCode"> 发送验证码 </el-button>
+                <el-input
+                  v-model="my_verify"
+                  style="max-width: 200px"
+                  placeholder="输入验证码"
+                >
+                  <template #prepend>验证码</template>
+                </el-input>
+              </div>
             </a-modal>
           </div>
         </el-popover>
         <div id="loggedInMessage" style="display:none">
               <div style="marigin-top:30px;">
-              
-                <a-avatar style="margin-top:10px;margin-right:20px;" size="large" :src="'https://m.elongstatic.com/hotel_pc_i18n/product/_nuxt/userHead.0-0-3-213881db..svg'" />
-
+                <el-popover
+                  placement="bottom"
+                  :width="200"
+                  trigger="hover"
+                  content="this is content, this is content, this is content"
+                >
+                  <a-button @click="quit" style="width:170px;margin-top:10px;">
+                    退出登录
+                  </a-button>
+                  <template #reference>
+                    <a-avatar style="margin-top:10px;margin-right:20px;" size="large" :src="'https://m.elongstatic.com/hotel_pc_i18n/product/_nuxt/userHead.0-0-3-213881db..svg'" />
+                  </template>
+                </el-popover>
               </div>
         </div>
         <img src="../assets/message.png" style="width: 55px; height: 55px; margin-top: 8%;" />
@@ -115,6 +138,7 @@
 <script setup>
 import { ref, onMounted,inject } from 'vue'
 import { useRouter } from "vue-router";
+import { ElMessage, ElMessageBox } from 'element-plus'
 const router = useRouter();
 const activeIndex = ref('1')
 const selectMenu = (key) => {
@@ -132,7 +156,7 @@ const selectMenu = (key) => {
 }
 
 //登陆
-//登陆
+
 import { postLogin } from "@/api/api"
 const openLogin = ref(false);
 const my_id = ref('');
@@ -152,8 +176,8 @@ const handleLoginOk = (e) => {
     });
   } else {
     postmyLogin();
+    openLogin.value = false;
   }
-  openLogin.value = false;
 };
 const postmyLogin = async () =>{
   try{
@@ -163,9 +187,9 @@ const postmyLogin = async () =>{
         message: "登陆成功",
         type: "success",
       });
-      localstorage.setItem('user_id',my_id);
+      localStorage.setItem('user_id',my_id);
       localStorage.setItem('isLoggedIn',true);
-      localstorage.setItem('email',response.data.email);
+      localStorage.setItem('email',response.data.email);
       localStorage.setItem('password',my_password);
       localStorage.setItem('name',response.data.name);
       updateUI();
@@ -184,6 +208,8 @@ const postmyLogin = async () =>{
 //注册
 const my_email = ref('');
 const my_name = ref('');
+const my_verify= ref('');
+const verification = ref('');
 
 import { postRegister } from "@/api/api"
 const openRegister = ref(false);
@@ -216,6 +242,7 @@ const postmyRegister = async () =>{
     console.error("注册失败:", error);
   }
 }
+//发送验证码
 
 const handleRegisterOk = (e) => {
   console.log(e);
@@ -225,11 +252,16 @@ const handleRegisterOk = (e) => {
       type: "error",
       plain: true,
     });
-  } else {
+  }else {
     postmyRegister();
+    openRegister.value = false;
   }
-  openRegister.value = false;
 };
+
+const changeToRegister =()=>{
+  openLogin.value = false;
+  openRegister.value = true;
+}
 
 
 // 页面加载完成时执行
@@ -251,6 +283,16 @@ function updateUI() {
     document.getElementById('loginButton').style.display = 'block'; // 显示登录按钮
     document.getElementById('loggedInMessage').style.display = 'none'; // 隐藏已登录的消息
   }
+}
+//退出登录
+
+const quit=()=>{
+  localStorage.setItem('user_id',"");
+  localStorage.setItem('isLoggedIn',false);
+  localStorage.setItem('email',"");
+  localStorage.setItem('password',"");
+  localStorage.setItem('name',"");
+  updateUI();
 }
 
 onMounted(() => {

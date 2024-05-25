@@ -34,6 +34,10 @@ export const postFoodBill = (foods, userID, tid, date, time, sum_price) => {
             "time": time,
             "bill_time": nowtime,
             "sum_price": sum_price
+        }, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
         }
     );
 }
@@ -49,6 +53,10 @@ export const cancelFoodOrder = (userID, oid) => {
     return api.post(`/food/cancel/${userID}/${oid}`,
         {
             "cancel_time": nowtime,
+        }, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
         }
     );
 }
@@ -94,6 +102,10 @@ export const postTicketBill = (persons, userID, tid, date, sum_price) => {
             "date": date,
             "bill_time": nowtime,
             "sum_price": sum_price
+        }, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
         }
     );
 }
@@ -144,6 +156,10 @@ export const postHotelBill = (hotelid, id, checkin_time, checkout_time, room_num
             "room_type": room_type,
             "customers": customers,
             "money": money,
+        }, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
         }
 
     )
@@ -159,21 +175,28 @@ export const cancelHotelOrder = (userID, oid) => {
 
 /*提交个人注册信息*/
 export const postRegister = (userID, name, password, email) => {
-    return api.post(`/register`,
-        {
-            "id": userID,
-            "name": name,
-            "password": password,
-            "email": email
+    return api.post(`/register`, {
+        "id": userID,
+        "name": name,
+        "password": password,
+        "email": email
+    }, {
+        headers: {
+            'Content-Type': 'application/json'
         }
-    )
+    });
 }
+
 /*登陆*/
 export const postLogin = (userID, password) => {
     return api.post(`/login`,
         {
             "id": userID,
             "password": password
+        } ,{
+            headers: {
+                'Content-Type': 'application/json'
+            }
         }
     )
 }

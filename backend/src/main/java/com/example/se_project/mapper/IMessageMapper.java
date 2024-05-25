@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 import java.util.Map;
+
 // 消息
 @Mapper
 public interface IMessageMapper extends BaseMapper<Message> {

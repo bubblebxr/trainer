@@ -14,8 +14,9 @@ import java.util.List;
 public class FoodServiceImpl implements IFoodService {
     @Autowired
     IFoodMapper foodMapper;
+
     @Override
-    public List<Food> getAllFood(String trainId, String date, String type){
+    public List<Food> getAllFood(String trainId, String date, String type) {
         return foodMapper.getAllFood(trainId, date, type);
     }
 
@@ -29,8 +30,6 @@ public class FoodServiceImpl implements IFoodService {
     public void addFoodOrder(FoodOrder foodOrder) {
         foodMapper.addFoodOrder(foodOrder);
     }
-
-
 
 
     @Override

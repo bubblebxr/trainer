@@ -139,7 +139,7 @@ public class TrainController {
 
         messageService.addMessage(userId, Message.generateMessageId(), oid, "车票订单支付成功", formattedDate, content, false, 3);
 
-        emailService.sendSimpleMail(userService.getEmail(userId),"火车订单支付成功",content);
+        emailService.sendSimpleMail(userService.getEmail(userId), "火车订单支付成功", content);
         return new HashMap<>() {{
             put("info", "下单成功！");
         }};
@@ -178,7 +178,7 @@ public class TrainController {
             String content = "您已成功取消" + trainDate + "由" + train.get("start_station") + "站发往" + train.get("arrive_station") + "站的" + trainId + "次列车车票";
             messageService.addMessage(userID, Message.generateMessageId(), oid, "火车订单取消成功", formattedDate, content, false, 3);
 
-            emailService.sendSimpleMail(userService.getEmail(userID),"火车订单取消成功",content);
+            emailService.sendSimpleMail(userService.getEmail(userID), "火车订单取消成功", content);
 
             return new HashMap<>() {{
                 put("info", "取消成功");

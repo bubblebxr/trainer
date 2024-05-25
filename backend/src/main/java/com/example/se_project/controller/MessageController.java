@@ -16,14 +16,14 @@ public class MessageController {
     private IMessageService messageService;
 
     @GetMapping("/message/getAll/{userID}")
-    public Map<String,Object> getMessage(@PathVariable String userID){
-        return new HashMap<>(){{
-            put("result",messageService.getMessage(userID));
+    public Map<String, Object> getMessage(@PathVariable String userID) {
+        return new HashMap<>() {{
+            put("result", messageService.getMessage(userID));
         }};
     }
 
     @PostMapping("/message/setRead/{mid}")
-    public void setHaveread(@PathVariable String mid){
+    public void setHaveread(@PathVariable String mid) {
 
         // 标记已读
         messageService.setHaveread(mid);

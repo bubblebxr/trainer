@@ -56,12 +56,18 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public List<Map<String,Object>> getIdByUidAndStatus(String userID, String status) {
+    public List<Map<String, Object>> getIdByUidAndStatus(String userID, String status) {
         return orderMapper.getIdByUidAndStatus(userID, status);
     }
 
     @Override
-    public List<Map<String,Object>> getIdByUid(String userID) {
+    public List<Map<String, Object>> getIdByUid(String userID) {
         return orderMapper.getIdByUid(userID);
     }
+
+    @Override
+    public List<Map<String, Object>> getAllTrain() {
+        return orderMapper.getAllTrainOrder();
+    }
+
 }

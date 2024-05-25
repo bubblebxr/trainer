@@ -23,6 +23,7 @@ public class Order {
         // 组合时间戳和随机数生成订单ID
         return timestamp + randomNum;
     }
+
     private String uid;
     private String billTime;
 
@@ -50,6 +51,7 @@ public class Order {
     public enum OrderStatus {
         Paid, Canceled, Done
     }
+
     private OrderStatus orderStatus;
 
     public enum OrderType {

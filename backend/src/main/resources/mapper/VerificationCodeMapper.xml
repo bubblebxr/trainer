@@ -9,9 +9,8 @@
     <insert id="addVerificationCode">
         insert into verificationCodes (email, code, generatedAt, expiresAt)
         values (#{email}, #{code}, #{generatedAt}, #{expiresAt})
-        on duplicate key update
-                             code = values(code),
-                             generatedAt = values(generatedAt),
-                             expiresAt = values(expiresAt)
+        on duplicate key update code        = values(code),
+                                generatedAt = values(generatedAt),
+                                expiresAt   = values(expiresAt)
     </insert>
 </mapper>

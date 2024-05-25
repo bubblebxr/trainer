@@ -23,12 +23,12 @@ public class StationController {
     @GetMapping("/station")
     public Map<String, Object> inquireAllStations() {
         List<Object> list = new ArrayList<>();
-        stationService.inquireAllStations().forEach(e->{
-            list.add(new HashMap<>(){{
+        stationService.inquireAllStations().forEach(e -> {
+            list.add(new HashMap<>() {{
                 put("value", e.getStationName());
             }});
         });
-        return new HashMap<>(){{
+        return new HashMap<>() {{
             put("station", list);
         }};
     }

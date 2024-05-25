@@ -38,7 +38,7 @@ public class TrainServiceImpl implements ITrainService {
 
     @Override
     public TrainOrder getTrainOrdersByIdentificationAndDate(String identification, String date) {
-        return  trainMapper.getTrainOrdersByIdentificationAndDate(identification, date);
+        return trainMapper.getTrainOrdersByIdentificationAndDate(identification, date);
     }
 
 
@@ -56,4 +56,15 @@ public class TrainServiceImpl implements ITrainService {
     public Map<String, Object> getTrainByIdAndDate(String trainId, String trainDate) {
         return trainMapper.getTrainByIdAndDate(trainId, trainDate);
     }
+
+    @Override
+    public String getStartTime(String trainId, String trainDate) {
+        return trainMapper.getStartTime(trainId, trainDate);
+    }
+
+    @Override
+    public List<Map<String, Object>> getTrainIdAndDate(String orderId) {
+        return trainMapper.getTrainIdAndDate(orderId);
+    }
+
 }

@@ -13,6 +13,7 @@ public interface IOrderMapper {
 
     @Select("select * from orders where uid = #{uid} and orderType = #{type}")
     List<Order> getOrderByUid(String uid, Order.OrderType type);
+
     @Select("select * from orders where oid = #{oid} and uid = #{uid}")
     Order getOrderByOidAndUid(String oid, String uid);
 
@@ -31,11 +32,14 @@ public interface IOrderMapper {
     void deleteOrder(Order order);
 
     @Update("update orders set cancelTime = #{cancelTime} where oid=#{oid}")
-    void setCancelTime(String oid,String cancelTime);
+    void setCancelTime(String oid, String cancelTime);
 
     @Select("select oid,orderStatus,total,billTime from orders where uid=#{userID} and orderType='Train'")
-    List<Map<String,Object>> getIdByUid(String userID);
+    List<Map<String, Object>> getIdByUid(String userID);
 
     @Select("select oid from orders where uid=#{userID} and orderStatus=#{status} and orderType='Train'")
-    List<Map<String,Object>> getIdByUidAndStatus(String userID,String status);
+    List<Map<String, Object>> getIdByUidAndStatus(String userID, String status);
+
+    @Select("select * from orders where orderType='Train'")
+    List<Map<String, Object>> getAllTrainOrder();
 }

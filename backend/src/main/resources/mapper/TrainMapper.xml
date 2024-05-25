@@ -92,5 +92,15 @@
         from trains
     where trainId=#{trainId} and date=#{trainDate}
     </select>
+    <select id="getStartTime">
+        select startTime
+        from trains
+        where trainId=#{trainId} and date=#{trainDate}
+    </select>
+    <select id="getTrainIdAndDate">
+        select trainId,trainDate
+        from trainorders
+        where oid=#{orderId}
+    </select>
 
 </mapper>

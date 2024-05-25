@@ -62,7 +62,6 @@ public class Comment {
     }
 
 
-
     public Integer getHotel_id() {
         return hotel_id;
     }

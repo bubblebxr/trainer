@@ -17,16 +17,16 @@ public class UserController {
     private User user;
 
     @PostMapping(value = "/register")
-    public Map<String, Object> userRegister(@RequestBody Map<String, String> registerMap) {
-        String id = registerMap.get("id");
-        String name = registerMap.get("name");
-        String password = registerMap.get("password");
-        String email = registerMap.get("email");
+    public Map<String, Object> userRegister(@RequestBody Map<String, Object> registerMap) {
+        String id = registerMap.get("id").toString();
+        String name = registerMap.get("name").toString();
+        String password = registerMap.get("password").toString();
+        String email = registerMap.get("email").toString();
         Map<String, Object> map = new HashMap<>();
 
         //System.out.println(id);
         // 校验身份证号
-        if (!id.matches("\\d{17}[\\dX]")) {
+        if (!id.matches("^[1-9]\\d{5}(18|19|([23]\\d))\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$")) {
             map.put("result", false);
             map.put("reason", "身份证号格式错误");
             return map;
@@ -68,9 +68,9 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public Map<String, Object> userLogin(@RequestBody Map<String, String> loginMap) {
-        String id = loginMap.get("id");
-        String password = loginMap.get("password");
+    public Map<String, Object> userLogin(@RequestBody Map<String, Object> loginMap) {
+        String id = loginMap.get("id").toString();
+        String password = loginMap.get("password").toString();
         Map<String, Object> map = new HashMap<>();
         if (userService.findUserById(id) == 0) {
             //map.put("message","用户未注册");
@@ -95,9 +95,9 @@ public class UserController {
     }
 
     @PostMapping("/updatepassword")
-    public Map<String, Object> updatePassword(@RequestBody Map<String, String> map){
-        String userId = map.get("id");
-        String newpassword = map.get("newpassword");
+    public Map<String, Object> updatePassword(@RequestBody Map<String, Object> map){
+        String userId = map.get("id").toString();
+        String newpassword = map.get("newpassword").toString();
         return new HashMap<>(){{
         put("info",userService.updatePassword(userId,newpassword));
         }};

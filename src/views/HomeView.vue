@@ -179,6 +179,7 @@ import { ref, onMounted,inject,computed,provide } from 'vue'
 import { useRouter } from "vue-router";
 import eventBus from "@/eventBus.js";
 import { getMessage } from "@/api/api.js";
+import { ElMessage } from "element-plus";
 const router = useRouter();
 const activeIndex = ref("1");
 const drawer = ref(false);

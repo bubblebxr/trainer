@@ -1,13 +1,23 @@
 package com.example.se_project.entity;
 
-import java.time.LocalDateTime;
+import com.baomidou.mybatisplus.annotation.TableName;
 
+import java.time.LocalDateTime;
+import java.util.Random;
+
+@TableName("verificationCodes")
 public class VerificationCode {
 
     private String email;
     private String code;
     private LocalDateTime generatedAt;
     private LocalDateTime expiresAt;
+
+    public static String generateVerificationCode() {
+        Random random = new Random();
+        int code = 100000 + random.nextInt(900000); // 生成6位随机验证码
+        return String.valueOf(code);
+    }
 
     // Getters and setters
 

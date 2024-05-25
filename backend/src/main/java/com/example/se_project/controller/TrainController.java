@@ -1,10 +1,7 @@
 package com.example.se_project.controller;
 
 import com.example.se_project.entity.*;
-import com.example.se_project.service.IMessageService;
-import com.example.se_project.service.IOrderService;
-import com.example.se_project.service.ITrainService;
-import com.example.se_project.service.IUserService;
+import com.example.se_project.service.*;
 import com.example.se_project.service.Impl.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +23,8 @@ public class TrainController {
     private EmailService emailService;
     @Autowired
     private IUserService userService;
+    @Autowired
+    private IFoodService foodService;
 
     // isGD:0高铁 1火车 2全选
     // sort_type:1start_time升序,2start_tiem降序,3duration升序
@@ -163,6 +162,11 @@ public class TrainController {
             String trainId = trainMap.getTrainId();
             String trainDate = trainMap.getTrainDate();
             Map<String, Object> train = trainService.getTrainByIdAndDate(trainId, trainDate);
+
+            // 取消该trainOrder对应的foodOrder
+            foodService.getFoodOrdersByTrain(trainId, trainDate).forEach(foodOrder -> {
+                orderService.cancelOrder(orderService.getOrder(foodOrder.getOid()));
+            });
 
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = new Date();

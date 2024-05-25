@@ -12,7 +12,7 @@ import ticketOrders from '../components/orders/ticket.vue'
 import hotelOrders from '../components/orders/hotel.vue'
 import foodOrders from '../components/orders/food.vue'
 import myTicket from '../components/orders/myTicket.vue'
-import About from '../views/About.vue'
+import About from '../components/hotelDetail.vue'
 
 
 const routes = [
@@ -75,13 +75,13 @@ const routes = [
         path: 'ticketDetail',
         name: 'detail',
         component: ticketDetail
+      },
+      {
+        path: 'about',
+        name: 'about',
+        component: About
       }
     ]
-  },
-  {
-    path: '/about',
-    name: 'about',
-    component: About
   }
 ]
 

@@ -50,6 +50,7 @@
             <el-button id="loginButton" type="primary" round plain size="large" style="margin-top:12%;margin-right:3%;" class="log">登录/注册</el-button>
             
           </template>
+          <!-- 登陆 -->
           <div>
             <a-button @click="login" style="width:170px;">
               登录
@@ -73,14 +74,18 @@
                   <template #prepend>密码</template>
                 </el-input>
               </div>
+              <button style="margin-top:20px;color:#61bbff;text-decoration:underline;" @click="changeToRegister">
+                先去注册
+              </button>
             </a-modal>
 
           </div>
+          <!-- 注册 -->
           <div>
             <a-button @click="register" style="width:170px;margin-top:10px;">
               注册
             </a-button>
-            <a-modal v-model:open="openRegister" title="注册" @ok="handleRegisterOk">
+            <a-modal v-model:open="openRegister" title="注册" @ok="handleRegisterOk" ok-text="确认信息" style="color:white" :cancel-button-props="{ style: { display: 'none' } }">
               <div style="margin-top:20px;">
                 <el-input
                   v-model="my_id"
@@ -119,12 +124,37 @@
               </div>
             </a-modal>
           </div>
+          <a-modal v-model:open="openVerification" title="注册"  :cancel-button-props="{ style: { display: 'none' } }" :ok-button-props="{ style: { display: 'none' } }">
+              
+              <div style="margin-top:20px;">
+                <el-button style="width:100px;margin-right:20px;" @click="sendVerificationOk" :disabled="countingDown"> {{ buttonText }} </el-button>
+                <el-input
+                  v-model="my_code"
+                  style="max-width: 230px"
+                  placeholder="输入验证码"
+                >
+                  <template #prepend>验证码</template>
+                </el-input>
+                <el-button @click="handleVerificationOk" style="margin-left:20px" type="primary"> 提交验证码 </el-button>
+              </div>
+            </a-modal>
+
         </el-popover>
         <div id="loggedInMessage" style="display:none">
               <div style="marigin-top:30px;">
-              
-                <a-avatar style="margin-top:10px;margin-right:20px;" size="large" :src="'https://m.elongstatic.com/hotel_pc_i18n/product/_nuxt/userHead.0-0-3-213881db..svg'" />
-
+                <el-popover
+                  placement="bottom"
+                  :width="200"
+                  trigger="hover"
+                  content="this is content, this is content, this is content"
+                >
+                  <a-button @click="quit" style="width:170px;margin-top:10px;">
+                    退出登录
+                  </a-button>
+                  <template #reference>
+                    <a-avatar style="margin-top:10px;margin-right:20px;" size="large" :src="'https://m.elongstatic.com/hotel_pc_i18n/product/_nuxt/userHead.0-0-3-213881db..svg'" />
+                  </template>
+                </el-popover>
               </div>
         </div>
         <el-badge
@@ -179,6 +209,7 @@ import { ref, onMounted, computed,inject } from "vue";
 import { useRouter } from "vue-router";
 import eventBus from "@/eventBus.js";
 import { getMessage } from "@/api/api.js";
+import { ElMessage, ElMessageBox } from 'element-plus'
 const router = useRouter();
 const activeIndex = ref("1");
 const drawer = ref(false);
@@ -222,7 +253,7 @@ const unReadNum = computed(() => {
 });
 
 //登陆
-//登陆
+
 import { postLogin } from "@/api/api"
 const openLogin = ref(false);
 const my_id = ref('');
@@ -242,8 +273,8 @@ const handleLoginOk = (e) => {
     });
   } else {
     postmyLogin();
+    openLogin.value = false;
   }
-  openLogin.value = false;
 };
 const postmyLogin = async () =>{
   try{
@@ -253,9 +284,9 @@ const postmyLogin = async () =>{
         message: "登陆成功",
         type: "success",
       });
-      localstorage.setItem('user_id',my_id);
+      localStorage.setItem('user_id',my_id);
       localStorage.setItem('isLoggedIn',true);
-      localstorage.setItem('email',response.data.email);
+      localStorage.setItem('email',response.data.email);
       localStorage.setItem('password',my_password);
       localStorage.setItem('name',response.data.name);
       updateUI();
@@ -274,9 +305,12 @@ const postmyLogin = async () =>{
 //注册
 const my_email = ref('');
 const my_name = ref('');
+const my_verify= ref('');
+const my_code = ref('');
 
-import { postRegister } from "@/api/api"
+import { postRegister,postCode,postCodeVeryfication } from "@/api/api"
 const openRegister = ref(false);
+const openVerification = ref(false);
 
 const register = () => {
   openRegister.value = true;
@@ -287,25 +321,86 @@ const postmyRegister = async () =>{
     const response = await postRegister(my_id, my_name, my_password,my_email);
     if(response.data.result){
       ElMessage({
-        message: "注册成功",
+        message: "提交成功",
         type: "success",
       });
       localStorage.setItem('user_id',my_id);
-      localStorage.setItem('isLoggedIn',true);
       localStorage.setItem('email',my_email);
       localStorage.setItem('password',my_password);
       localStorage.setItem('name',my_name);
-      updateUI();
+      openRegister.value = false;
+      openVerification.value = true;
       
+    }else{
+      ElMessage.error("提交失败:"+response.data.reason);
+    }
+  }catch (error) {
+    console.error("提交失败:", error);
+  }
+}
+//发送验证码
+
+const sendVerificationOk = async () =>{
+  try{
+    const response = await postCode(my_email);
+    if(response.data.result){
+      ElMessage({
+        message: "成功发送验证码",
+        type: "success",
+      });
+      if (!countingDown.value) {
+          startCountdown();
+           // 在这里发送验证码的逻辑
+        }
+    }else{
+      ElMessage.error("验证码发送失败");
+    }
+  }catch (error) {
+    console.error("验证码发送失败:", error);
+  }
+}
+
+const handleVerificationOk = async () =>{
+  try{
+    const response = await postCodeVeryfication(my_code,my_email);
+    if(response.data.result){
+      ElMessage({
+        message: "注册成功",
+        type: "success",
+      });
+      openVerification.value = false;
+      localStorage.setItem('isLoggedIn',true);
+      updateUI();
       //重新加载页面
       window.location.href = window.location.href;
     }else{
-      ElMessage.error("注册失败:"+response.data.reason);
+      ElMessage.error("验证码错误，请重新输入");
     }
   }catch (error) {
-    console.error("注册失败:", error);
+    console.error("验证码发送失败:", error);
   }
+};
+//倒计时
+const countdownSeconds = 120;
+const countingDown = ref(false); 
+const buttonText = ref('发送验证码');
+
+function startCountdown() {
+  countingDown.value = true;
+  let seconds = countdownSeconds;
+  buttonText.value = `${seconds}s`;
+  const countdownInterval = setInterval(() => {
+    seconds--;
+    buttonText.value = `${seconds}s`;
+    if (seconds <= 0) {
+      clearInterval(countdownInterval);
+      countingDown.value = false;
+      buttonText.value = '发送验证码';
+    }
+  }, 1000);
 }
+
+
 
 const handleRegisterOk = (e) => {
   console.log(e);
@@ -315,11 +410,16 @@ const handleRegisterOk = (e) => {
       type: "error",
       plain: true,
     });
-  } else {
+  }else {
     postmyRegister();
   }
-  openRegister.value = false;
 };
+
+const changeToRegister =()=>{
+  openLogin.value = false;
+  openRegister.value = true;
+  updateUI();
+}
 
 
 // 页面加载完成时执行
@@ -341,6 +441,16 @@ function updateUI() {
     document.getElementById('loginButton').style.display = 'block'; // 显示登录按钮
     document.getElementById('loggedInMessage').style.display = 'none'; // 隐藏已登录的消息
   }
+}
+//退出登录
+
+const quit=()=>{
+  localStorage.setItem('user_id',"");
+  localStorage.setItem('isLoggedIn',false);
+  localStorage.setItem('email',"");
+  localStorage.setItem('password',"");
+  localStorage.setItem('name',"");
+  updateUI();
 }
 
 onMounted(() => {
@@ -379,6 +489,7 @@ const jumpToOrder = (orderType, orderId) => {
     });
   }
 };
+
 // setInterval(getAllMessage,1000);
 </script>
 

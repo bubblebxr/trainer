@@ -54,9 +54,9 @@
                       <component :is="actions.icon3" style="margin-right: 8px" />
                         {{ item.messages }}
                       </span>
-                      <div style="margin-left: 300px">
+                      <div style="margin-left: 200px">
                         <a-typography-title :level="4">¥ {{item.miniprice}} 起</a-typography-title>
-                        <router-link :to="{ name: 'about', query: { id: item.id ,checkin: arrive_date, checkout: Ideparture_date  }}" target="_blank">点击查看</router-link>
+                        <el-button type="success" plain @click="submitTicket(item.id,arrive_date,Ideparture_date)" style="background-color:#b8e0ff;border-color:#1d9cfc;width:100px;">点击查看</el-button>
                       </div>
 
                    
@@ -92,6 +92,9 @@ import { StarOutlined, LikeOutlined, MessageOutlined } from '@ant-design/icons-v
 import { getHotel,getPlaces } from '../api/api';
 import { ref, onMounted, watch } from 'vue'
 import { ElMessage } from 'element-plus'
+import { useRouter, useRoute } from "vue-router";
+const router = useRouter();
+const route = useRoute()
 var listData = ref([]); /*酒店信息*/
 const sort_type = ref('likes');/**排序方式 */
 const arrive_station = ref('');/**站 */
@@ -227,6 +230,16 @@ const fetchSearchResult = async () => {
   } catch (error) {
       console.error('获取查询信息失败', error);
   }
+};
+
+//点击查看
+const submitTicket = (id,check_in,check_out) => {
+    router.push({
+        path: "/home/about",
+        query: {
+            id: id ,checkin: check_in, checkout: check_out
+        },
+    });
 };
 
 //点击查询

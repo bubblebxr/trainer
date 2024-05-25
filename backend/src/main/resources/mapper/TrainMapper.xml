@@ -12,13 +12,13 @@
         and date =#{date}
         <choose>
             <when test="is_GD == 2">
-                AND (type = 0 OR type = 1)
+                AND (type = 'Gaotie' OR type = 'Huoche')
             </when>
             <when test="is_GD}== 1">
-                AND type = 1
+                AND type = 'Huoche'
             </when>
             <when test="is_GD == 0">
-                AND type = 0
+                AND type = 'Gaotie'
             </when>
         </choose>
         AND (
@@ -26,54 +26,36 @@
             <when test="seat_type[0] == true">
                 businessSeatSurplus &gt; 0
             </when>
-            <otherwise>
-                businessSeatSurplus &lt; 0
-            </otherwise>
         </choose>
         OR
         <choose>
             <when test="seat_type[1] == true">
                 firstClassSeatSurplus &gt; 0
             </when>
-            <otherwise>
-                firstClassSeatSurplus &lt; 0
-            </otherwise>
         </choose>
         OR
         <choose>
             <when test="seat_type[2] == true">
                 secondClassSeatSurplus &gt; 0
             </when>
-            <otherwise>
-                secondClassSeatSurplus &lt; 0
-            </otherwise>
         </choose>
         OR
         <choose>
             <when test="seat_type[3] == true">
                 softSleeperSurplus &gt; 0
             </when>
-            <otherwise>
-                softSleeperSurplus &lt; 0
-            </otherwise>
         </choose>
         OR
         <choose>
             <when test="seat_type[4] == true">
                 hardSleeperSurplus &gt; 0
             </when>
-            <otherwise>
-                hardSleeperSurplus &lt; 0
-            </otherwise>
         </choose>
         OR
         <choose>
             <when test="seat_type[5] == true">
                 hardSeatSurplus &gt; 0
             </when>
-            <otherwise>
-                hardSeatSurplus &lt; 0
-            </otherwise>
         </choose>
         )
         ORDER BY

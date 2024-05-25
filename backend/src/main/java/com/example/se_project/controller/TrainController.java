@@ -52,6 +52,8 @@ public class TrainController {
                 put("tid", trainId);
                 put("start_time", e.getStartTime());
                 put("arrive_time", e.getArrivalTime());
+
+                System.out.println(e.getDuration());
                 put("time", e.getDuration());
                 put("start_station", e.getStartStation());
                 put("arrive_station", e.getArrivalStation());

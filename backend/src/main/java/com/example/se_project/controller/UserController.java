@@ -82,6 +82,7 @@ public class UserController {
 
             if (loginuser != null) {
                 //map.put("id", loginuser.getId());
+                map.put("result", true);
                 map.put("email", loginuser.getEmail());
                 map.put("name", loginuser.getName());
             } else {

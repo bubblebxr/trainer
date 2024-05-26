@@ -42,4 +42,10 @@ public interface IOrderMapper {
 
     @Select("select * from orders where orderType='Train'")
     List<Map<String, Object>> getAllTrainOrder();
+
+    @Select("select haveSend from orders where oid=#{orderId}")
+    Boolean getMessageSend(String orderId);
+
+    @Update("update orders set haveSend = true where oid = #{orderId}")
+    void setMessageHaveSend(String orderId);
 }

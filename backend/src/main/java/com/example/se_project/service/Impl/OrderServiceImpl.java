@@ -69,5 +69,12 @@ public class OrderServiceImpl implements IOrderService {
     public List<Map<String, Object>> getAllTrain() {
         return orderMapper.getAllTrainOrder();
     }
-
+@Override
+    public Boolean getMessageSend(String orderId){
+        return orderMapper.getMessageSend(orderId);
+}
+@Override
+    public void setMessageHaveSend(String orderId){
+        orderMapper.setMessageHaveSend(orderId);
+}
 }

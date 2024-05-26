@@ -246,7 +246,7 @@ public class HotelController {
             hotelService.addHotelorderDetail(id, oid, checkinTime, checkoutTime, roomNum, roomType, customer.get("name"), customer.get("id"));
         }
 
-        String content = "您已成功预订" + hotelService.getHotelName(id).get("name") + "，入住时间" + checkinTime + "--" + checkoutTime + "，祝您旅途愉快。";
+        String content = "【WerwerTrip】您已成功预订" + hotelService.getHotelName(id).get("name") + "，入住时间" + checkinTime + "--" + checkoutTime + "，祝您旅途愉快。";
         messageService.addMessage(userId, Message.generateMessageId(), oid, "酒店订单支付成功", formattedDate, content, false, 4);
         emailService.sendSimpleMail(userService.getEmail(userId), "酒店订单支付成功", content);
         return new HashMap<>() {{
@@ -326,7 +326,7 @@ public class HotelController {
             String checkinTime = hotelMap.get("checkinTime").toString();
             String checkoutTime = hotelMap.get("checkoutTime").toString();
 
-            String content = "您已成功取消" + hotelService.getHotelName(hotelId).get("name") + "" + checkinTime + "--" + checkoutTime + "的订单";
+            String content = "【WerwerTrip】您已成功取消" + hotelService.getHotelName(hotelId).get("name") + "" + checkinTime + "--" + checkoutTime + "的订单";
             messageService.addMessage(userID, Message.generateMessageId(), oid, "酒店订单取消成功", formattedDate, content, false, 4);
             emailService.sendSimpleMail(userService.getEmail(userID), "酒店订单取消成功", content);
             return new HashMap<>() {{

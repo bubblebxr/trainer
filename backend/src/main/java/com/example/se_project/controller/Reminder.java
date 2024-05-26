@@ -41,17 +41,21 @@ public class Reminder {
             Map<String, Object> trainMap = trainService.getTrainIdAndDate(orderId).get(0);
             String trainId = trainMap.get("trainId").toString();
             String trainDate = trainMap.get("trainDate").toString();
+            System.out.println(trainId);
+            System.out.println(trainDate);
             String startTime = trainService.getStartTime(trainId, trainDate);
+            System.out.println(startTime);
             LocalDateTime start = LocalDateTime.parse(startTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-
+            System.out.println(now);
             Duration duration = Duration.between(now, start);
 
-            if (duration.toHours() == 2 && duration.toMinutesPart() >= 59) {
-                // 在2小时59分钟到3小时之间
+            if (duration.toHours() < 3 && !orderService.getMessageSend(orderId)) {
+                // 距发车时间小于3h且未发送过消息
                 String content = "距离您预定的" + trainDate + " " + trainId + "车次的" + "列车发车时间已不足3小时，请您合理安排出行时间，以免错过列车。";
 
                 messageService.addMessage(userId, Message.generateMessageId(), orderId, "行程提醒", now.toString(), content, false, 2);
                 emailService.sendSimpleMail(email, "行程提醒", content);
+                orderService.setMessageHaveSend(orderId);
             }
 
         }

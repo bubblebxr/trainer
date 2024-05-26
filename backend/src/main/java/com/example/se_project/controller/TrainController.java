@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @RestController
@@ -135,7 +137,10 @@ public class TrainController {
         String formattedDate = formatter.format(date);
 
         Map<String, Object> trainMap = trainService.getTrainByIdAndDate(trainId, trainDate);
-        String content = "您已购买" + trainDate + "由" + trainMap.get("start_station") + "站发往" + trainMap.get("arrive_station") + "站的" + trainId + "次列车车票，发车时间" + trainMap.get("start_time") + "。请合理安排出行时间。";
+        LocalDateTime startTime = (LocalDateTime) trainMap.get("startTime");
+        String formattedStartTime = startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+        String content = "【WerwerTrip】您已成功购买" + trainDate + "由" + trainMap.get("startStation") + "站发往" + trainMap.get("arrivalStation") + "站的" + trainId + "次列车车票，发车时间" + formattedStartTime + "。请合理安排出行时间。";
 
         messageService.addMessage(userId, Message.generateMessageId(), oid, "车票订单支付成功", formattedDate, content, false, 3);
 
@@ -175,7 +180,7 @@ public class TrainController {
             String formattedDate = formatter.format(date);
 
             //String content = "您已成功取消" +trainMap.getTrainDate() + " " + trainMap.getTrainId()+ "车次的列车" + food.getMealTime();
-            String content = "您已成功取消" + trainDate + "由" + train.get("start_station") + "站发往" + train.get("arrive_station") + "站的" + trainId + "次列车车票";
+            String content = "【WerwerTrip】您已成功取消" + trainDate + "由" + train.get("startStation") + "站发往" + train.get("arrivalStation") + "站的" + trainId + "次列车车票";
             messageService.addMessage(userID, Message.generateMessageId(), oid, "火车订单取消成功", formattedDate, content, false, 3);
 
             emailService.sendSimpleMail(userService.getEmail(userID), "火车订单取消成功", content);

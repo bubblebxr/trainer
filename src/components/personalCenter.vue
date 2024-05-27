@@ -41,7 +41,7 @@
 </template>
 <script setup>
 import { ref, reactive, watch } from 'vue';
-import { updatePassword } from '../api/api';
+import { updatePassword, postCodeVeryfication } from '../api/api';
 import { ElMessage } from "element-plus";
 import { postCode } from "@/api/api"
 const edit = ref(true);
@@ -110,7 +110,6 @@ const cancelPersonalEdit = () => {
     formLogin.confirmPassword = "";
 };
 const PersonalSubmit = async () => {
-    //TODO:确认验证码正确 错误码：1
     if (formLogin.password != formLogin.confirmPassword) {
         ElMessage({
             message: "新密码与确认密码不一致",
@@ -118,17 +117,26 @@ const PersonalSubmit = async () => {
             plain: true,
         });
     } else {
-        const data = await updatePassword(user_id, formLogin.password, formLogin.confirm);
-        if (data.data.result) {
+        const response = await postCodeVeryfication(formLogin.confirm, my_email);
+        if (response.data.result){
+            const data = await updatePassword(user_id, formLogin.password);
+            if (data.data.result) {
+                ElMessage({
+                    message: "更新密码成功",
+                    type: "success",
+                    plain: true,
+                });
+                edit.value = true;
+            } else {
+                ElMessage({
+                    message: "更新密码失败",
+                    type: "error",
+                    plain: true,
+                });
+            }
+        }else{
             ElMessage({
-                message: "更新密码成功",
-                type: "success",
-                plain: true,
-            });
-            edit.value = true;
-        } else {
-            ElMessage({
-                message: "更新密码失败",
+                message: "验证码错误！",
                 type: "error",
                 plain: true,
             });

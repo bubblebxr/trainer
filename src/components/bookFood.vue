@@ -117,7 +117,7 @@ import { getFoods, getThisTicket, postFoodBill } from "@/api/api";
 import { useRouter } from "vue-router";
 const router = useRouter();
 import { ElMessage,ElNotification  } from "element-plus";
-const userID = "00000"; //当前用户ID
+const userID = localStorage.getItem('user_id'); //当前用户ID
 const tid = ref("");
 const date = ref(""); 
 const time = ref("lunch");

@@ -142,7 +142,7 @@ public class TrainController {
 
         String content = "【WerwerTrip】您已成功购买" + trainDate + "由" + trainMap.get("startStation") + "站发往" + trainMap.get("arrivalStation") + "站的" + trainId + "次列车车票，发车时间" + formattedStartTime + "。请合理安排出行时间。";
 
-        messageService.addMessage(userId, Message.generateMessageId(), oid, "车票订单支付成功", formattedDate, content, false, 3);
+        messageService.addMessage(userId, Message.generateMessageId(), oid, "车票订单支付成功", formattedDate, content, false, "3");
 
         emailService.sendSimpleMail(userService.getEmail(userId), "火车订单支付成功", content);
         return new HashMap<>() {{
@@ -181,7 +181,7 @@ public class TrainController {
 
             //String content = "您已成功取消" +trainMap.getTrainDate() + " " + trainMap.getTrainId()+ "车次的列车" + food.getMealTime();
             String content = "【WerwerTrip】您已成功取消" + trainDate + "由" + train.get("startStation") + "站发往" + train.get("arrivalStation") + "站的" + trainId + "次列车车票";
-            messageService.addMessage(userID, Message.generateMessageId(), oid, "火车订单取消成功", formattedDate, content, false, 3);
+            messageService.addMessage(userID, Message.generateMessageId(), oid, "火车订单取消成功", formattedDate, content, false, "3");
 
             emailService.sendSimpleMail(userService.getEmail(userID), "火车订单取消成功", content);
 
@@ -281,14 +281,21 @@ public class TrainController {
                     put("tid", orderMap.get("trainId"));
                     put("oid", order.get("oid"));
                     put("status", finalOrderStatus);
+
                     Map<String, Object> trainMap = trainService.getTrainByIdAndDate(orderMap.get("trainId").toString(), orderMap.get("trainDate").toString());
-                    put("start_station", trainMap.get("start_station"));
-                    put("start_time", trainMap.get("start_time"));
-                    put("arrive_time", trainMap.get("arrive_time"));
-                    put("order_time", order.get("billTime"));
-                    //put("order_time", time);
+                    LocalDateTime startTime = (LocalDateTime) trainMap.get("startTime");
+                    String formattedStartTime = startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                    LocalDateTime arrivalTime = (LocalDateTime) trainMap.get("arrivalTime");
+                    String formattedArrivalTime = arrivalTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                    LocalDateTime billTime = (LocalDateTime) order.get("billTime");
+                    String formattedBillTime = billTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+                    put("start_station", trainMap.get("startStation"));
+                    put("start_time", formattedStartTime);
+                    put("arrive_time", formattedArrivalTime);
+                    put("order_time", formattedBillTime);
                     put("time", trainMap.get("duration"));
-                    put("arrive_station", trainMap.get("arrive_station"));
+                    put("arrive_station", trainMap.get("arrivalStation"));
                     put("date", orderMap.get("trainDate"));
                     put("seat_type", orderMap.get("seatType"));
                     put("price", order.get("total"));

@@ -16,7 +16,7 @@ public class MessageServiceImpl implements IMessageService {
     private IMessageMapper messageMapper;
 
     @Override
-    public void addMessage(String userId, String mid, String orderId, String title, String messageTime, String content, Boolean haveRead, Integer orderType) {
+    public void addMessage(String userId, String mid, String orderId, String title, String messageTime, String content, Boolean haveRead, String orderType) {
         messageMapper.addMessage(userId, mid, orderId, title, messageTime, content, haveRead, orderType);
     }
 

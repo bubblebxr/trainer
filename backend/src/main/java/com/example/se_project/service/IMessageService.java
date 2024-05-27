@@ -8,7 +8,7 @@ import java.util.Map;
 // 消息
 @Component
 public interface IMessageService {
-    void addMessage(String userId, String mid, String orderId, String title, String messageTime, String content, Boolean haveRead, Integer orderType);
+    void addMessage(String userId, String mid, String orderId, String title, String messageTime, String content, Boolean haveRead, String orderType);
 
     List<Map<String, Object>> getMessage(String userId);
 

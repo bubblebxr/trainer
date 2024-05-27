@@ -40,7 +40,7 @@ public interface IOrderMapper {
     @Select("select oid from orders where uid=#{userID} and orderStatus=#{status} and orderType='Train'")
     List<Map<String, Object>> getIdByUidAndStatus(String userID, String status);
 
-    @Select("select * from orders where orderType='Train'")
+    @Select("select * from orders where orderType='Train' and orderStatus='Paid'")
     List<Map<String, Object>> getAllTrainOrder();
 
     @Select("select haveSend from orders where oid=#{orderId}")

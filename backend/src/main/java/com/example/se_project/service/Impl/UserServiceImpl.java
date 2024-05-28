@@ -4,7 +4,6 @@ import com.example.se_project.entity.User;
 import com.example.se_project.mapper.IUserMapper;
 import com.example.se_project.service.IUserService;
 import com.example.se_project.util.SaltGenerator;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.se_project.util.MD5Util;

@@ -5,7 +5,6 @@ import com.example.se_project.entity.Hotel;
 import com.example.se_project.entity.Room;
 import com.example.se_project.mapper.IHotelMapper;
 import com.example.se_project.service.IHotelService;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

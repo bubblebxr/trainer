@@ -3,7 +3,6 @@ package com.example.se_project.service.Impl;
 import com.example.se_project.entity.Passenger;
 import com.example.se_project.mapper.IPassengerMapper;
 import com.example.se_project.service.IPassengerService;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

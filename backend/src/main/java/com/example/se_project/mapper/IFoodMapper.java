@@ -6,6 +6,7 @@ import com.example.se_project.entity.FoodOrder;
 import com.example.se_project.entity.Order;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -24,4 +25,7 @@ public interface IFoodMapper extends BaseMapper<Food> {
 
     @Select("select * from foodOrders where trainId = #{tid} and trainDate = #{date}")
     List<FoodOrder> getFoodOrdersByTrain(String tid, String date);
+
+    @Update("update foods set num = num - #{num}")
+    void reduceFoodNum(Food food, int num);
 }

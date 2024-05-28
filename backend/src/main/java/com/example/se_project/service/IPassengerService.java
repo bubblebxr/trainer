@@ -1,7 +1,6 @@
 package com.example.se_project.service;
 
 import com.example.se_project.entity.Passenger;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

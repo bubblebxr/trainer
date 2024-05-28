@@ -9,8 +9,8 @@
                 </el-icon>
                 <el-autocomplete v-model="destinationStation" :fetch-suggestions="queryStartStation" placeholder="到达地"
                     class="item" @select="handleDestination" clearable :popper-class="popperClass" />
-                <el-date-picker class="item" v-model="date" type="date" placeholder="出发日期" :shortcuts="shortcuts"
-                    :size="20" :disabled-date="disabledDate"  />
+                <el-date-picker class="item" v-model="date" type="date" placeholder="出发日期" :shortcuts="shortcuts" value-format="YYYY-MM-DD"
+                    :size="20" :disabled-date="disabledDate" />
                 <el-icon style="width:30px;">
                     <Search @click="search"
                         style="background-color:orange;width:30px;;height:200%;border-radius: 5px;" />
@@ -81,7 +81,7 @@
             </el-row>
         </div>
         <div style="margin-top:0.2%;  width:100%;display: block;padding-left:1%;margin-bottom:3%;">
-            <el-table :data="searchResult" height="480" :header-cell-style="{ background: '#8abbe7', color: 'white', }"
+            <el-table :data="searchResult" height="520" :header-cell-style="{ background: '#8abbe7', color: 'white', }"
                 empty-text="没有列车信息">
                 <el-table-column prop="tid" label="车次" width="160">
                     <template #default="scope">

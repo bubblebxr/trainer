@@ -110,7 +110,13 @@ const cancelPersonalEdit = () => {
     formLogin.confirmPassword = "";
 };
 const PersonalSubmit = async () => {
-    if (formLogin.password != formLogin.confirmPassword) {
+    if (formLogin.password === '' || formLogin.confirmPassword === '' || formLogin.confirm === '') {
+        ElMessage({
+            message: "还有未填写的信息",
+            type: "error",
+            plain: true,
+        });
+    } else if (formLogin.password != formLogin.confirmPassword) {
         ElMessage({
             message: "新密码与确认密码不一致",
             type: "error",
@@ -118,7 +124,7 @@ const PersonalSubmit = async () => {
         });
     } else {
         const response = await postCodeVeryfication(formLogin.confirm, my_email);
-        if (response.data.result){
+        if (response.data.result) {
             const data = await updatePassword(user_id, formLogin.password);
             if (data.data.result) {
                 ElMessage({
@@ -134,7 +140,7 @@ const PersonalSubmit = async () => {
                     plain: true,
                 });
             }
-        }else{
+        } else {
             ElMessage({
                 message: "验证码错误！",
                 type: "error",

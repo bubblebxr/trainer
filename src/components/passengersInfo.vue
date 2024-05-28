@@ -124,6 +124,14 @@ const insert=()=>{
     insertTable.value = true;
 };
 const insertFinish=async()=>{
+    if(form.name===''||form.identification===''||form.phone===''){
+        ElMessage({
+            message: "还有未填写的信息",
+            type: "error",
+            plain: true,
+        });
+        return;
+    }
     var p = /^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/;
     if (p.test(form.identification)) {
         const data = await insertPassengers(id,form.name, form.identification, form.phone);

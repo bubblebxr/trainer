@@ -117,7 +117,7 @@ const foodOrders = ref([]);
 // const foodOrders = ref([
 //   {
 //     tid: "strin1",
-//     oid: "string1",
+//     oid: "12222",
 //     date: "string",
 //     time: "午餐",
 //     order_time: "string",
@@ -130,204 +130,18 @@ const foodOrders = ref([]);
 //         photo:
 //           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
 //       },
-//       {
-//         food_name: "string",
-//         count: 1,
-//         photo:
-//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
-//       },
-//       {
-//         food_name: "string",
-//         count: 1,
-//         photo:
-//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
-//       },
-//       {
-//         food_name: "string",
-//         count: 1,
-//         photo:
-//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
-//       },
-//       {
-//         food_name: "string",
-//         count: 1,
-//         photo:
-//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
-//       },
 //     ],
 //   },
-//   {
-//     tid: "strin2",
-//     oid: "string2",
-//     date: "string",
-//     time: "午餐",
-//     order_time: "string",
-//     status: "已支付",
-//     sum_price: 100,
-//     foods: [
-//       {
-//         food_name: "string",
-//         count: 1,
-//         photo:
-//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
-//       },
-//       {
-//         food_name: "string",
-//         count: 1,
-//         photo:
-//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
-//       },
-//       {
-//         food_name: "string",
-//         count: 1,
-//         photo:
-//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
-//       },
-//       {
-//         food_name: "string",
-//         count: 1,
-//         photo:
-//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
-//       },
-//       {
-//         food_name: "string",
-//         count: 1,
-//         photo:
-//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
-//       },
-//     ],
-//   },
-//   {
-//     tid: "strin3",
-//     oid: "string3",
-//     date: "string",
-//     time: "午餐",
-//     order_time: "string",
-//     status: "已支付",
-//     sum_price: 100,
-//     foods: [
-//       {
-//         food_name: "string",
-//         count: 1,
-//         photo:
-//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
-//       },
-//       {
-//         food_name: "string",
-//         count: 1,
-//         photo:
-//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
-//       },
-//       {
-//         food_name: "string",
-//         count: 1,
-//         photo:
-//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
-//       },
-//       {
-//         food_name: "string",
-//         count: 1,
-//         photo:
-//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
-//       },
-//       {
-//         food_name: "string",
-//         count: 1,
-//         photo:
-//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
-//       },
-//     ],
-//   },
-//   {
-//     tid: "strin4",
-//     oid: "string4",
-//     date: "string",
-//     time: "午餐",
-//     order_time: "string",
-//     status: "已支付",
-//     sum_price: 100,
-//     foods: [
-//       {
-//         food_name: "string",
-//         count: 1,
-//         photo:
-//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
-//       },
-//       {
-//         food_name: "string",
-//         count: 1,
-//         photo:
-//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
-//       },
-//       {
-//         food_name: "string",
-//         count: 1,
-//         photo:
-//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
-//       },
-//       {
-//         food_name: "string",
-//         count: 1,
-//         photo:
-//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
-//       },
-//       {
-//         food_name: "string",
-//         count: 1,
-//         photo:
-//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
-//       },
-//     ],
-//   },
-//   {
-//     tid: "strin",
-//     oid: "string5",
-//     date: "string",
-//     time: "午餐",
-//     order_time: "string",
-//     status: "已支付",
-//     sum_price: 100,
-//     foods: [
-//       {
-//         food_name: "string",
-//         count: 1,
-//         photo:
-//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
-//       },
-//       {
-//         food_name: "string",
-//         count: 1,
-//         photo:
-//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
-//       },
-//       {
-//         food_name: "string",
-//         count: 1,
-//         photo:
-//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
-//       },
-//       {
-//         food_name: "string",
-//         count: 1,
-//         photo:
-//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
-//       },
-//       {
-//         food_name: "string",
-//         count: 1,
-//         photo:
-//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
-//       },
-//     ],
-//   },
+
 // ]);
 
 const status = ref("all");
-const userID = localStorage.getItem('user_id');
+const userID = localStorage.getItem("user_id");
 const route = useRoute();
 const scrollToOrder = (orderId) => {
   const orderElement = document.getElementById(orderId);
   console.log("滚动到：", orderId);
+  console.log("查询的orderELemnet:", orderElement);
   if (orderElement) {
     orderElement.scrollIntoView({ behavior: "smooth", block: "center" });
     setTimeout(() => {
@@ -402,7 +216,9 @@ onMounted(() => {
   getOrders();
   const orderId = route.query.orderId;
   if (orderId) {
-    scrollToOrder(orderId);
+    setTimeout(() => {
+      scrollToOrder(orderId);
+    }, 500);
   }
 });
 watch(status, (newValue) => {

@@ -5,7 +5,7 @@
         <el-radio-button label="已取消" value="cancle"></el-radio-button>
         <el-radio-button label="已完成" value="done"></el-radio-button>
     </el-radio-group>
-    <div v-for="(item, index) in ticketOrders" :key="index">
+    <div v-for="(item, index) in ticketOrders" :id="item.oid" :key="index">
         <el-card style="width: 100%;border-radius: 25px;margin-top:1%;margin-bottom:1%;">
             <template #header>
                 <el-row>
@@ -139,9 +139,19 @@
 import { onMounted, ref, watch } from "vue";
 import { getTicketOrders, cancelTicketOrder } from "../../api/api.js";
 import { ElMessage, ElNotification } from "element-plus";
+import { useRoute } from "vue-router";
 const status = ref("all");
 const userID = localStorage.getItem('user_id');
 const ticketOrders = ref([]);
+const route = useRoute();
+//消息跳转
+const scrollToOrder = (orderId) => {
+  const orderElement = document.getElementById(orderId);
+  console.log("滚动到：", orderId);
+  if (orderElement) {
+    orderElement.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+};
 const cancelOrders = async (oid,tid) => {
     try {
         const responce = await cancelTicketOrder(userID, oid);
@@ -191,6 +201,12 @@ watch(status, (newValue) => {
 });
 onMounted(() => {
     getOrders();
+    const orderId = route.query.orderId;
+    if (orderId) {
+    setTimeout(() => {
+      scrollToOrder(orderId);
+    }, 500);
+  }
 });
 </script>
 <style scoped>

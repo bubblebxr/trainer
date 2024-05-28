@@ -124,8 +124,10 @@ watch(status, (newValue) => {
 onMounted(() => {
     getOrders();
     const orderId = route.query.orderId;
-  if (orderId) {
-    scrollToOrder(orderId);
+    if (orderId) {
+    setTimeout(() => {
+      scrollToOrder(orderId);
+    }, 500);
   }
 });
 </script>

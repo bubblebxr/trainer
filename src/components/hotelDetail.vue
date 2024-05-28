@@ -485,7 +485,7 @@ const pay = async () =>{
           console.error('input_name 和 input_id 的长度不一致');
         }
         try{
-        const response = await postHotelBill(hotelData.hotel_id,localStorage.getItem("id"),check_in,check_out,roomCount,1,customers,money);
+        const response = await postHotelBill(hotelData.hotel_id,localStorage.getItem("id"),check_in,check_out,roomCount.value,1,customers,money.value);
         var result = response.data.result;
         if(result){
             ElMessage({

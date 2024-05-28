@@ -31,8 +31,10 @@
             v-model="date"
             type="date"
             placeholder="出发日期"
-            :shortcuts="shortcuts"
+            :disabled-date="disabledDate"
+
             :size="20"
+            value-format="YYYY-MM-DD"
           />
           <el-popover
             placement="top-start"
@@ -125,6 +127,9 @@ const foodList = ref([]);
 
 const order_foods = ref([]); //已点的食物
 const Paidticket = ref([]);
+const disabledDate = (time) => {
+    return time.getTime() < Date.now() - 8.64e7
+};
 const search = () => {
   if (tid.value === "" || time.value === "" || date.value === "") {
     ElMessage({
@@ -138,7 +143,7 @@ const search = () => {
 };
 const fetchFoods = async () => {
   try {
-    const response = await getFoods(userID,tid, date, time);
+    const response = await getFoods(userID,tid.value, date.value, time.value);
     if (response.data.haveTicket) {
       foodList.value = response.data.result;
       ElMessage({
@@ -169,7 +174,7 @@ const fetchTids = async () => {
 };
 const submitBill = async (sum_price) =>{
   try{
-  const responce = await (order_foods, userID, tid, date, time, sum_price);
+  const responce = await (order_foods.value, userID, tid.value, date.value, time.value, sum_price);
   if(responce.data.result)
   {ElNotification({
     title: '订单已提交',

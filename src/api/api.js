@@ -90,7 +90,8 @@ export const insertPassengers = (id, name, identification, phone) => {
 
 /*提交火车票订单*/
 export const postTicketBill = (persons, userID, tid, date, sum_price) => {
-    var nowtime = new Date();
+    var nowtime = new Date().toISOString();
+    var time = nowtime.replace('T', ' ').replace('Z', '');
     return api.post(`/ticket/bill`,
         {
             "person": [
@@ -103,7 +104,7 @@ export const postTicketBill = (persons, userID, tid, date, sum_price) => {
             "userID": userID,
             "tid": tid,
             "date": date,
-            "bill_time": nowtime,
+            "bill_time": time,
             "sum_price": sum_price
         }, {
         headers: {

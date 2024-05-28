@@ -214,6 +214,8 @@ onMounted(() => {
   if(Paidticket.value){
     ElMessageBox.alert('只有订好车票后才能订火车餐哦', '您还没有订购车票', {
     confirmButtonText: '我知道了',
+    callback: (action) => {
+    },
   })
   }
   tid.value = router.currentRoute.value.query.tid;

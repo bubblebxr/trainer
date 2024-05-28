@@ -198,6 +198,7 @@
           style="border-radius: 15px; margin-bottom: 5%"
           @click="
             item.haveRead = true;
+            setRead(item.mid);
             jumpToOrder(item.orderType, item.orderId);
           "
         >
@@ -228,7 +229,7 @@
 import { ref, onMounted, computed, inject } from "vue";
 import { useRouter } from "vue-router";
 import eventBus from "@/eventBus.js";
-import { getMessage } from "@/api/api.js";
+import { getMessage ,haveReadMessage} from "@/api/api.js";
 import { ElMessage, ElMessageBox } from "element-plus";
 const router = useRouter();
 const activeIndex = ref("1");
@@ -288,31 +289,19 @@ const selectMenu = (key) => {
     }
   }
 };
-// const message = ref([
-//   {
-//     title: "车票提醒",
-//     messageTime: "2020-03-10",
-//     content:
-//       "您已购买2024-05-09 G5车次 杭州--->北京车次，发车时间05月09日08:00。请合理安排出行时间。",
-//     haveRead: true,
-//     orderType:"3",
-//     orderId: "string3",
-//   },
-//   {
-//     title: "订单取消",
-//     messageTime: "2024-09-12",
-//     content: "您已下单2024-10-20 G81车次 午餐餐品。将由列车员送到座位上。",
-//     haveRead: false,
-//     orderType:"5",
-//     orderId: "string4",
-//   },
-// ]);
 const message = ref([]);
 const userID = localStorage.getItem("user_id");
 const unReadNum = computed(() => {
   return message.value.filter((msg) => !msg.haveRead).length;
 });
-
+//设置已读
+const setRead = async (mid)=>{
+  try{
+    haveReadMessage(mid);
+  }catch(error){
+    console.log("设置已读失败,消息id为：",mid);
+  }
+}
 //登录
 
 import { postLogin } from "@/api/api";

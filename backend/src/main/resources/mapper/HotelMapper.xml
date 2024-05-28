@@ -34,7 +34,7 @@
         group by name
     </select>
     <select id="getRoomDetail">
-        select MIN(num), MIN(price), name,photo,size,others,bedSize
+        select MIN(num), AVG(price), name,photo,size,others,bedSize
         from rooms
         where date >= #{arrive_date}
           and date &lt; #{ldeparture_date}
@@ -56,13 +56,27 @@
         values(#{id},#{oid},#{checkinTime},#{checkoutTime},#{roomNum},#{roomType},#{customerName},#{customerId})
     </insert>
     <select id="getHotelName">
-        select name,position
+        select name, position
         from hotels
-        where id=#{id}
+        where id = #{id}
     </select>
     <select id="getHotelOrderDetail">
         select *
         from hotelorders
         where oid = #{oid}
     </select>
+    <update id="updateNumWhenBill">
+        update rooms
+        set num=num-#{room_num}
+        where hotel_id=#{hotel_id}
+        and date >= #{checkin_time}
+          and date &lt; #{checkout_time}
+    </update>
+    <update id="updateNumWhenCancel">
+        update rooms
+        set num=num+#{room_num}
+        where hotel_id=#{hotel_id}
+          and date >= #{checkin_time}
+          and date &lt; #{checkout_time}
+    </update>
 </mapper>

@@ -61,8 +61,8 @@ public class HotelController {
             //Double garde = hotelService.getHotelRank(id);
             //if(hotelService.getHotelRank(id))
             Double rank = hotelService.getHotelRank(id);
-            if(rank == null)
-                rank= 5.0;
+            if (rank == null)
+                rank = 5.0;
             DecimalFormat decimalFormat = new DecimalFormat("#.#");
             //String roundedNumber = ;
             rank = Double.parseDouble(decimalFormat.format(rank));
@@ -133,7 +133,10 @@ public class HotelController {
                 roomInfo.add(new HashMap<>() {{
                     put("name", map.get("name"));
                     put("photo", map.get("photo"));
-                    put("price", Double.parseDouble(map.get("MIN(price)").toString()));
+                    Double doublePrice = Double.parseDouble(map.get("AVG(price)").toString());
+                    DecimalFormat decimalFormat = new DecimalFormat("#.##");
+                    doublePrice = Double.parseDouble(decimalFormat.format(doublePrice));
+                    put("price", doublePrice);
                     put("num", Integer.parseInt(map.get("MIN(num)").toString()));
                     put("size", map.get("size") + "平米");
                     put("others", map.get("others"));
@@ -143,7 +146,11 @@ public class HotelController {
                 roomInfo.add(new HashMap<>() {{
                     put("name", map.get("name"));
                     put("photo", map.get("photo"));
-                    put("price", Double.parseDouble(map.get("MIN(price)").toString()));
+                    Double bigPrice = Double.parseDouble(map.get("AVG(price)").toString());
+                    DecimalFormat decimalFormat = new DecimalFormat("#.##");
+                    bigPrice = Double.parseDouble(decimalFormat.format(bigPrice));
+                    put("price", bigPrice);
+                    //put("price", Double.parseDouble(map.get("AVG(price)").toString()));
                     put("num", Integer.parseInt(map.get("MIN(num)").toString()));
                     put("size", map.get("size") + "平米");
                     put("others", map.get("others"));
@@ -153,7 +160,11 @@ public class HotelController {
                 roomInfo.add(new HashMap<>() {{
                     put("name", map.get("name"));
                     put("photo", map.get("photo"));
-                    put("price", Double.parseDouble(map.get("MIN(price)").toString()));
+                    Double familyPrice = Double.parseDouble(map.get("AVG(price)").toString());
+                    DecimalFormat decimalFormat = new DecimalFormat("#.##");
+                    familyPrice = Double.parseDouble(decimalFormat.format(familyPrice));
+                    put("price", familyPrice);
+                    //put("price", Double.parseDouble(map.get("AVG(price)").toString()));
                     put("num", Integer.parseInt(map.get("MIN(num)").toString()));
                     put("size", map.get("size") + "平米");
                     put("others", map.get("others"));
@@ -176,8 +187,8 @@ public class HotelController {
             }});
         });
         Double rank = hotelService.getHotelRank(id);
-        if(rank == null)
-            rank= 5.0;
+        if (rank == null)
+            rank = 5.0;
         //double rank = hotelService.getHotelRank(id);
         DecimalFormat decimalFormat = new DecimalFormat("#.#");
         //String roundedNumber = ;
@@ -201,10 +212,7 @@ public class HotelController {
         result.put("likes", current_hotel.getLikes());
         result.put("messages", messages);
         result.put("photos", photoInfo);
-        //put("miniprice", finalMinPrice.toString());
-        //put("photo", current_hotel.getPhoto());
         result.put("position", current_hotel.getPosition());
-        //put("content", current_hotel.getContent());
         result.put("comments", commentInfo);
         result.put("rooms", roomInfo);
         result.put("others", othersInfo);
@@ -262,6 +270,7 @@ public class HotelController {
         for (Map<String, String> customer : customers) {
             hotelService.addHotelorderDetail(id, oid, checkinTime, checkoutTime, roomNum, roomType, customer.get("name"), customer.get("id"));
         }
+        hotelService.updateNumWhenBill(id, checkinTime, checkoutTime, roomNum);
 
         String content = "【WerwerTrip】您已成功预订" + hotelService.getHotelName(id).get("name") + "，入住时间" + checkinTime + "--" + checkoutTime + "，祝您旅途愉快。";
         messageService.addMessage(userId, Message.generateMessageId(), oid, "酒店订单支付成功", formattedDate, content, false, "4");
@@ -324,7 +333,7 @@ public class HotelController {
     }
 
     @PostMapping("/hotel/cancel/{userID}/{oid}")
-    public Map<String, String> cancelHotelOrder(@PathVariable String userID,
+    public Map<String, Object> cancelHotelOrder(@PathVariable String userID,
                                                 @PathVariable String oid) {
 
         Order order = orderService.getOrderByOidAndUid(oid, userID);
@@ -343,12 +352,16 @@ public class HotelController {
             String hotelId = hotelMap.get("id").toString();
             String checkinTime = hotelMap.get("checkinTime").toString();
             String checkoutTime = hotelMap.get("checkoutTime").toString();
+            Integer roomNum = (Integer) hotelMap.get("roomNum");
+
+            hotelService.updateNumWhenCancel(hotelId, checkinTime, checkoutTime, roomNum);
 
             String content = "【WerwerTrip】您已成功取消" + hotelService.getHotelName(hotelId).get("name") + "" + checkinTime + "--" + checkoutTime + "的订单";
             messageService.addMessage(userID, Message.generateMessageId(), oid, "酒店订单取消成功", formattedDate, content, false, "4");
             emailService.sendSimpleMail(userService.getEmail(userID), "酒店订单取消成功", content);
             return new HashMap<>() {{
                 put("cancel_time", formattedDate);
+                put("result", true);
             }};
         }
 

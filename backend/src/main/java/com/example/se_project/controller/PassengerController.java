@@ -21,8 +21,11 @@ public class PassengerController {
                                              @RequestParam(value = "name") String name,
                                              @RequestParam(value = "identification") String identification,
                                              @RequestParam(value = "phone") String phone) {
+        Integer res =  passengerService.addPassenger(name, identification, phone, id);
+        boolean result;
+        result= res != 0;
         return new HashMap<>() {{
-            put("info", passengerService.addPassenger(name, identification, phone, id));
+            put("info",result);
         }};
 
 
@@ -41,8 +44,12 @@ public class PassengerController {
         String finalNewname = newname;
         String finalNewidentification = newidentification;
         String finalNewphone = newphone;
+
+        Integer res = passengerService.updatePassenger(id, oldidentification, finalNewname, finalNewidentification, finalNewphone);
+        boolean result;
+        result= res != 0;
         return new HashMap<>() {{
-            put("info", passengerService.updatePassenger(id, oldidentification, finalNewname, finalNewidentification, finalNewphone));
+            put("info", result);
         }};
     }
 
@@ -53,12 +60,15 @@ public class PassengerController {
         }};
     }
 
-    @DeleteMapping("/deletePassengers/{id}")
+    @PostMapping ("/deletePassengers/{id}")
     public Map<String, Boolean> deletePassenger(@PathVariable String id,
                                                 @RequestParam String name,
                                                 @RequestParam String identification) {
+        Integer res = passengerService.deletePassenger(id, name, identification);
+        boolean result;
+        result= res != 0;
         return new HashMap<>() {{
-            put("info", passengerService.deletePassenger(id, name, identification));
+            put("info", result);
         }};
     }
 }

@@ -10,7 +10,7 @@ import java.util.List;
 
 @Mapper
 public interface IPassengerMapper extends BaseMapper<Passenger> {
-    boolean addPassenger(String name, String identification, String phone, String userId);
+    Integer addPassenger(String name, String identification, String phone, String userId);
 
 //    boolean updatePassengerName(String id, String oldidentification, String newname);
 //
@@ -18,11 +18,11 @@ public interface IPassengerMapper extends BaseMapper<Passenger> {
 //
 //    boolean updatePassengerPhone(String id, String oldidentification, String newphone);
 
-    boolean updatePassenger(String id, String oldidentification, String newname, String newidentification, String newphone);
+    Integer updatePassenger(String id, String oldidentification, String newname, String newidentification, String newphone);
 
     List<Passenger> showPassengerInfo(String userId);
 
-    boolean deletePassenger(String userId, String name, String identification);
+    Integer deletePassenger(String userId, String name, String identification);
 
     Passenger getPassengerByUidAndId(String id, String identification);
 }

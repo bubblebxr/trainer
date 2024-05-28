@@ -36,4 +36,6 @@ public interface IHotelMapper {
     Map<String, String> getHotelName(String id);
 
     List<Map<String, Object>> getHotelOrderDetail(String oid);
+    void updateNumWhenBill(String hotel_id,String checkin_time,String checkout_time, Integer room_num);
+    void updateNumWhenCancel(String hotel_id,String checkin_time,String checkout_time, Integer room_num);
 }

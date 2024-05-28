@@ -80,7 +80,7 @@ public class UserController {
         String password = loginMap.get("password").toString();
         Map<String, Object> map = new HashMap<>();
         if (userService.findUserById(id) == 0) {
-            //map.put("message","用户未注册");
+            map.put("message", "用户未注册");
             map.put("result", false);
             map.put("email", null);
             map.put("name", null);
@@ -89,11 +89,12 @@ public class UserController {
 
             if (loginuser != null) {
                 //map.put("id", loginuser.getId());
+                map.put("message", "登录成功");
                 map.put("result", true);
                 map.put("email", loginuser.getEmail());
                 map.put("name", loginuser.getName());
             } else {
-                //map.put("message", "密码错误");
+                map.put("message", "用户id或密码错误");
                 map.put("result", false);
                 map.put("email", null);
                 map.put("name", null);
@@ -106,8 +107,15 @@ public class UserController {
     public Map<String, Object> updatePassword(@RequestBody Map<String, Object> map) {
         String userId = map.get("id").toString();
         String newpassword = map.get("newpassword").toString();
-        return new HashMap<>() {{
-            put("info", userService.updatePassword(userId, newpassword));
-        }};
+        Integer res = userService.updatePassword(userId, newpassword);
+        if (res == 0) {
+            return new HashMap<>() {{
+                put("result", false);
+            }};
+        } else {
+            return new HashMap<>() {{
+                put("result", true);
+            }};
+        }
     }
 }

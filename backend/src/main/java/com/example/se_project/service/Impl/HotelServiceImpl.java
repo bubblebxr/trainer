@@ -5,6 +5,7 @@ import com.example.se_project.entity.Hotel;
 import com.example.se_project.entity.Room;
 import com.example.se_project.mapper.IHotelMapper;
 import com.example.se_project.service.IHotelService;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -79,4 +80,13 @@ public class HotelServiceImpl implements IHotelService {
         return hotelMapper.getHotelOrderDetail(oid);
     }
 
+    @Override
+    public void updateNumWhenBill(String hotel_id, String checkin_time, String checkout_time, Integer room_num) {
+        hotelMapper.updateNumWhenBill(hotel_id, checkin_time, checkout_time, room_num);
+    }
+
+    @Override
+    public void updateNumWhenCancel(String hotel_id, String checkin_time, String checkout_time, Integer room_num) {
+        hotelMapper.updateNumWhenCancel(hotel_id, checkin_time, checkout_time, room_num);
+    }
 }

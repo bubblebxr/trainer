@@ -93,7 +93,7 @@
     where trainId=#{trainId} and date=#{trainDate}
     </select>
     <select id="getStartTime">
-        select startTime
+        select startTime,arrivalTime
         from trains
         where trainId=#{trainId} and date=#{trainDate}
     </select>

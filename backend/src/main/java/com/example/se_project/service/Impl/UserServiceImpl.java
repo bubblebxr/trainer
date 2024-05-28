@@ -4,6 +4,7 @@ import com.example.se_project.entity.User;
 import com.example.se_project.mapper.IUserMapper;
 import com.example.se_project.service.IUserService;
 import com.example.se_project.util.SaltGenerator;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.se_project.util.MD5Util;
@@ -41,8 +42,10 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public boolean updatePassword(String userId, String newpassword) {
-        return userMapper.updatePassword(userId, newpassword);
+    public Integer updatePassword(String userId, String newpassword) {
+        String salt = userMapper.getUserSalt(userId);
+        String DBPass = MD5Util.md5(newpassword, salt);
+        return userMapper.updatePassword(userId, DBPass);
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.example.se_project.service.Impl;
 import com.example.se_project.entity.Passenger;
 import com.example.se_project.mapper.IPassengerMapper;
 import com.example.se_project.service.IPassengerService;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,7 @@ public class PassengerServiceImpl implements IPassengerService {
     private IPassengerMapper passengerMapper;
 
     @Override
-    public boolean addPassenger(String name, String identification, String phone, String userId) {
+    public Integer addPassenger(String name, String identification, String phone, String userId) {
         return passengerMapper.addPassenger(name, identification, phone, userId);
     }
 
@@ -35,7 +36,7 @@ public class PassengerServiceImpl implements IPassengerService {
 //    }
 
     @Override
-    public boolean updatePassenger(String id, String oldidentification, String newname, String newidentification, String newphone) {
+    public Integer updatePassenger(String id, String oldidentification, String newname, String newidentification, String newphone) {
         return passengerMapper.updatePassenger(id, oldidentification, newname, newidentification, newphone);
     }
 
@@ -45,7 +46,7 @@ public class PassengerServiceImpl implements IPassengerService {
     }
 
     @Override
-    public boolean deletePassenger(String userId, String name, String identification) {
+    public Integer deletePassenger(String userId, String name, String identification) {
         return passengerMapper.deletePassenger(userId, name, identification);
     }
 

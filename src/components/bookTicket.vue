@@ -332,6 +332,7 @@ const search = () => {
         ElMessage({
             message: '查询成功',
             type: 'success',
+            plain: true,
         })
         show.value=true;
     }

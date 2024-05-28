@@ -140,7 +140,7 @@ import { onMounted, ref, watch } from "vue";
 import { getTicketOrders, cancelTicketOrder } from "../../api/api.js";
 import { ElMessage, ElNotification } from "element-plus";
 const status = ref("all");
-const userID = "0000";
+const userID = localStorage.getItem('user_id');
 const ticketOrders = ref([]);
 const cancelOrders = async (oid,tid) => {
     try {
@@ -157,7 +157,7 @@ const cancelOrders = async (oid,tid) => {
             });
         }
         else {
-            ElMessage.error("取消订单失败");
+            ElMessage.error("取消订单失败~");
         }
     } catch (error) {
         console.error("取消订单失败", error);

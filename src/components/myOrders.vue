@@ -36,7 +36,7 @@ const items = reactive([
         getItem('餐饮订单', '5')
     ]),
     getItem('本人车票', '6', h(AppstoreOutlined)),
-    getItem('我的收藏', '7', h(PieChartOutlined))
+    // getItem('我的收藏', '7', h(PieChartOutlined))
 ])
 const handleClick = e => {
     console.log('click', e);

@@ -58,9 +58,9 @@
 <script setup>
 import { onMounted, ref, watch } from "vue";
 import { getHotelOrders, cancelHotelOrder } from "../../api/api.js";
-import { ElMessage } from "element-plus";
+import { ElMessage, ElNotification } from "element-plus";
 const status = ref("all");
-const userID = "0000";
+const userID = localStorage.getItem('user_id');
 const hotelOrders = ref([]);
 const cancelOrders=async(oid)=>{
     try {
@@ -71,6 +71,11 @@ const cancelOrders=async(oid)=>{
                 type: "success",
             });
             //TODO 通知消息弹窗
+            ElNotification({
+                title: '取消订单成功',
+                message: "",//TODO
+                type: 'success',
+            });
         }
         else {
             ElMessage.error("取消订单失败");
@@ -110,8 +115,8 @@ onMounted(() => {
     getOrders();
 });
 </script>
-<style>
-.el-card .el-card__header {
+<style scoped>
+.el-card /deep/ .el-card__header {
     background-color: #f0f8ff;
 }
 

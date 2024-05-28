@@ -5,7 +5,7 @@ export const getStation = () => {
 };
 
 export const getSearchResult = (startCity, arriveCity, date, isGD, sortType, seatType, isHide) => {
-    const queryString = `?is_GD=${isGD}&sort_type=${sortType}&seat_type=${seatType}&isHide=${isHide}`;
+    const queryString = encodeURIComponent (`?is_GD=${isGD}&sort_type=${sortType}&seat_type=${seatType}&isHide=${isHide}`);
     return api.post(`/trains/${startCity}/${arriveCity}/${date}${queryString}`);
 };
 
@@ -217,7 +217,6 @@ export const updatePassword = (userID, newPassword, confirm) => {
         {
             "id": userID,
             "newpassword": newPassword,
-            "idCode": confirm
         }, {
         headers: {
             'Content-Type': 'application/json'

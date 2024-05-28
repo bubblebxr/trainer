@@ -181,7 +181,7 @@ const hard_seat = ref("");
 const selectedPerson = ref([]);
 const person = ref([]);
 const passengers = ref([]);
-const id = ref('1');//暂时代替用户id
+const id = ref(localStorage.getItem('user_id'));//暂时代替用户id
 const passengersTable = ref([]);
 const options = ref([]);
 const value = ref([]);//多选框选中的
@@ -287,7 +287,7 @@ const getInfo = async () => {
     }
 };
 const handleChecked = (e) => {
-    // console.log("handle!" + e);
+    console.log("handle!" + e);
     const temp = person.value.filter(name => !e.includes(name));
     for (var i = 0; i < temp.length; i++) {
         value.value.pop(i);

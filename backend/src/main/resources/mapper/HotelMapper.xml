@@ -27,7 +27,7 @@
     </select>
     <select id="getAvailableRoom">
         select MIN(num), MIN(price), name
-        from se_project.rooms
+        from rooms
         where date >= #{arrive_date}
           and date &lt; #{ldeparture_date}
           and hotel_id = #{id}
@@ -35,7 +35,7 @@
     </select>
     <select id="getRoomDetail">
         select MIN(num), MIN(price), name,photo,size,others,bedSize
-        from se_project.rooms
+        from rooms
         where date >= #{arrive_date}
           and date &lt; #{ldeparture_date}
           and hotel_id = #{id}

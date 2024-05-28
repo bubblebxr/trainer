@@ -57,7 +57,12 @@ public class HotelController {
             Integer messages = hotelService.getCommentNum(id);
             current_hotel = hotelService.getHotelInfo(id);
             Double finalMinPrice = minPrice;
-            double rank = hotelService.getHotelRank(id);
+            //System.out.println();
+            //Double garde = hotelService.getHotelRank(id);
+            //if(hotelService.getHotelRank(id))
+            Double rank = hotelService.getHotelRank(id);
+            if(rank == null)
+                rank= 5.0;
             DecimalFormat decimalFormat = new DecimalFormat("#.#");
             //String roundedNumber = ;
             rank = Double.parseDouble(decimalFormat.format(rank));
@@ -170,7 +175,10 @@ public class HotelController {
                 put("photo", e.getPhoto());
             }});
         });
-        double rank = hotelService.getHotelRank(id);
+        Double rank = hotelService.getHotelRank(id);
+        if(rank == null)
+            rank= 5.0;
+        //double rank = hotelService.getHotelRank(id);
         DecimalFormat decimalFormat = new DecimalFormat("#.#");
         //String roundedNumber = ;
         rank = Double.parseDouble(decimalFormat.format(rank));

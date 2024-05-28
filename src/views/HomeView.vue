@@ -1,107 +1,219 @@
 <template>
   <el-container class="home-container">
-    <el-header style="display: flex; align-items: center; justify-content: space-between">
+    <el-header
+      style="display: flex; align-items: center; justify-content: space-between"
+    >
       <div style="display: flex; align-items: center">
-        <img src="../assets/logo2.png" style="width: 100px; height: 55px; margin-top: 3%" />
-        <el-menu :default-active="activeIndex" class="menu" mode="horizontal" :ellipsis="false" @select="selectMenu"
-          style="color: black; margin-top: 2%">
-          <el-menu-item index="1" style="color: black; font-weight: bold; font-size: 17px">火车订票</el-menu-item>
-          <el-menu-item index="2" style="color: black; font-weight: bold; font-size: 17px">酒店预订</el-menu-item>
-          <el-menu-item index="3" style="color: black; font-weight: bold; font-size: 17px">火车订餐</el-menu-item>
-          <el-menu-item index="4" style="color: black; font-weight: bold; font-size: 17px">我的</el-menu-item>
+        <img
+          src="../assets/logo2.png"
+          style="width: 100px; height: 55px; margin-top: 3%"
+        />
+        <el-menu
+          :default-active="activeIndex"
+          class="menu"
+          mode="horizontal"
+          :ellipsis="false"
+          @select="selectMenu"
+          style="color: black; margin-top: 2%"
+        >
+          <el-menu-item
+            index="1"
+            style="color: black; font-weight: bold; font-size: 17px"
+            >火车订票</el-menu-item
+          >
+          <el-menu-item
+            index="2"
+            style="color: black; font-weight: bold; font-size: 17px"
+            >酒店预订</el-menu-item
+          >
+          <el-menu-item
+            index="3"
+            style="color: black; font-weight: bold; font-size: 17px"
+            >火车订餐</el-menu-item
+          >
+          <el-menu-item
+            index="4"
+            style="color: black; font-weight: bold; font-size: 17px"
+            >我的</el-menu-item
+          >
         </el-menu>
       </div>
-      <div style="display: flex; align-items: center;">
-        <div style="display: flex; align-items: center;">
-          <el-popover placement="bottom" :width="200" trigger="click"
-            content="this is content, this is content, this is content">
+      <div style="display: flex; align-items: center">
+        <div style="display: flex; align-items: center">
+          <el-popover
+            placement="bottom"
+            :width="200"
+            trigger="click"
+            content="this is content, this is content, this is content"
+          >
             <template #reference>
-              <el-button id="loginButton" type="primary" round plain size="large"
-                style="margin-top:12%;margin-right:3%;" class="log">登录/注册</el-button>
-
+              <el-button
+                id="loginButton"
+                type="primary"
+                round
+                plain
+                size="large"
+                style="margin-top: 12%; margin-right: 3%"
+                class="log"
+                >登录/注册</el-button
+              >
             </template>
             <!-- 登录 -->
             <div>
-              <a-button @click="login" style="width:170px;">
-                登录
-              </a-button>
-              <a-modal v-model:open="openLogin" title="登录" @ok="handleLoginOk">
-                <div style="margin-top:20px;">
-                  <el-input v-model="my_id" style="max-width: 600px" placeholder="输入身份证号">
+              <a-button @click="login" style="width: 170px"> 登录 </a-button>
+              <a-modal
+                v-model:open="openLogin"
+                title="登录"
+                @ok="handleLoginOk"
+              >
+                <div style="margin-top: 20px">
+                  <el-input
+                    v-model="my_id"
+                    style="max-width: 600px"
+                    placeholder="输入身份证号"
+                  >
                     <template #prepend>ID号</template>
                   </el-input>
                 </div>
-                <div style="margin-top:20px;">
-                  <el-input v-model="my_password" style="max-width: 600px" placeholder="输入密码">
+                <div style="margin-top: 20px">
+                  <el-input
+                    v-model="my_password"
+                    style="max-width: 600px"
+                    placeholder="输入密码"
+                  >
                     <template #prepend>密码</template>
                   </el-input>
                 </div>
-                <button style="margin-top:20px;color:#61bbff;text-decoration:underline;" @click="changeToRegister">
+                <button
+                  style="
+                    margin-top: 20px;
+                    color: #61bbff;
+                    text-decoration: underline;
+                  "
+                  @click="changeToRegister"
+                >
                   先去注册
                 </button>
               </a-modal>
-
             </div>
             <!-- 注册 -->
             <div>
-              <a-button @click="register" style="width:170px;margin-top:10px;">
+              <a-button
+                @click="register"
+                style="width: 170px; margin-top: 10px"
+              >
                 注册
               </a-button>
-              <a-modal v-model:open="openRegister" title="注册" @ok="handleRegisterOk" ok-text="确认信息" style="color:white"
-                :cancel-button-props="{ style: { display: 'none' } }">
-                <div style="margin-top:20px;">
-                  <el-input v-model="my_id" style="max-width: 600px" placeholder="输入身份证号">
+              <a-modal
+                v-model:open="openRegister"
+                title="注册"
+                @ok="handleRegisterOk"
+                ok-text="确认信息"
+                style="color: white"
+                :cancel-button-props="{ style: { display: 'none' } }"
+              >
+                <div style="margin-top: 20px">
+                  <el-input
+                    v-model="my_id"
+                    style="max-width: 600px"
+                    placeholder="输入身份证号"
+                  >
                     <template #prepend>ID号</template>
                   </el-input>
                 </div>
-                <div style="margin-top:20px;">
-                  <el-input v-model="my_name" style="max-width: 600px" placeholder="输入姓名">
+                <div style="margin-top: 20px">
+                  <el-input
+                    v-model="my_name"
+                    style="max-width: 600px"
+                    placeholder="输入姓名"
+                  >
                     <template #prepend>姓名</template>
                   </el-input>
                 </div>
-                <div style="margin-top:20px;">
-                  <el-input v-model="my_password" style="max-width: 600px" placeholder="输入密码">
+                <div style="margin-top: 20px">
+                  <el-input
+                    v-model="my_password"
+                    style="max-width: 600px"
+                    placeholder="输入密码"
+                  >
                     <template #prepend>密码</template>
                   </el-input>
                 </div>
-                <div style="margin-top:20px;">
-                  <el-input v-model="my_email" style="max-width: 600px" placeholder="输入邮箱">
+                <div style="margin-top: 20px">
+                  <el-input
+                    v-model="my_email"
+                    style="max-width: 600px"
+                    placeholder="输入邮箱"
+                  >
                     <template #prepend>邮箱</template>
                   </el-input>
                 </div>
               </a-modal>
             </div>
-            <a-modal v-model:open="openVerification" title="注册" :cancel-button-props="{ style: { display: 'none' } }"
-              :ok-button-props="{ style: { display: 'none' } }">
-
-              <div style="margin-top:20px;">
-                <el-button style="width:100px;margin-right:20px;" @click="sendVerificationOk" :disabled="countingDown">
-                  {{
-          buttonText }} </el-button>
-                <el-input v-model="my_code" style="max-width: 230px" placeholder="输入验证码">
+            <a-modal
+              v-model:open="openVerification"
+              title="注册"
+              :cancel-button-props="{ style: { display: 'none' } }"
+              :ok-button-props="{ style: { display: 'none' } }"
+            >
+              <div style="margin-top: 20px">
+                <el-button
+                  style="width: 100px; margin-right: 20px"
+                  @click="sendVerificationOk"
+                  :disabled="countingDown"
+                >
+                  {{ buttonText }}
+                </el-button>
+                <el-input
+                  v-model="my_code"
+                  style="max-width: 230px"
+                  placeholder="输入验证码"
+                >
                   <template #prepend>验证码</template>
                 </el-input>
-                <el-button @click="handleVerificationOk" style="margin-left:20px" type="primary"> 提交验证码 </el-button>
+                <el-button
+                  @click="handleVerificationOk"
+                  style="margin-left: 20px"
+                  type="primary"
+                >
+                  提交验证码
+                </el-button>
               </div>
             </a-modal>
-
           </el-popover>
-          <div id="loggedInMessage" style="display:none">
+          <div id="loggedInMessage" style="display: none">
             <div>
-              <el-popover placement="bottom" :width="200" trigger="hover"
-                content="this is content, this is content, this is content">
-                <a-button @click="quit" style="width:170px;margin-top:10px;">
+              <el-popover
+                placement="bottom"
+                :width="200"
+                trigger="hover"
+                content="this is content, this is content, this is content"
+              >
+                <a-button @click="quit" style="width: 170px; margin-top: 10px">
                   退出登录
                 </a-button>
                 <template #reference>
-                  <a-avatar style="margin-top:10px;margin-right:20px;" size="large"
-                    :src="'https://m.elongstatic.com/hotel_pc_i18n/product/_nuxt/userHead.0-0-3-213881db..svg'" />
+                  <a-avatar
+                    style="margin-top: 10px; margin-right: 20px"
+                    size="large"
+                    :src="'https://m.elongstatic.com/hotel_pc_i18n/product/_nuxt/userHead.0-0-3-213881db..svg'"
+                  />
                 </template>
               </el-popover>
             </div>
           </div>
-          <el-badge :value="unReadNum" :show-zero="false" :max="10" style="margin-top: 8%; margin-right: 1em">
-            <img src="../assets/message.png" style="width: 50px; height: 50px;" @click="messageOpen()" /> </el-badge>
+          <el-badge
+            :value="unReadNum"
+            :show-zero="false"
+            :max="10"
+            style="margin-top: 8%; margin-right: 1em"
+          >
+            <img
+              src="../assets/message.png"
+              style="width: 50px; height: 50px"
+              @click="messageOpen()"
+            />
+          </el-badge>
         </div>
       </div>
     </el-header>
@@ -114,10 +226,13 @@
     <!-- 弹出消息栏 -->
     <el-drawer v-model="drawer" title="消息" direction="rtl" size="35%">
       <div v-for="(item, index) in message" :key="index">
-        <el-card style="border-radius: 15px; margin-bottom: 5%" @click="
-          item.haveRead = true;
-        jumpToOrder(item.orderType, item.orderId);
-        ">
+        <el-card
+          style="border-radius: 15px; margin-bottom: 5%"
+          @click="
+            item.haveRead = true;
+            jumpToOrder(item.orderType, item.orderId);
+          "
+        >
           <template #header>
             <div style="display: flex; justify-content: space-between">
               <el-badge is-dot :hidden="item.haveRead">
@@ -146,20 +261,20 @@ import { ref, onMounted, computed, inject } from "vue";
 import { useRouter } from "vue-router";
 import eventBus from "@/eventBus.js";
 import { getMessage } from "@/api/api.js";
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage, ElMessageBox } from "element-plus";
 const router = useRouter();
 const activeIndex = ref("1");
 const drawer = ref(false);
 const messageOpen = () => {
-  const isLoggedIn = localStorage.getItem('isLoggedIn');
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
   if (isLoggedIn === "true") {
     drawer.value = true;
   } else {
     ElMessage({
-      message: '请先登录',
-      type: 'error',
+      message: "请先登录",
+      type: "error",
       plain: true,
-    })
+    });
   }
 };
 const selectMenu = (key) => {
@@ -173,29 +288,35 @@ const selectMenu = (key) => {
   } else if (activeIndex.value === "2") {
     router.push("/home/hotel");
   } else if (activeIndex.value === "3") {
-    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
     if (isLoggedIn === "true") {
       router.push("/home/dining");
     } else {
-      activeIndex.value = pre;
+      setTimeout(() => {
+        activeIndex.value = pre;
+      }, 50);
       openLogin.value = true;
       ElMessage({
-        message: '请先登录',
-        type: 'error',
+        message: "请先登录",
+        type: "error",
         plain: true,
-      })
+      });
     }
   } else if (activeIndex.value === "4") {
-    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
     if (isLoggedIn === "true") {
       router.push("/home/orders");
     } else {
-      activeIndex.value = pre;
+      setTimeout(() => {
+        activeIndex.value = pre;
+      }, 50);
+
+      openLogin.value = true;
       ElMessage({
-        message: '请先登录',
-        type: 'error',
+        message: "请先登录",
+        type: "error",
         plain: true,
-      })
+      });
     }
   }
 };
@@ -219,17 +340,17 @@ const selectMenu = (key) => {
 //   },
 // ]);
 const message = ref([]);
-const userID = localStorage.getItem('user_id');
+const userID = localStorage.getItem("user_id");
 const unReadNum = computed(() => {
   return message.value.filter((msg) => !msg.haveRead).length;
 });
 
 //登录
 
-import { postLogin } from "@/api/api"
+import { postLogin } from "@/api/api";
 const openLogin = ref(false);
-const my_id = ref('');
-const my_password = ref('');
+const my_id = ref("");
+const my_password = ref("");
 
 const login = () => {
   openLogin.value = true;
@@ -256,11 +377,11 @@ const postmyLogin = async () => {
         message: "登录成功",
         type: "success",
       });
-      localStorage.setItem('user_id', my_id);
-      localStorage.setItem('isLoggedIn', true);
-      localStorage.setItem('email', response.data.email);
-      localStorage.setItem('password', my_password);
-      localStorage.setItem('name', response.data.name);
+      localStorage.setItem("user_id", my_id);
+      localStorage.setItem("isLoggedIn", true);
+      localStorage.setItem("email", response.data.email);
+      localStorage.setItem("password", my_password);
+      localStorage.setItem("name", response.data.name);
       updateUI();
       //重新加载页面
       window.location.href = window.location.href;
@@ -270,17 +391,15 @@ const postmyLogin = async () => {
   } catch (error) {
     console.error("登录失败:", error);
   }
-}
-
-
+};
 
 //注册
-const my_email = ref('');
-const my_name = ref('');
-const my_verify = ref('');
-const my_code = ref('');
+const my_email = ref("");
+const my_name = ref("");
+const my_verify = ref("");
+const my_code = ref("");
 
-import { postRegister, postCode, postCodeVeryfication } from "@/api/api"
+import { postRegister, postCode, postCodeVeryfication } from "@/api/api";
 const openRegister = ref(false);
 const openVerification = ref(false);
 
@@ -290,26 +409,30 @@ const register = () => {
 
 const postmyRegister = async () => {
   try {
-    const response = await postRegister(my_id.value, my_name.value, my_password.value, my_email.value);
+    const response = await postRegister(
+      my_id.value,
+      my_name.value,
+      my_password.value,
+      my_email.value
+    );
     if (response.data.result) {
       ElMessage({
         message: "提交成功",
         type: "success",
       });
-      localStorage.setItem('user_id', my_id);
-      localStorage.setItem('email', my_email);
-      localStorage.setItem('password', my_password);
-      localStorage.setItem('name', my_name);
+      localStorage.setItem("user_id", my_id);
+      localStorage.setItem("email", my_email);
+      localStorage.setItem("password", my_password);
+      localStorage.setItem("name", my_name);
       openRegister.value = false;
       openVerification.value = true;
-
     } else {
       ElMessage.error("提交失败:" + response.data.reason);
     }
   } catch (error) {
     console.error("提交失败:", error);
   }
-}
+};
 //发送验证码
 
 const sendVerificationOk = async () => {
@@ -330,7 +453,7 @@ const sendVerificationOk = async () => {
   } catch (error) {
     console.error("验证码发送失败:", error);
   }
-}
+};
 
 const handleVerificationOk = async () => {
   try {
@@ -341,7 +464,7 @@ const handleVerificationOk = async () => {
         type: "success",
       });
       openVerification.value = false;
-      localStorage.setItem('isLoggedIn', true);
+      localStorage.setItem("isLoggedIn", true);
       updateUI();
       //重新加载页面
       window.location.href = window.location.href;
@@ -355,7 +478,7 @@ const handleVerificationOk = async () => {
 //倒计时
 const countdownSeconds = 120;
 const countingDown = ref(false);
-const buttonText = ref('发送验证码');
+const buttonText = ref("发送验证码");
 
 function startCountdown() {
   countingDown.value = true;
@@ -367,16 +490,19 @@ function startCountdown() {
     if (seconds <= 0) {
       clearInterval(countdownInterval);
       countingDown.value = false;
-      buttonText.value = '发送验证码';
+      buttonText.value = "发送验证码";
     }
   }, 1000);
 }
 
-
-
 const handleRegisterOk = (e) => {
   console.log(e);
-  if (my_id.value === "" || my_password.value === "" || my_email.value === "" || my_name === "") {
+  if (
+    my_id.value === "" ||
+    my_password.value === "" ||
+    my_email.value === "" ||
+    my_name === ""
+  ) {
     ElMessage({
       message: "还有没填写的信息",
       type: "error",
@@ -391,43 +517,41 @@ const changeToRegister = () => {
   openLogin.value = false;
   openRegister.value = true;
   updateUI();
-}
-
+};
 
 // 页面加载完成时执行
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener("DOMContentLoaded", function () {
   // 更新页面元素的显示状态
   updateUI();
 });
 
 // 更新页面元素显示状态的函数
 function updateUI() {
-  var isLoggedIn = localStorage.getItem('isLoggedIn');
-
+  var isLoggedIn = localStorage.getItem("isLoggedIn");
 
   // 根据 isLoggedIn 的值更新页面元素显示状态
-  if (isLoggedIn === 'true') {
-    document.getElementById('loginButton').style.display = 'none'; // 隐藏登录按钮
-    document.getElementById('loggedInMessage').style.display = 'block'; // 显示已登录的消息
+  if (isLoggedIn === "true") {
+    document.getElementById("loginButton").style.display = "none"; // 隐藏登录按钮
+    document.getElementById("loggedInMessage").style.display = "block"; // 显示已登录的消息
   } else {
-    document.getElementById('loginButton').style.display = 'block'; // 显示登录按钮
-    document.getElementById('loggedInMessage').style.display = 'none'; // 隐藏已登录的消息
+    document.getElementById("loginButton").style.display = "block"; // 显示登录按钮
+    document.getElementById("loggedInMessage").style.display = "none"; // 隐藏已登录的消息
   }
 }
 //退出登录
 
 const quit = () => {
-  localStorage.setItem('user_id', "");
-  localStorage.setItem('isLoggedIn', false);
-  localStorage.setItem('email', "");
-  localStorage.setItem('password', "");
-  localStorage.setItem('name', "");
-  if (activeIndex.value === '3' || activeIndex.value === '4') {
+  localStorage.setItem("user_id", "");
+  localStorage.setItem("isLoggedIn", false);
+  localStorage.setItem("email", "");
+  localStorage.setItem("password", "");
+  localStorage.setItem("name", "");
+  if (activeIndex.value === "3" || activeIndex.value === "4") {
     router.push("/home/ticket");
-    activeIndex.value = '1';
+    activeIndex.value = "1";
   }
   updateUI();
-}
+};
 
 onMounted(() => {
   router.push("/home/ticket");

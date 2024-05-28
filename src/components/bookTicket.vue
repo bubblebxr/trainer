@@ -81,7 +81,7 @@
             </el-row>
         </div>
         <div style="margin-top:0.2%;  width:100%;display: block;padding-left:1%;margin-bottom:3%;">
-            <el-table :data="searchResult" height="520" :header-cell-style="{ background: '#8abbe7', color: 'white', }"
+            <el-table :data="searchResult" height="480" :header-cell-style="{ background: '#8abbe7', color: 'white', }"
                 empty-text="没有列车信息">
                 <el-table-column prop="tid" label="车次" width="160">
                     <template #default="scope">

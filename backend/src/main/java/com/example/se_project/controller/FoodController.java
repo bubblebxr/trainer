@@ -146,6 +146,7 @@ public class FoodController {
             HashMap<String, Object> map = new HashMap<>();
 
             List<FoodOrder> foodOrders = foodService.getFoodOrdersByOid(order.getOid());
+            map.put("tid", foodOrders.get(0).getTrainId());
             map.put("oid", order.getOid());
             map.put("order_time", order.getBillTime());
 

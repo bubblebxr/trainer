@@ -179,12 +179,13 @@ export const cancelHotelOrder = (userID, oid) => {
 }
 
 /*提交个人注册信息*/
-export const postRegister = (userID, name, password, email) => {
+export const postRegister = (userID, name, password, email, time) => {
     return api.post(`/register`, {
         "id": userID,
         "name": name,
         "password": password,
-        "email": email
+        "email": email,
+        "time": time
     }, {
         headers: {
             'Content-Type': 'application/json'

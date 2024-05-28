@@ -5,7 +5,7 @@
              <div style="display: flex;border-color:#a3a3a3;border-style: solid;margin: 0 auto;" class="top-info">
                 <div style="height:25px;width:160px;margin-left:10px">
                   <div style="margin-top:5px;padding-left:10px;color:#969696;height:18px;font-size:15px;">入住时间</div>
-                  <el-date-picker class="date_picker" v-model="check_in" format="YYYY-MM-DD" value-format="YYYY-MM-DD" type="date"  size="large" style="height:25px;width:160px;margin-top:0px;border:none" placeholder="请选择" bordered=0 suffixIcon=" " @change="recalculateDateDiff"/>
+                  <el-date-picker class="date_picker" v-model="check_in" format="YYYY-MM-DD" value-format="YYYY-MM-DD" type="date"  size="large" style="height:25px;width:160px;margin-top:0px;border:none" placeholder="请选择" bordered=0 suffixIcon=" " @change="recalculateDateDiff" />
                 </div>
                 <div style="height:25px;width:80px;margin-top:15px;margin-left:10px">
                   <div style="background-color:#ededed;margin-top:5px;width:55px;padding-left:15px;color:black">{{ daysDiff }}晚</div>
@@ -37,22 +37,22 @@
         
         </div>
 
-        <div style="display:grid; grid-template-columns: 650px 245px 245px; grid-template-rows: 220px; grid-gap: 10px; border-color:#a3a3a3;border-style: solid;margin: 0 auto;" class="photo">
+        <div v-if="hotelData" style="display:grid; grid-template-columns: 650px 245px 245px; grid-template-rows: 220px; grid-gap: 10px; border-color:#a3a3a3;border-style: solid;margin: 0 auto;" class="photo">
     <a-image-preview-group>
        <div class="big" style="grid-column-start: 1;">
-        <a-image :width="650" height="440" style="object-fit:cover;height:450px;width:650px;" src="https://pavo.elongstatic.com/i/Mobile720_720/nw_1qOfnXM7v7G.jpg" />
+        <a-image :width="650" height="440" style="object-fit:cover;height:450px;width:650px;" :src="hotelData.photos[0]" />
        </div>
        <div class="small" style="grid-column-start: 2;">
-        <a-image :width="245" height="220" style="height:220px;width:245px; object-fit:cover; " src="https://pavo.elongstatic.com/i/h5hotel350_350/1kCaNKrs6U8.jpg" />
+        <a-image :width="245" height="220" style="height:220px;width:245px; object-fit:cover; " :src="hotelData.photos[1]" />
         </div>
         <div class="small" style="grid-column-start: 3;">
-        <a-image :width="245" height="220" style="height:220px;width:245px; object-fit:cover; " src="https://pavo.elongstatic.com/i/h5hotel350_350/1qOgNMpMF0c.jpg" />
+        <a-image :width="245" height="220" style="height:220px;width:245px; object-fit:cover; " :src="hotelData.photos[2]" />
         </div>
         <div class="small" style="grid-column-start: 2;">
-        <a-image :width="245" height="220" style="height:220px;width:245px; object-fit:cover; " src="https://pavo.elongstatic.com/i/h5hotel350_350/1qOgNVQNZhm.jpg" />
+        <a-image :width="245" height="220" style="height:220px;width:245px; object-fit:cover; " :src="hotelData.photos[3]" />
         </div>
         <div class="small" style="grid-column-start: 3;">
-        <a-image :width="245" height="220" style="height:220px;width:245px; object-fit:cover;" src="https://pavo.elongstatic.com/i/h5hotel350_350/1qOgNic4kJG.jpg" />
+        <a-image :width="245" height="220" style="height:220px;width:245px; object-fit:cover;" :src="hotelData.photos[4]" />
         </div>
     </a-image-preview-group>
   </div>
@@ -402,6 +402,7 @@ const showDrawer = (item) => {
       type: 'error',
       plain: true,
     })
+
   }
 };
 

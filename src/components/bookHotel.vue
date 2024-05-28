@@ -7,9 +7,9 @@
         <el-autocomplete v-model="arrive_station" :fetch-suggestions="queryStation" placeholder="到达地"
           class="item" @select="handleArrive" clearable :popper-class="popperClass" />
         <el-date-picker class="item" v-model="arrive_date" type="date" placeholder="到达时间" :shortcuts="shortcuts"
-          :size="20" @change="checkTime"/>
+          :size="20" @change="checkTime" format="YYYY-MM-DD" value-format="YYYY-MM-DD"/>
         <el-date-picker class="item" v-model="Ideparture_date" type="date" placeholder="离开时间" :shortcuts="shortcuts"
-          :size="20" @change="checkTime"/>
+          :size="20" @change="checkTime" format="YYYY-MM-DD" value-format="YYYY-MM-DD"/>
         <el-icon style="width: 30px;">
           <Search @click="search"
             style="background-color: orange; width: 30px; height: 200%; border-radius: 5px;" />
@@ -97,7 +97,7 @@ const router = useRouter();
 const route = useRoute()
 var listData = ref([]); /*酒店信息*/
 const sort_type = ref("likes");/**排序方式 */
-const arrive_station = ref('beijing');/**站 */
+const arrive_station = ref('');/**站 */
 const arrive_date = ref('');/**到达时间 */
 const Ideparture_date = ref('');/**离开时间 */
 const searchValid = ref(false); /** 查询是否有效 */
@@ -198,7 +198,7 @@ const search = () => {
             type: 'error',
             plain: true,
         })
-    } else if (searchValid.value === false) {
+    } else if (searchValid.value === true) {
         ElMessage({
             message: '没有查询到酒店',
             type: 'error',

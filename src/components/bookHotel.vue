@@ -90,66 +90,23 @@
 <script setup>
 import { StarOutlined, LikeOutlined, MessageOutlined } from '@ant-design/icons-vue'
 import { getHotel,getPlaces } from '../api/api';
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch,watchEffect } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useRouter, useRoute } from "vue-router";
 const router = useRouter();
 const route = useRoute()
 var listData = ref([]); /*酒店信息*/
-const sort_type = ref('likes');/**排序方式 */
-const arrive_station = ref('');/**站 */
+const sort_type = ref("likes");/**排序方式 */
+const arrive_station = ref('beijing');/**站 */
 const arrive_date = ref('');/**到达时间 */
 const Ideparture_date = ref('');/**离开时间 */
 const searchValid = ref(false); /** 查询是否有效 */
 const stationInvalid = ref(false);/**检测站点是否合格*/
 const first = ref(false); /** 是否有查询结果 */
-const startStationOptions = ref([]);/**所有地点信息 */
-const places = ref([]);/** 所有可供查询的地点 */
+const Places = ref([]);/** 所有可供查询的地点 */
 const visible = ref(false);
 
 
-listData = [
-  {
-    id:"1",
-    name: `Hotel ${1}`,
-    // 评分
-    rank: 2,
-    // 收藏量
-    stars: 2,
-    // 喜欢
-    likes: 2,
-    // 评论数
-    messages: 2,
-    // 最低价
-    miniprice: 199,
-    photo: 'https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png',
-    //位置
-    position:
-        `beijing`,
-    content:
-        'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.'
-  },
-  {
-    id:"2",
-    name: `Hotel ${1}`,
-    // 评分
-    rank: 2,
-    // 收藏量
-    stars: 2,
-    // 喜欢
-    likes: 2,
-    // 评论数
-    messages: 2,
-    // 最低价
-    miniprice: 199,
-    photo: 'https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png',
-    //位置
-    position:
-        `Description ${1}`,
-    content:
-        'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.'
-  }
-]
 
 
 const actions =
@@ -166,56 +123,45 @@ const handleStart = item => {
 };
 //获取所有城市
 const flag = ref(1);
+
 const fetchData = async () => {
     if (flag.value === 1) {
         flag.value++;
         try {
             const data = await getPlaces();
-            places.value = data.data.places;
-            console.log("获取城市信息成功", places.value);
+            Places.value = data.data.places.map(place => ({ value: place.place }));
+            console.log("获取城市信息成功", Places.value);
         } catch (error) {
             console.error('获取城市信息失败：', error);
         }
     }
 };
+const handleArrive = item => {
+    console.log('Selected station:', item);
+};
 onMounted(() => {
     fetchData();
     first.value = true;
-    arrive_station.value = router.currentRoute.value.query.arrive_station;
-    arrive_date.value = router.currentRoute.value.query.date;
+    
 });
 //选择站
 const queryStation = (queryString, cb) => {
-    const filteredOptions = queryString
-        ? places.value.filter(option =>
-            option.value.toLowerCase().includes(queryString.toLowerCase())
-        )
-        : places.value;
-    cb(filteredOptions);
+  const results = queryString
+    ? Places.value.filter(createFilter(queryString))
+    : Places.value;
+  // call callback function to return suggestions
+  cb(results);
 };
-//选择时间
-const shortcuts = [
-    {
-        text: '今天',
-        value: new Date(),
-    },
-    {
-        text: '明天',
-        value: () => {
-            const date = new Date();
-            date.setTime(date.getTime() + 3600 * 1000 * 24);
-            return date;
-        },
-    },
-    {
-        text: '一周以后',
-        value: () => {
-            const date = new Date();
-            date.setTime(date.getTime() + 3600 * 1000 * 24 * 7);
-            return date;
-        },
-    },
-];
+
+const createFilter = (queryString) => {
+  return (place) => {
+    return (
+      place.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
+    );
+  };
+};
+
+
 //不合理的时间
 const disabledDate = (time) => {
     return time.getTime() < Date.now() - 8.64e7
@@ -225,7 +171,7 @@ const disabledDate = (time) => {
 const fetchSearchResult = async () => {
   
   try {
-    const response = await getHotel(arrive_station.value,arrive_date.value,Ideparture_date.value);
+    const response = await getHotel(arrive_station.value,arrive_date.value,Ideparture_date.value,sort_type.value);
     var a = response.data.result;
     listData = a;
     console.log("获取查询信息成功", a);
@@ -277,7 +223,7 @@ watch([sort_type], (newValue, oldValue) => {
 
 //检测地点
 watch(arrive_station, (newValue) => {
-    stationInvalid.value = newValue != '' && !places.value.some(places => place.value === newValue);
+    stationInvalid.value = newValue != '' && !Places.value.some(place => place.value === newValue);
     if (stationInvalid.value === true) searchValid.value = true;
     else searchValid.value = false;
 });

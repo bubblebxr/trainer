@@ -49,6 +49,11 @@ public class UserServiceImpl implements IUserService {
     public String getEmail(String userId) {
         return userMapper.getEmail(userId);
     }
+
+    @Override
+    public String getUserSalt(String userId) {
+        return userMapper.getUserSalt(userId);
+    }
 }
 
 

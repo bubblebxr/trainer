@@ -31,4 +31,8 @@ public interface IOrderService {
 
     List<Map<String, Object>> getAllTrain();
 
+    Boolean getMessageSend(String orderId);
+
+    void setMessageHaveSend(String orderId);
+
 }

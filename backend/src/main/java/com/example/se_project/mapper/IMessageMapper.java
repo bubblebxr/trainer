@@ -15,7 +15,7 @@ import java.util.Map;
 public interface IMessageMapper extends BaseMapper<Message> {
     @Insert("insert into messages(uid,mid,orderId,title,messageTime,content,haveRead,orderType)" +
             "values(#{userId},#{mid},#{orderId},#{title},#{messageTime},#{content},#{haveRead},#{orderType})")
-    void addMessage(String userId, String mid, String orderId, String title, String messageTime, String content, Boolean haveRead, Integer orderType);
+    void addMessage(String userId, String mid, String orderId, String title, String messageTime, String content, Boolean haveRead, String orderType);
 
     @Select("select * from messages where uid=#{userId}")
     List<Map<String, Object>> getMessage(String userId);

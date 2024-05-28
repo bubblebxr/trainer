@@ -44,7 +44,7 @@
     <delete id="deletePassenger">
         delete
         from passengers
-        where userId = #{id}
+        where userId = #{userId}
           and identification = #{identification}
           and name = #{name}
     </delete>

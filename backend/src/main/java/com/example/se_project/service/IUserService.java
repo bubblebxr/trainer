@@ -16,5 +16,6 @@ public interface IUserService {
     boolean updatePassword(String userId, String newpassword);
 
     String getEmail(String userId);
+    String getUserSalt(String userId);
 
 }

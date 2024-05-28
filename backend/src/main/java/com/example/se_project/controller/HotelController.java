@@ -57,7 +57,12 @@ public class HotelController {
             Integer messages = hotelService.getCommentNum(id);
             current_hotel = hotelService.getHotelInfo(id);
             Double finalMinPrice = minPrice;
-            double rank = hotelService.getHotelRank(id);
+            //System.out.println();
+            //Double garde = hotelService.getHotelRank(id);
+            //if(hotelService.getHotelRank(id))
+            Double rank = hotelService.getHotelRank(id);
+            if(rank == null)
+                rank= 5.0;
             DecimalFormat decimalFormat = new DecimalFormat("#.#");
             //String roundedNumber = ;
             rank = Double.parseDouble(decimalFormat.format(rank));
@@ -128,8 +133,8 @@ public class HotelController {
                 roomInfo.add(new HashMap<>() {{
                     put("name", map.get("name"));
                     put("photo", map.get("photo"));
-                    put("price", map.get("MIN(price)"));
-                    put("num", "余" + map.get("MIN(num)") + "间");
+                    put("price", Double.parseDouble(map.get("MIN(price)").toString()));
+                    put("num", Integer.parseInt(map.get("MIN(num)").toString()));
                     put("size", map.get("size") + "平米");
                     put("others", map.get("others"));
                     put("bed-size", map.get("bedSize"));
@@ -148,8 +153,8 @@ public class HotelController {
                 roomInfo.add(new HashMap<>() {{
                     put("name", map.get("name"));
                     put("photo", map.get("photo"));
-                    put("price", map.get("MIN(price)"));
-                    put("num", "余" + map.get("MIN(num)") + "间");
+                    put("price", Double.parseDouble(map.get("MIN(price)").toString()));
+                    put("num", Integer.parseInt(map.get("MIN(num)").toString()));
                     put("size", map.get("size") + "平米");
                     put("others", map.get("others"));
                     put("bed-size", map.get("bedSize"));
@@ -170,7 +175,10 @@ public class HotelController {
                 put("photo", e.getPhoto());
             }});
         });
-        double rank = hotelService.getHotelRank(id);
+        Double rank = hotelService.getHotelRank(id);
+        if(rank == null)
+            rank= 5.0;
+        //double rank = hotelService.getHotelRank(id);
         DecimalFormat decimalFormat = new DecimalFormat("#.#");
         //String roundedNumber = ;
         rank = Double.parseDouble(decimalFormat.format(rank));
@@ -233,7 +241,16 @@ public class HotelController {
             roomType = "大床房";
         else if (type == 3)
             roomType = "家庭房";
-        Double total = (Double) map.get("money");
+        //Object total =
+        double total = 0;
+
+        Object value = map.get("money");
+        if (value instanceof Integer) {
+            int moneyInt = (Integer) value;
+            total = (double) moneyInt; // 将int转换为double
+        } else if (value instanceof Double) {
+            total = (Double) value;
+        }
 
         String oid = Order.generateOrderId();
 
@@ -246,8 +263,8 @@ public class HotelController {
             hotelService.addHotelorderDetail(id, oid, checkinTime, checkoutTime, roomNum, roomType, customer.get("name"), customer.get("id"));
         }
 
-        String content = "您已成功预订" + hotelService.getHotelName(id).get("name") + "，入住时间" + checkinTime + "--" + checkoutTime + "，祝您旅途愉快。";
-        messageService.addMessage(userId, Message.generateMessageId(), oid, "酒店订单支付成功", formattedDate, content, false, 4);
+        String content = "【WerwerTrip】您已成功预订" + hotelService.getHotelName(id).get("name") + "，入住时间" + checkinTime + "--" + checkoutTime + "，祝您旅途愉快。";
+        messageService.addMessage(userId, Message.generateMessageId(), oid, "酒店订单支付成功", formattedDate, content, false, "4");
         emailService.sendSimpleMail(userService.getEmail(userId), "酒店订单支付成功", content);
         return new HashMap<>() {{
             put("result", true);
@@ -279,7 +296,7 @@ public class HotelController {
             map.put("oid", oid);
             map.put("time", order.getBillTime());
             map.put("name", hotel.get("name"));
-            map.put("position", map.get("position"));
+            map.put("position", hotel.get("position"));
             map.put("check_in", checkinTime);
             map.put("check_out", checkoutTime);
             map.put("money", order.getTotal());
@@ -287,7 +304,8 @@ public class HotelController {
             List<Object> customers = new ArrayList<>();
 
             details.forEach(detail -> {
-                customers.add(detail.get("name"));
+                customers.add(detail.get("customerName"));
+                System.out.println(detail);
             });
             map.put("customers", customers);
 
@@ -326,8 +344,8 @@ public class HotelController {
             String checkinTime = hotelMap.get("checkinTime").toString();
             String checkoutTime = hotelMap.get("checkoutTime").toString();
 
-            String content = "您已成功取消" + hotelService.getHotelName(hotelId).get("name") + "" + checkinTime + "--" + checkoutTime + "的订单";
-            messageService.addMessage(userID, Message.generateMessageId(), oid, "酒店订单取消成功", formattedDate, content, false, 4);
+            String content = "【WerwerTrip】您已成功取消" + hotelService.getHotelName(hotelId).get("name") + "" + checkinTime + "--" + checkoutTime + "的订单";
+            messageService.addMessage(userID, Message.generateMessageId(), oid, "酒店订单取消成功", formattedDate, content, false, "4");
             emailService.sendSimpleMail(userService.getEmail(userID), "酒店订单取消成功", content);
             return new HashMap<>() {{
                 put("cancel_time", formattedDate);

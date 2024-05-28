@@ -22,7 +22,7 @@ public interface IPassengerMapper extends BaseMapper<Passenger> {
 
     List<Passenger> showPassengerInfo(String userId);
 
-    Integer deletePassenger(String userId, String name, String identification);
+    Integer deletePassenger(String userId, String passengerName, String identification);
 
     Passenger getPassengerByUidAndId(String id, String identification);
 }

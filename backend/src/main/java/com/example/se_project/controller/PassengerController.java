@@ -5,6 +5,8 @@ import com.example.se_project.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -21,11 +23,11 @@ public class PassengerController {
                                              @RequestParam(value = "name") String name,
                                              @RequestParam(value = "identification") String identification,
                                              @RequestParam(value = "phone") String phone) {
-        Integer res =  passengerService.addPassenger(name, identification, phone, id);
+        Integer res = passengerService.addPassenger(name, identification, phone, id);
         boolean result;
-        result= res != 0;
+        result = res != 0;
         return new HashMap<>() {{
-            put("info",result);
+            put("info", result);
         }};
 
 
@@ -47,7 +49,7 @@ public class PassengerController {
 
         Integer res = passengerService.updatePassenger(id, oldidentification, finalNewname, finalNewidentification, finalNewphone);
         boolean result;
-        result= res != 0;
+        result = res != 0;
         return new HashMap<>() {{
             put("info", result);
         }};
@@ -60,13 +62,14 @@ public class PassengerController {
         }};
     }
 
-    @PostMapping ("/deletePassengers/{id}")
+    @PostMapping("/deletePassengers/{id}")
     public Map<String, Boolean> deletePassenger(@PathVariable String id,
                                                 @RequestParam String name,
                                                 @RequestParam String identification) {
-        Integer res = passengerService.deletePassenger(id, name, identification);
+        String passengerName = URLDecoder.decode(name, StandardCharsets.UTF_8);
+        Integer res = passengerService.deletePassenger(id, passengerName, identification);
         boolean result;
-        result= res != 0;
+        result = res != 0;
         return new HashMap<>() {{
             put("info", result);
         }};

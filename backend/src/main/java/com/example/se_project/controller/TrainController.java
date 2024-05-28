@@ -128,9 +128,33 @@ public class TrainController {
 
         orderService.addOrder(new Order(oid, userId, billTime, total, Order.OrderStatus.Paid, Order.OrderType.Train));
 
+        Integer num1=0,num2=0,num3=0,num4=0,num5=0,num6=0;
+
         for (Map<String, String> person : persons) {
-            trainService.addTrainOrderDetail(oid, trainId, trainDate, person.get("name"), person.get("identification"), person.get("seat_type"));
+            String type = person.get("seat_type");
+            trainService.addTrainOrderDetail(oid, trainId, trainDate, person.get("name"), person.get("identification"),type);
+            switch (type) {
+                case "商务座":
+                    num1 += 1;
+                    break;
+                case "一等座":
+                    num2 += 1;
+                    break;
+                case "二等座":
+                    num3 += 1;
+                    break;
+                case "软卧":
+                    num4 += 1;
+                    break;
+                case "硬卧":
+                    num5 += 1;
+                    break;
+                case "硬座":
+                    num6 += 1;
+                    break;
+            }
         }
+        //trainService.
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date();

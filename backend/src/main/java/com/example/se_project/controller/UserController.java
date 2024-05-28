@@ -2,6 +2,7 @@ package com.example.se_project.controller;
 
 import com.example.se_project.entity.User;
 import com.example.se_project.service.IUserService;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +23,7 @@ public class UserController {
         String name = registerMap.get("name").toString();
         String password = registerMap.get("password").toString();
         String email = registerMap.get("email").toString();
+        Integer time = Integer.parseInt(registerMap.get("time").toString());
         Map<String, Object> map = new HashMap<>();
 
         //System.out.println(id);
@@ -56,7 +58,9 @@ public class UserController {
             map.put("result", false);
             map.put("reason", "用户已注册");
         } else {
-            userService.registerUser(id, name, password, email);
+            if(time==2){
+                userService.registerUser(id, name, password, email);
+            }
             map.put("result", true);
             map.put("reason", "注册成功");
         }

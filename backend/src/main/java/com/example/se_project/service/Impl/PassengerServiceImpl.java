@@ -45,8 +45,8 @@ public class PassengerServiceImpl implements IPassengerService {
     }
 
     @Override
-    public Integer deletePassenger(String userId, String name, String identification) {
-        return passengerMapper.deletePassenger(userId, name, identification);
+    public Integer deletePassenger(String userId, String PassengerName, String identification) {
+        return passengerMapper.deletePassenger(userId, PassengerName, identification);
     }
 
     @Override

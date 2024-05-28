@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.se_project.entity.Stopover;
 import com.example.se_project.entity.Train;
 import com.example.se_project.entity.TrainOrder;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -35,4 +36,6 @@ public interface ITrainMapper extends BaseMapper<Train> {
     String getStartTime(String trainId, String trainDate);
 
     List<Map<String, Object>> getTrainIdAndDate(String orderId);
+
+    void updateTrainSeat(String trainId, String trainDate, Integer num1, Integer num2, Integer num3, Integer num4, Integer num5, Integer num6);
 }

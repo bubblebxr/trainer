@@ -30,4 +30,6 @@ public interface ITrainService {
 
     List<Map<String, Object>> getTrainIdAndDate(String orderId);
 
+    void updateTrainSeat(String trainId, String trainDate, Integer num1, Integer num2, Integer num3, Integer num4, Integer num5, Integer num6);
+
 }

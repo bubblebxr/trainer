@@ -19,7 +19,7 @@ public interface IPassengerService {
 
     public List<Passenger> showPassengerInfo(String userId);
 
-    public Integer deletePassenger(String id, String name, String identification);
+    public Integer deletePassenger(String id, String PassengerName, String identification);
 
     Passenger getPassengerByUidAndId(String id, String identification);
 }

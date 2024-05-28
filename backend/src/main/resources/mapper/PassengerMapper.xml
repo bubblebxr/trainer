@@ -46,7 +46,7 @@
         from passengers
         where userId = #{userId}
           and identification = #{identification}
-          and name = #{name}
+          and name = #{passengerName}
     </delete>
     <select id="getPassengerByUidAndId">
         select *

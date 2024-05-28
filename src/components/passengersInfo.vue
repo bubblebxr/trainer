@@ -11,7 +11,7 @@
             </template>
         </el-table-column>
         <el-table-column prop="identification" label="身份证号" />
-        <el-table-column prop="phone" label="手机/电话" />
+        <el-table-column prop="phone" label="联系方式" />
         <el-table-column label="身份状态">
             <template #default="scope">
                 <img src="../assets/identificationSuccess.png" style="width:40px;height:35px;margin-top:3%;" />
@@ -80,7 +80,7 @@ const form = reactive({
     phone: '',
 });
 const passengers = ref([]);
-const id =localStorage.getItem('user_id');;//暂时代替用户id
+const id = localStorage.getItem('user_id');;//暂时代替用户id
 const multipleSelection = ref([]);
 const dialogFormVisible = ref(false);
 const insertTable = ref(false);
@@ -120,11 +120,11 @@ const singleDelete = async (index) => {
         });
     }
 };
-const insert=()=>{
+const insert = () => {
     insertTable.value = true;
 };
-const insertFinish=async()=>{
-    if(form.name===''||form.identification===''||form.phone===''){
+const insertFinish = async () => {
+    if (form.name === '' || form.identification === '' || form.phone === '') {
         ElMessage({
             message: "还有未填写的信息",
             type: "error",
@@ -134,7 +134,7 @@ const insertFinish=async()=>{
     }
     var p = /^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/;
     if (p.test(form.identification)) {
-        const data = await insertPassengers(id,form.name, form.identification, form.phone);
+        const data = await insertPassengers(id, form.name, form.identification, form.phone);
         if (data.data.info === true) {
             passengers.value.push({ name: form.name, identification: form.identification, phone: form.phone });
             ElMessage({
@@ -170,8 +170,8 @@ const editInfo = async (index) => {
 };
 const editFinish = async () => {
     var p = /^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/;
-    if (p.test(form.identification) ) {
-        const data = await updatePassengers(id.value, presentEdit.value['identification'], form.name, form.identification, form.phone);
+    if (p.test(form.identification)) {
+        const data = await updatePassengers(id, presentEdit.value['identification'], form.name, form.identification, form.phone);
         if (data.data.info === true) {
             getInfo();
             ElMessage({
@@ -189,7 +189,7 @@ const editFinish = async () => {
     } else {
         console.log("error");
         ElMessage({
-            message: "编辑失败",
+            message: "信息不合法！请重新检查~",
             type: "error",
             plain: true,
         });

@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.se_project.entity.Stopover;
 import com.example.se_project.entity.Train;
 import com.example.se_project.entity.TrainOrder;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 

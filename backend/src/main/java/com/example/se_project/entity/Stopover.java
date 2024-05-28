@@ -1,5 +1,6 @@
 package com.example.se_project.entity;
 
+import java.sql.Time;
 import java.util.Date;
 
 public class Stopover {
@@ -32,7 +33,6 @@ public class Stopover {
     public Time getDuration() {
         return duration;
     }
-
 
     public void setDuration(Time duration) {
         this.duration = duration;

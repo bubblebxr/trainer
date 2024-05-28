@@ -2,7 +2,6 @@ package com.example.se_project.controller;
 
 import com.example.se_project.entity.User;
 import com.example.se_project.service.IUserService;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,6 +1,9 @@
 package com.example.se_project.entity;
 
+<<<<<<< HEAD
 import java.sql.Time;
+=======
+>>>>>>> 741074827a3d28fb08a6fbb061711a039014b4e6
 import java.util.Date;
 
 public class Stopover {
@@ -12,7 +15,11 @@ public class Stopover {
 
     private Date leaveTime;
 
+<<<<<<< HEAD
     private Time duration;
+=======
+    private long duration;
+>>>>>>> 741074827a3d28fb08a6fbb061711a039014b4e6
 
     public String getStationName() {
         return stationName;
@@ -30,11 +37,19 @@ public class Stopover {
         this.arriveTime = arriveTime;
     }
 
+<<<<<<< HEAD
     public Time getDuration() {
         return duration;
     }
 
     public void setDuration(Time duration) {
+=======
+    public long getDuration() {
+        return duration;
+    }
+
+    public void setDuration(long duration) {
+>>>>>>> 741074827a3d28fb08a6fbb061711a039014b4e6
         this.duration = duration;
     }
 

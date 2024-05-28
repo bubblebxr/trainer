@@ -35,10 +35,10 @@ export const postFoodBill = (foods, userID, tid, date, time, sum_price) => {
             "bill_time": nowtime,
             "sum_price": sum_price
         }, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
+        headers: {
+            'Content-Type': 'application/json'
         }
+    }
     );
 }
 /*获取火车餐订单*/
@@ -54,10 +54,10 @@ export const cancelFoodOrder = (userID, oid) => {
         {
             "cancel_time": nowtime,
         }, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
+        headers: {
+            'Content-Type': 'application/json'
         }
+    }
     );
 }
 
@@ -103,10 +103,10 @@ export const postTicketBill = (persons, userID, tid, date, sum_price) => {
             "bill_time": nowtime,
             "sum_price": sum_price
         }, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
+        headers: {
+            'Content-Type': 'application/json'
         }
+    }
     );
 }
 
@@ -157,10 +157,10 @@ export const postHotelBill = (hotelid, id, checkin_time, checkout_time, room_num
             "customers": customers,
             "money": money,
         }, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
+        headers: {
+            'Content-Type': 'application/json'
         }
+    }
 
     )
 }
@@ -193,11 +193,11 @@ export const postLogin = (userID, password) => {
         {
             "id": userID,
             "password": password
-        } ,{
-            headers: {
-                'Content-Type': 'application/json'
-            }
+        }, {
+        headers: {
+            'Content-Type': 'application/json'
         }
+    }
     )
 }
 

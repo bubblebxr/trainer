@@ -10,7 +10,7 @@
                 <el-autocomplete v-model="destinationStation" :fetch-suggestions="queryStartStation" placeholder="到达地"
                     class="item" @select="handleDestination" clearable :popper-class="popperClass" />
                 <el-date-picker class="item" v-model="date" type="date" placeholder="出发日期" :shortcuts="shortcuts"
-                    :size="20" :disabled-date="disabledDate" />
+                    :size="20" :disabled-date="disabledDate"  />
                 <el-icon style="width:30px;">
                     <Search @click="search"
                         style="background-color:orange;width:30px;;height:200%;border-radius: 5px;" />

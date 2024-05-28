@@ -181,7 +181,7 @@ const hard_seat = ref("");
 const selectedPerson = ref([]);
 const person = ref([]);
 const passengers = ref([]);
-const id = ref('1');//暂时代替用户id
+const id = ref(localStorage.getItem('user_id'));//暂时代替用户id
 const passengersTable = ref([]);
 const options = ref([]);
 const value = ref([]);//多选框选中的
@@ -232,13 +232,14 @@ const ordersCommit = async () => {
         var temp = value.value[i].match(regex)[1];
         info.push({ name: passengersTable.value[i]['name'], identification: passengersTable.value[i]['identification'], seat_type: temp });
     }
+    // console.log(info);
     try {
         const responce = await postTicketBill(
             info,
             id.value,
             tid.value,
             start_date.value,
-            total.value,
+            total.value.toString(),
         );
         var result = responce.data.result;
         if (result) {

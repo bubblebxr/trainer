@@ -80,7 +80,7 @@ const form = reactive({
     phone: '',
 });
 const passengers = ref([]);
-const id = localStorage.getItem('user_id');;//暂时代替用户id
+const id = localStorage.getItem('user_id');//暂时代替用户id
 const multipleSelection = ref([]);
 const dialogFormVisible = ref(false);
 const insertTable = ref(false);

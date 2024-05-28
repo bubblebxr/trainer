@@ -6,8 +6,8 @@ export const getStation = () => {
 
 export const getSearchResult = (startCity, arriveCity, date, isGD, sortType, seatType, isHide) => {
     const queryString = `?is_GD=${isGD}&sort_type=${sortType}&seat_type=${seatType}&isHide=${isHide}`;
-    const start=encodeURIComponent(startCity);
-    const arrive=encodeURIComponent(arriveCity);
+    const start = encodeURIComponent(startCity);
+    const arrive = encodeURIComponent(arriveCity);
     return api.post(`/trains/${start}/${arrive}/${date}${queryString}`);
 };
 
@@ -72,9 +72,10 @@ export const getPassengers = (id) => {
     return api.post(`/passengersInfo/${id}`);
 };
 
-export const deletePassengers = (id, identification) => {
-    const queryString = `?identification=${identification}`;
-    return api.delete(`/deletePassengers/${id}${queryString}`);
+/* 删除乘车人 */
+export const deletePassengers = (id,name, identification) => {
+    const queryString = `?name=${encodeURIComponent(name)}&identification=${identification}`;
+    return api.post(`/deletePassengers/${id}${queryString}`);
 };
 
 export const updatePassengers = (id, oldidentification, newname, newidentification, newphone) => {

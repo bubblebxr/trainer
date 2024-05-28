@@ -102,7 +102,6 @@ const arrive_date = ref('');/**到达时间 */
 const Ideparture_date = ref('');/**离开时间 */
 const searchValid = ref(false); /** 查询是否有效 */
 const stationInvalid = ref(false);/**检测站点是否合格*/
-const first = ref(false); /** 是否有查询结果 */
 const Places = ref([]);/** 所有可供查询的地点 */
 const visible = ref(false);
 
@@ -136,12 +135,14 @@ const fetchData = async () => {
         }
     }
 };
+
 const handleArrive = item => {
     console.log('Selected station:', item);
 };
+
 onMounted(() => {
     fetchData();
-    first.value = true;
+    
     
 });
 //选择站
@@ -169,12 +170,13 @@ const disabledDate = (time) => {
 
 //从api获取查询结构
 const fetchSearchResult = async () => {
-  
   try {
     const response = await getHotel(arrive_station.value,arrive_date.value,Ideparture_date.value,sort_type.value);
     var a = response.data.result;
     listData = a;
     console.log("获取查询信息成功", a);
+    //重新加载页面
+      window.location.href = window.location.href;
   } catch (error) {
       console.error('获取查询信息失败', error);
   }
@@ -219,7 +221,7 @@ const search = () => {
 watch([sort_type], (newValue, oldValue) => {
     console.log('筛选方式改变', newValue, oldValue);
     fetchSearchResult();
-}, { immediate: true });
+});
 
 //检测地点
 watch(arrive_station, (newValue) => {

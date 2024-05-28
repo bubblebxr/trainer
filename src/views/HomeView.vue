@@ -27,13 +27,13 @@
               </a-button>
               <a-modal v-model:open="openLogin" title="登录" @ok="handleLoginOk">
                 <div style="margin-top:20px;">
-                  <el-input v-model="my_id" style="max-width: 600px" placeholder="输入身份证号">
-                    <template #prepend>ID号</template>
+                  <el-input v-model="my_id" style="max-width: 600px;height: 40px;" placeholder="输入身份证号">
+                    
                   </el-input>
                 </div>
                 <div style="margin-top:20px;">
-                  <el-input v-model="my_password" style="max-width: 600px" placeholder="输入密码">
-                    <template #prepend>密码</template>
+                  <el-input v-model="my_password" style="max-width: 600px;height: 40px;" placeholder="输入密码">
+                    
                   </el-input>
                 </div>
                 <button style="margin-top:20px;color:#61bbff;text-decoration:underline;" @click="changeToRegister">
@@ -50,23 +50,23 @@
               <a-modal v-model:open="openRegister" title="注册" @ok="handleRegisterOk" ok-text="确认信息" style="color:white"
                 :cancel-button-props="{ style: { display: 'none' } }">
                 <div style="margin-top:20px;">
-                  <el-input v-model="my_id" style="max-width: 600px" placeholder="输入身份证号">
-                    <template #prepend>ID号</template>
+                  <el-input v-model="my_id" style="max-width: 600px;height: 40px;" placeholder="输入身份证号">
+                    
                   </el-input>
                 </div>
                 <div style="margin-top:20px;">
-                  <el-input v-model="my_name" style="max-width: 600px" placeholder="输入姓名">
-                    <template #prepend>姓名</template>
+                  <el-input v-model="my_name" style="max-width: 600px;height: 40px;" placeholder="输入姓名">
+                    
                   </el-input>
                 </div>
                 <div style="margin-top:20px;">
-                  <el-input v-model="my_password" style="max-width: 600px" placeholder="输入密码">
-                    <template #prepend>密码</template>
+                  <el-input v-model="my_password" style="max-width: 600px;height: 40px;" placeholder="输入密码">
+                    
                   </el-input>
                 </div>
                 <div style="margin-top:20px;">
-                  <el-input v-model="my_email" style="max-width: 600px" placeholder="输入邮箱">
-                    <template #prepend>邮箱</template>
+                  <el-input v-model="my_email" style="max-width: 600px;height: 40px;" placeholder="输入邮箱">
+                   
                   </el-input>
                 </div>
               </a-modal>
@@ -256,10 +256,10 @@ const postmyLogin = async () => {
         message: "登录成功",
         type: "success",
       });
-      localStorage.setItem('user_id', my_id);
+      localStorage.setItem('user_id', my_id.value);
       localStorage.setItem('isLoggedIn', true);
       localStorage.setItem('email', response.data.email);
-      localStorage.setItem('password', my_password);
+      localStorage.setItem('password', my_password.value);
       localStorage.setItem('name', response.data.name);
       updateUI();
       //重新加载页面
@@ -296,10 +296,10 @@ const postmyRegister = async () => {
         message: "提交成功",
         type: "success",
       });
-      localStorage.setItem('user_id', my_id);
-      localStorage.setItem('email', my_email);
-      localStorage.setItem('password', my_password);
-      localStorage.setItem('name', my_name);
+      localStorage.setItem('user_id', my_id.value);
+      localStorage.setItem('email', my_email.value);
+      localStorage.setItem('password', my_password.value);
+      localStorage.setItem('name', my_name.value);
       openRegister.value = false;
       openVerification.value = true;
 

@@ -2,7 +2,7 @@
     <el-radio-group v-model="status">
         <el-radio-button label="全部订单" value="all"></el-radio-button>
         <el-radio-button label="已支付" value="paid"></el-radio-button>
-        <el-radio-button label="已取消" value="cancle"></el-radio-button>
+        <el-radio-button label="已取消" value="cancel"></el-radio-button>
         <el-radio-button label="已完成" value="done"></el-radio-button>
     </el-radio-group>
     <div v-for="(item, index) in hotelOrders" :key="index">

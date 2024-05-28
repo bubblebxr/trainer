@@ -5,7 +5,7 @@ export const getStation = () => {
 };
 
 export const getSearchResult = (startCity, arriveCity, date, isGD, sortType, seatType, isHide) => {
-    const queryString = encodeURIComponent (`?is_GD=${isGD}&sort_type=${sortType}&seat_type=${seatType}&isHide=${isHide}`);
+    const queryString = encodeURIComponent(`?is_GD=${isGD}&sort_type=${sortType}&seat_type=${seatType}&isHide=${isHide}`);
     return api.post(`/trains/${startCity}/${arriveCity}/${date}${queryString}`);
 };
 
@@ -154,8 +154,13 @@ export const postHotelBill = (hotelid, id, checkin_time, checkout_time, room_num
             "checkout_time": checkout_time,
             "room_num": room_num,
             "room_type": room_type,
-            "customers": customers,
-            "money": money,
+            "customers": [
+                {
+                    "name": customers.name,
+                    "id": customers.id
+                }
+            ],
+            "money": money
         }, {
         headers: {
             'Content-Type': 'application/json'
@@ -170,7 +175,7 @@ export const getHotelOrders = (userID, status) => {
 }
 /*酒店订单取消*/
 export const cancelHotelOrder = (userID, oid) => {
-    return api.post(`/ticket/cancel/${userID}/${oid}`);
+    return api.post(`/hotel/cancel/${userID}/${oid}`);
 }
 
 /*提交个人注册信息*/

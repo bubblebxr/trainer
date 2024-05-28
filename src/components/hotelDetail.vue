@@ -5,19 +5,19 @@
              <div style="display: flex;border-color:#a3a3a3;border-style: solid;margin: 0 auto;" class="top-info">
                 <div style="height:25px;width:160px;margin-left:10px">
                   <div style="margin-top:5px;padding-left:10px;color:#969696;height:18px;font-size:15px;">入住时间</div>
-                  <el-date-picker class="date_picker" v-model="check_in" type="date"  size="large" style="height:25px;width:160px;margin-top:0px;border:none" placeholder="请选择" bordered=0 suffixIcon=" " @change="recalculateDateDiff"/>
+                  <el-date-picker class="date_picker" v-model="check_in" format="YYYY-MM-DD" value-format="YYYY-MM-DD" type="date"  size="large" style="height:25px;width:160px;margin-top:0px;border:none" placeholder="请选择" bordered=0 suffixIcon=" " @change="recalculateDateDiff"/>
                 </div>
                 <div style="height:25px;width:80px;margin-top:15px;margin-left:10px">
                   <div style="background-color:#ededed;margin-top:5px;width:55px;padding-left:15px;color:black">{{ daysDiff }}晚</div>
                 </div>
                 <div style="height:25px;width:160px;">
                   <div style="margin-top:5px;padding-left:10px;color:#969696;height:18px;font-size:15px;">退房时间</div>
-                  <el-date-picker class="date_picker" v-model="check_out" type="date" size="large" style="height:25px;width:160px;margin-top:0px;border:none" placeholder="请选择" bordered=0 suffixIcon=" " @change="recalculateDateDiff"/>
+                  <el-date-picker class="date_picker" v-model="check_out" format="YYYY-MM-DD" value-format="YYYY-MM-DD" type="date" size="large" style="height:25px;width:160px;margin-top:0px;border:none" placeholder="请选择" bordered=0 suffixIcon=" " @change="recalculateDateDiff"/>
                 </div>  
              </div>
         </div>
 
-        <div style="border-color:#a3a3a3;margin: 0 auto;" class="information">
+        <div v-if="hotelData" style="border-color:#a3a3a3;margin: 0 auto;" class="information">
           <div style="display:flex;margin-left:10px;margin-top:10px;height:70px;">
             <p style="font-size:40px;font-weight: bold;">{{hotelData.name}}</p>
             <div style="margin-top:5px;margin-left:20px">
@@ -55,9 +55,9 @@
         <a-image :width="245" height="220" style="height:220px;width:245px; object-fit:cover;" src="https://pavo.elongstatic.com/i/h5hotel350_350/1qOgNic4kJG.jpg" />
         </div>
     </a-image-preview-group>
-</div>
+  </div>
 
-        <div style="display: flex;border-color:#a3a3a3;margin: 0 auto;margin-top:10px" class="other">
+        <div v-if="hotelData" style="display: flex;border-color:#a3a3a3;margin: 0 auto;margin-top:10px" class="other">
             <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick" size="large">
                 <el-tab-pane label="房型" name="rooms">
                     <div style="height:50px;display:flex;margin-left:2px;">
@@ -91,7 +91,9 @@
                                 <div style="margin-left: 200px">
                                   <a-typography-title :level="2">¥ {{item.price}}</a-typography-title>         
                                 </div>
-                                <a-button :size="large" style="color:black" @click="showDrawer(item)">点击预订</a-button>
+                                <a-button :size="large" style="background-color: {{ item.num === 0 ? 'darkgray' : 'inherit' }}"  @click="showDrawer(item)" :disabled="item.num === 0">
+                                {{ item.num === 0 ? '已售完' : '点击预订' }}
+                                </a-button>
                                 <a-drawer
                                   v-model:open="open"
                                   class="custom-class"
@@ -138,8 +140,8 @@
                                   <div style="height:50px;width:300px;background-color:#f8e8e2;border-type:solid;border-radius:2px;color:#eb775c;padding-top:4px;padding-left:6px;padding-right:3px;margin-bottom:15px;">
                                     请输入住客姓名以及身份证号，每间只需填1人，姓名不可重复。
                                   </div>
-                                  <div style="height:300px;">
-                                    <el-scrollbar style="height:300px;">
+                                  <div style="height:250px;">
+                                    <el-scrollbar style="height:250px;">
                                     <template v-for="i in roomCount">
                                       <div style="margin-top:1px;display:flex;">
                                         <div style="margin-top:8px;margin-right:10px;">
@@ -184,7 +186,7 @@
                 </el-tab-pane>
                 <el-tab-pane label="评论" name="comments">
                   <div style="width:1155px;display:flex;margin-left:2px;">
-                      <a-list item-layout="vertical" size="large" :pagination="pagination" :data-source="hotelData.comments">
+                      <a-list  v-if="hotelData.comments && hotelData.comments.length > 0" item-layout="vertical" size="large" :pagination="pagination" :data-source="hotelData.comments">
                         <template #renderItem="{ item }">
                           <a-list-item key="item.name" style="width:1155px">
                             <template #actions>
@@ -295,7 +297,7 @@
 <script setup>
 import { getHotelDetail,postHotelBill } from "../api/api.js";
 import { useRoute } from 'vue-router';
-import { ref,onMounted,watch } from 'vue';
+import { ref,onMounted,watch, nextTick } from 'vue';
 import { BookOutlined,HeartOutlined,StarOutlined, LikeOutlined, MessageOutlined,EnvironmentOutlined } from '@ant-design/icons-vue'
 //标签的选择的
 const activeName = ref('rooms');
@@ -307,95 +309,41 @@ var commentData= ref([]);
 
 const hotelid = ref('');
 
-var check_in = ref('');
-var check_out = ref('');
+
 
 //页面加载预处理
 
 const route = useRoute();
+var check_in = ref(route.query.checkin || '');
+var check_out = ref(route.query.checkout || '');
 
 const fetchData = async () => {
     try {
             const response = await getHotelDetail(hotelid.value,checked1.value,checked2.value,checked3.value,check_in.value,check_out.value);
             hotelData.value = response.data;
-            console.log("获取酒店详细信息成功");
+            console.log("获取酒店详细信息成功",hotelData.value);
         } catch (error) {
             console.error('获取酒店详细信息失败：', error);
         }
 };
 
-onMounted(() => {
+    onMounted(async () => {
       hotelid.value = route.query.id;
-      check_in.value = route.query.checkin;
-      check_out.value = route.query.checkout;
       const NstartDate = new Date(check_in.value);
       const NendDate = new Date(check_out.value);
       const timeDiff = Math.abs(NendDate - NstartDate);
       daysDiff.value = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-      fetchData(); 
-     
-});
+
+      await fetchData(); // 等待数据加载完成
+      await nextTick();
+
+      // 这里可以根据需要进行其他操作
+    });
 
 
 
 
-hotelData = {
-  name:"克里斯蒂大酒店",
-  rank:4,
-  stars:10,
-  likes:10,
-  messages:10,
-  position:"北京市海淀区街道3",
-  comments: [
-    {
-      name:"David",
-      time:"2024/1/30",
-      content:"really good experience here!",
-      place:"北京",
-      room:"标准双人间",
-      rank:5.0,
-      photo:"https://m.elongstatic.com/hotel_pc_i18n/product/_nuxt/userHead.0-0-3-213881db..svg",
-    },
-    {
-      name:"David",
-      time:"2024/1/30",
-      content:"really good experience here!",
-      place:"北京",
-      room:"标准双人间",
-      rank:4.5,
-      photo:"https://m.elongstatic.com/hotel_pc_i18n/product/_nuxt/userHead.0-0-3-213881db..svg",
-    },
-    {
-      name:"David",
-      time:"2024/1/30",
-      content:"really good experience here!",
-      place:"北京",
-      room:"标准双人间",
-      rank:4.0,
-      photo:"https://m.elongstatic.com/hotel_pc_i18n/product/_nuxt/userHead.0-0-3-213881db..svg",
-    }
-  ],
-  rooms: [
-    {
-      name: `Room ${1}`,
-      price: 199,
-      photo: 'https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png',
-      num: 10,
-      size: "30m^2",
-      others:"infoinfoaaaaaaaaaaaaaahfshg gfshu gsjgu",
-      bed_size:"2张1.5m单人床",
-    }
-  ],
-  others: {
-    phone:"15829374891",
-    set_time:"2019年3月2日",
-    description:"布达佩斯酒店（Budapest Hotel）位于匈牙利首都布达佩斯（Budapest）这个美丽而充满历史底蕴的城市中，是该城市享有盛誉的奢华酒店之一。布达佩斯酒店不仅是一家享誉国际的五星级豪华酒店，更是一座见证了城市风云变幻的历史建筑。这座酒店坐落于多瑙河畔，拥有绝佳的城市景观，为宾客提供了绝佳的欣赏布达佩斯城市全景的机会。建筑外观保留着典雅的欧洲建筑风格，内部装饰豪华精致，融合了现代设计与传统元素，展现出独特的魅力。布达佩斯酒店提供多样化的豪华客房和套房选择，每间客房都配备了舒适的家具和现代化设施，为宾客营造温馨舒适的居住体验。酒店内设施齐全，包括高级餐厅、室内游泳池、健身中心、水疗中心等，让宾客在体验奢华享受的同时也能尽情放松身心。作为一家享有盛誉的国际品牌酒店，布达佩斯酒店以其优质的服务和无与伦比的体验而闻名于世。在这里，宾客可以感受到匈牙利传统与现代化相结合的独特魅力，享受到尊贵的待客之道，留下美好难忘的回忆。无论是商务旅行还是休闲度假，布达佩斯酒店都将为宾客提供一个奢华且难忘的入住体验。",
-    breakfast_description:"对于酒店住客每天提供免费早餐，7:00-9:00于二层餐厅供应。",
-    age_notion:"办理人要求18岁至90岁，其他不符合的年龄需要看护人办理入住。",
-    checkin_time:"每日12:00之后可办理当日入住",
-    checkout_time:"每日下午14:00前退房",
-  },
-}
+
 
 
 const actions =
@@ -485,7 +433,7 @@ const pay = async () =>{
           console.error('input_name 和 input_id 的长度不一致');
         }
         try{
-        const response = await postHotelBill(hotelData.hotel_id,localStorage.getItem("id"),check_in,check_out,roomCount,1,customers,money);
+        const response = await postHotelBill(hotelid.value,localStorage.getItem('user_id'),check_in.value,check_out.value,roomCount.value,1,customers,money.value);
         var result = response.data.result;
         if(result){
             ElMessage({

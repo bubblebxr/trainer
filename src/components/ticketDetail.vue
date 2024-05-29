@@ -71,7 +71,7 @@
                             </el-select>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="name" label="姓名" width="200" />
+                    <el-table-column prop="name" label="姓名" width="100" />
                     <el-table-column label="证件类型" width="180">
                         <template #default="scope">
                             <el-text>中国居民身份证</el-text>
@@ -232,16 +232,16 @@ const ordersCommit = async () => {
         var temp = value.value[i].match(regex)[1];
         info.push({ name: passengersTable.value[i]['name'], identification: passengersTable.value[i]['identification'], seat_type: temp });
     }
-    console.log("start"+start_date.value);
     try {
         const responce = await postTicketBill(
-            info,
+            JSON.stringify(info),
             id.value,
             tid.value,
             start_date.value,
             total.value.toString(),
         );
-        var result = responce.data.result;
+        var result = responce.data.info;
+        // console.log("result"+result);
         if (result) {
             ElMessage({
                 message: "下单成功",

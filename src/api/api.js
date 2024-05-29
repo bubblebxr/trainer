@@ -90,21 +90,13 @@ export const insertPassengers = (id, name, identification, phone) => {
 
 /*提交火车票订单*/
 export const postTicketBill = (persons, userID, tid, date, sum_price) => {
-    var nowtime = new Date().toISOString();
-    var time = nowtime.replace('T', ' ').replace('Z', '');
+    var person = JSON.parse(persons);
     return api.post(`/ticket/bill`,
         {
-            "person": [
-                {
-                    "name": persons.name,
-                    "identification": persons.identification,
-                    "seat_type": persons.seat_type,
-                }
-            ],
+            "person": person,
             "userID": userID,
             "tid": tid,
             "date": date,
-            "bill_time": time,
             "sum_price": sum_price
         }, {
         headers: {

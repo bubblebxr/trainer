@@ -225,13 +225,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, inject } from "vue";
+import { ref, onMounted, computed, inject,provide } from "vue";
 import { useRouter } from "vue-router";
 import eventBus from "@/eventBus.js";
 import { getMessage } from "@/api/api.js";
 import { ElMessage, ElMessageBox } from "element-plus";
 const router = useRouter();
 const activeIndex = ref("1");
+provide('activeIndex', activeIndex);
 const drawer = ref(false);
 const messageOpen = () => {
   const isLoggedIn = localStorage.getItem("isLoggedIn");

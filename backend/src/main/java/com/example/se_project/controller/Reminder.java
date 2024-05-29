@@ -39,34 +39,43 @@ public class Reminder {
             String userId = order.get("uid").toString();
             String orderId = order.get("oid").toString();
             String email = userService.getEmail(userId);
-            Map<String, Object> trainMap = trainService.getTrainIdAndDate(orderId).get(0);
-            System.out.println(trainMap);
-
-            String trainId = trainMap.get("trainId").toString();
-            String trainDate = trainMap.get("trainDate").toString();
-            System.out.println(trainId);
-            System.out.println(trainDate);
-            String startTime = trainService.getStartTime(trainId, trainDate);
-            if (startTime != null) // 车次存在
+            List<Map<String, Object>> trainMapList = trainService.getTrainIdAndDate(orderId);
+            System.out.println(trainMapList);
+            if(!trainMapList.isEmpty())
             {
-                System.out.println(startTime);
-                LocalDateTime start = LocalDateTime.parse(startTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-                System.out.println(now);
-                Duration duration = Duration.between(now, start);
+                Map<String,Object> trainMap = trainMapList.get(0);
+                System.out.println(trainMap);
 
-                if (duration.isPositive() && duration.toHours() < 3 && !orderService.getMessageSend(orderId)) {
-                    // 距发车时间小于3h且未发送过消息
-                    String content = "【WerwerTrip】距离您预定的" + trainDate + " " + trainId + "车次的" + "列车发车时间已不足3小时，请您合理安排出行时间，以免错过列车。";
-                    //System.out.println(content);
-                    String Mcontent = "距离您预定的" + trainDate + " " + trainId + "车次的" + "列车发车时间已不足3小时，请您合理安排出行时间，以免错过列车。";
-                    messageService.addMessage(userId, Message.generateMessageId(), orderId, "行程提醒", now.toString(), Mcontent, false, "2");
-                    emailService.sendSimpleMail(email, "行程提醒", content);
-                    orderService.setMessageHaveSend(orderId);
+                String trainId = trainMap.get("trainId").toString();
+                String trainDate = trainMap.get("trainDate").toString();
+                System.out.println(trainId);
+                System.out.println(trainDate);
+                String startTime = trainService.getStartTime(trainId, trainDate);
+                if (startTime != null) // 车次存在
+                {
+                    System.out.println(startTime);
+                    LocalDateTime start = LocalDateTime.parse(startTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                    System.out.println(now);
+                    Duration duration = Duration.between(now, start);
+
+                    if (duration.isPositive() && duration.toHours() < 3 && !orderService.getMessageSend(orderId)) {
+                        // 距发车时间小于3h且未发送过消息
+                        String content = "【WerwerTrip】距离您预定的" + trainDate + " " + trainId + "车次的" + "列车发车时间已不足3小时，请您合理安排出行时间，以免错过列车。";
+                        //System.out.println(content);
+                        String Mcontent = "距离您预定的" + trainDate + " " + trainId + "车次的" + "列车发车时间已不足3小时，请您合理安排出行时间，以免错过列车。";
+                        messageService.addMessage(userId, Message.generateMessageId(), orderId, "行程提醒", now.toString(), Mcontent, false, "2");
+                        emailService.sendSimpleMail(email, "行程提醒", content);
+                        orderService.setMessageHaveSend(orderId);
+                    }
+                }
+                // 车次取消
+                else {
+                    System.out.println("车次不存在");
                 }
             }
-            // 车次取消
-            else {
-                System.out.println("车次不存在");
+            // 有order无trainorders
+            else{
+                System.out.println("获取订单详细信息失败");
             }
 
 

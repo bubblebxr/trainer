@@ -62,7 +62,11 @@ public class UserController {
         } else {
             if (time == 2) {
                 userService.registerUser(id, name, password, email);
-                //passengerService.addPassenger(name,id,)
+                //name, identification, phone, userId
+                String identification = id;
+                String userId = id;
+                String phone = email;
+                passengerService.addPassenger(name,identification,phone,userId);
             }
             map.put("result", true);
             map.put("reason", "注册成功");

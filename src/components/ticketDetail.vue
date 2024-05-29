@@ -235,13 +235,14 @@ const ordersCommit = async () => {
     // console.log(info);
     try {
         const responce = await postTicketBill(
-            info,
+            JSON.stringify(info),
             id.value,
             tid.value,
             start_date.value,
             total.value.toString(),
         );
-        var result = responce.data.result;
+        var result = responce.data.info;
+        // console.log("result"+result);
         if (result) {
             ElMessage({
                 message: "下单成功",

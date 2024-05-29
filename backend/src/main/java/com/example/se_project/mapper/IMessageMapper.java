@@ -17,7 +17,7 @@ public interface IMessageMapper extends BaseMapper<Message> {
             "values(#{userId},#{mid},#{orderId},#{title},#{messageTime},#{content},#{haveRead},#{orderType})")
     void addMessage(String userId, String mid, String orderId, String title, String messageTime, String content, Boolean haveRead, String orderType);
 
-    @Select("select * from messages where uid=#{userId}")
+    @Select("select * from messages where uid=#{userId} order by messageTime desc")
     List<Map<String, Object>> getMessage(String userId);
 
     @Update(("update messages set haveRead = true where mid=#{mid}"))

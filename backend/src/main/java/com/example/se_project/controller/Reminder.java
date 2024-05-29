@@ -58,7 +58,8 @@ public class Reminder {
                     // 距发车时间小于3h且未发送过消息
                     String content = "【WerwerTrip】距离您预定的" + trainDate + " " + trainId + "车次的" + "列车发车时间已不足3小时，请您合理安排出行时间，以免错过列车。";
                     //System.out.println(content);
-                    messageService.addMessage(userId, Message.generateMessageId(), orderId, "行程提醒", now.toString(), content, false, "2");
+                    String Mcontent = "距离您预定的" + trainDate + " " + trainId + "车次的" + "列车发车时间已不足3小时，请您合理安排出行时间，以免错过列车。";
+                    messageService.addMessage(userId, Message.generateMessageId(), orderId, "行程提醒", now.toString(), Mcontent, false, "2");
                     emailService.sendSimpleMail(email, "行程提醒", content);
                     orderService.setMessageHaveSend(orderId);
                 }

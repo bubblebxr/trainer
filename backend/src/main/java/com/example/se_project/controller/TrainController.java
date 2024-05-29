@@ -121,18 +121,22 @@ public class TrainController {
         String userId = (String) map.get("userID");
         String trainId = (String) map.get("tid");
         String trainDate = (String) map.get("date");
-        String billTime = (String) map.get("bill_time");
+        //String billTime = (String) map.get("bill_time");
         Double total = Double.parseDouble((String) map.get("sum_price"));
 
         String oid = Order.generateOrderId();
 
-        orderService.addOrder(new Order(oid, userId, billTime, total, Order.OrderStatus.Paid, Order.OrderType.Train));
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        String formattedDate = formatter.format(date);
 
-        Integer num1=0,num2=0,num3=0,num4=0,num5=0,num6=0;
+        orderService.addOrder(new Order(oid, userId, formattedDate, total, Order.OrderStatus.Paid, Order.OrderType.Train));
+
+        Integer num1 = 0, num2 = 0, num3 = 0, num4 = 0, num5 = 0, num6 = 0;
 
         for (Map<String, String> person : persons) {
             String type = person.get("seat_type");
-            trainService.addTrainOrderDetail(oid, trainId, trainDate, person.get("name"), person.get("identification"),type);
+            trainService.addTrainOrderDetail(oid, trainId, trainDate, person.get("name"), person.get("identification"), type);
             switch (type) {
                 case "商务座":
                     num1 += 1;
@@ -154,19 +158,20 @@ public class TrainController {
                     break;
             }
         }
-        //trainService.
+        //火车数量--
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = new Date();
-        String formattedDate = formatter.format(date);
+//        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        Date date = new Date();
+//        String formattedDate = formatter.format(date);
 
         Map<String, Object> trainMap = trainService.getTrainByIdAndDate(trainId, trainDate);
         LocalDateTime startTime = (LocalDateTime) trainMap.get("startTime");
         String formattedStartTime = startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
         String content = "【WerwerTrip】您已成功购买" + trainDate + "由" + trainMap.get("startStation") + "站发往" + trainMap.get("arrivalStation") + "站的" + trainId + "次列车车票，发车时间" + formattedStartTime + "。请合理安排出行时间。";
+        String Mcontent = "您已成功购买" + trainDate + "由" + trainMap.get("startStation") + "站发往" + trainMap.get("arrivalStation") + "站的" + trainId + "次列车车票，发车时间" + formattedStartTime + "。请合理安排出行时间。";
 
-        messageService.addMessage(userId, Message.generateMessageId(), oid, "车票订单支付成功", formattedDate, content, false, "3");
+        messageService.addMessage(userId, Message.generateMessageId(), oid, "车票订单支付成功", formattedDate, Mcontent, false, "3");
 
         emailService.sendSimpleMail(userService.getEmail(userId), "火车订单支付成功", content);
         return new HashMap<>() {{
@@ -205,7 +210,8 @@ public class TrainController {
 
             //String content = "您已成功取消" +trainMap.getTrainDate() + " " + trainMap.getTrainId()+ "车次的列车" + food.getMealTime();
             String content = "【WerwerTrip】您已成功取消" + trainDate + "由" + train.get("startStation") + "站发往" + train.get("arrivalStation") + "站的" + trainId + "次列车车票";
-            messageService.addMessage(userID, Message.generateMessageId(), oid, "火车订单取消成功", formattedDate, content, false, "3");
+            String Mcontent = "您已成功取消" + trainDate + "由" + train.get("startStation") + "站发往" + train.get("arrivalStation") + "站的" + trainId + "次列车车票";
+            messageService.addMessage(userID, Message.generateMessageId(), oid, "火车订单取消成功", formattedDate, Mcontent, false, "3");
 
             emailService.sendSimpleMail(userService.getEmail(userID), "火车订单取消成功", content);
 
@@ -232,11 +238,12 @@ public class TrainController {
             HashMap<String, Object> map = new HashMap<>();
             String oid = order.getOid();
             List<TrainOrder> trainOrders = trainService.getTrainOrdersByOid(oid);
-
+            System.out.println(oid);
             String tid = trainOrders.get(0).getTrainId();
             String date = trainOrders.get(0).getTrainDate();
             Train train = trainService.getTrainByTidAndDate(tid, date);
 
+            System.out.println(tid + " " + date);
             map.put("tid", tid);
             map.put("cancel_time", order.getCancelTime());
             map.put("oid", order.getOid());

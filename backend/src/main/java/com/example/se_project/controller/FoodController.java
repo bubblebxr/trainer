@@ -124,8 +124,9 @@ public class FoodController {
 
         //Map<String, Object> trainMap = trainService.getTrainByIdAndDate(trainId,trainDate);
         String content = "【WerwerTrip】您成功预订了" + mealDate + " " + trainId + "车次的" + time + "。感谢您的购买，祝您用餐愉快！";
+        String Mcontent = "您成功预订了" + mealDate + " " + trainId + "车次的" + time + "。感谢您的购买，祝您用餐愉快！";
 
-        messageService.addMessage(userId,Message.generateMessageId(), oid, "餐饮订单支付成功", formattedDate, content, false, "5");
+        messageService.addMessage(userId,Message.generateMessageId(), oid, "餐饮订单支付成功", formattedDate, Mcontent, false, "5");
 
         emailService.sendSimpleMail(userService.getEmail(userId),"餐饮订单支付成功",content);
         return new HashMap<>() {{
@@ -208,7 +209,8 @@ public class FoodController {
             String formattedDate = formatter.format(date);
 
             String content = "【WerwerTrip】您已成功取消" +food.getMealDate() + " " + food.getTrainId()+ "车次的" + food.getMealTime();
-            messageService.addMessage(userID, Message.generateMessageId(), oid, "餐饮订单取消成功", formattedDate, content, false, "5");
+            String Mcontent = "您已成功取消" +food.getMealDate() + " " + food.getTrainId()+ "车次的" + food.getMealTime();
+            messageService.addMessage(userID, Message.generateMessageId(), oid, "餐饮订单取消成功", formattedDate, Mcontent, false, "5");
 
             emailService.sendSimpleMail(userService.getEmail(userID),"餐饮订单取消成功",content);
             return new HashMap<>() {{

@@ -1,6 +1,7 @@
 package com.example.se_project.controller;
 
 import com.example.se_project.entity.User;
+import com.example.se_project.service.IPassengerService;
 import com.example.se_project.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,8 @@ public class UserController {
     private IUserService userService;
     @Autowired
     private User user;
+    @Autowired
+    private IPassengerService passengerService;
 
     @PostMapping(value = "/register")
     public Map<String, Object> userRegister(@RequestBody Map<String, Object> registerMap) {
@@ -22,7 +25,7 @@ public class UserController {
         String name = registerMap.get("name").toString();
         String password = registerMap.get("password").toString();
         String email = registerMap.get("email").toString();
-        Integer time = Integer.parseInt(registerMap.get("time").toString());
+        int time = Integer.parseInt(registerMap.get("time").toString());
         Map<String, Object> map = new HashMap<>();
 
         //System.out.println(id);
@@ -40,7 +43,7 @@ public class UserController {
 //            return map;
 //        }
 
-
+        // email格式校验(支持中文)
         if (!email.matches("^[A-Za-z0-9\\u4e00-\\u9fa5]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$")) {
             map.put("result", false);
             map.put("reason", "email格式错误");
@@ -57,8 +60,9 @@ public class UserController {
             map.put("result", false);
             map.put("reason", "用户已注册");
         } else {
-            if(time==2){
+            if (time == 2) {
                 userService.registerUser(id, name, password, email);
+                //passengerService.addPassenger(name,id,)
             }
             map.put("result", true);
             map.put("reason", "注册成功");

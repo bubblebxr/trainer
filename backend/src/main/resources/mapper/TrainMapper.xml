@@ -21,43 +21,6 @@
                 AND type = 'Gaotie'
             </when>
         </choose>
-        AND (
-        <choose>
-            <when test="seat_type[0] == true">
-                businessSeatSurplus &gt; 0
-            </when>
-        </choose>
-        OR
-        <choose>
-            <when test="seat_type[1] == true">
-                firstClassSeatSurplus &gt; 0
-            </when>
-        </choose>
-        OR
-        <choose>
-            <when test="seat_type[2] == true">
-                secondClassSeatSurplus &gt; 0
-            </when>
-        </choose>
-        OR
-        <choose>
-            <when test="seat_type[3] == true">
-                softSleeperSurplus &gt; 0
-            </when>
-        </choose>
-        OR
-        <choose>
-            <when test="seat_type[4] == true">
-                hardSleeperSurplus &gt; 0
-            </when>
-        </choose>
-        OR
-        <choose>
-            <when test="seat_type[5] == true">
-                hardSeatSurplus &gt; 0
-            </when>
-        </choose>
-        )
         ORDER BY
         <choose>
             <when test="sort_type == 2">

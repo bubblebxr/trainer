@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -44,6 +45,8 @@ public class TrainController {
         // 解码路径变量
         start_city = URLDecoder.decode(start_city, StandardCharsets.UTF_8);
         arrive_city = URLDecoder.decode(arrive_city, StandardCharsets.UTF_8);
+//        System.out.println("input"+start_city+arrive_city);
+//        System.out.println("start end: " + URLEncoder.encode("上海", StandardCharsets.UTF_8) +"/"+ URLEncoder.encode("北京",StandardCharsets.UTF_8));
 
         List<Train> trains = trainService.searchTrain(start_city, arrive_city, date,
                 is_GD, sort_type, seat_type, isHide);
@@ -55,7 +58,6 @@ public class TrainController {
                 put("start_time", e.getStartTime());
                 put("arrive_time", e.getArrivalTime());
 
-                System.out.println(e.getDuration());
                 put("time", e.getDuration());
                 put("start_station", e.getStartStation());
                 put("arrive_station", e.getArrivalStation());
@@ -238,12 +240,10 @@ public class TrainController {
             HashMap<String, Object> map = new HashMap<>();
             String oid = order.getOid();
             List<TrainOrder> trainOrders = trainService.getTrainOrdersByOid(oid);
-            System.out.println(oid);
             String tid = trainOrders.get(0).getTrainId();
             String date = trainOrders.get(0).getTrainDate();
             Train train = trainService.getTrainByTidAndDate(tid, date);
 
-            System.out.println(tid + " " + date);
             map.put("tid", tid);
             map.put("cancel_time", order.getCancelTime());
             map.put("oid", order.getOid());

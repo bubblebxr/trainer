@@ -71,7 +71,7 @@
                             </el-select>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="name" label="姓名" width="200" />
+                    <el-table-column prop="name" label="姓名" width="100" />
                     <el-table-column label="证件类型" width="180">
                         <template #default="scope">
                             <el-text>中国居民身份证</el-text>

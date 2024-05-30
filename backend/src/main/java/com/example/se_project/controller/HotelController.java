@@ -315,7 +315,7 @@ public class HotelController {
 
             details.forEach(detail -> {
                 customers.add(detail.get("customerName"));
-                System.out.println(detail);
+                //System.out.println(detail);
             });
             map.put("customers", customers);
 

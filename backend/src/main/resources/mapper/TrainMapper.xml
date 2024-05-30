@@ -65,5 +65,21 @@
         from trainorders
         where oid=#{orderId}
     </select>
+    <update id="updateTrainSeat">
+        update trains
+        set businessSeatSurplus = businessSeatSurplus-#{num1}
+        and firstClassSeatSurplus = firstClassSeatSurplus-#{num2}
+        and secondClassSeatSurplus = secondClassSeatSurplus-#{num3}
+        and softSleeperSurplus = softSleeperSurplus-#{num4}
+        and hardSleeperSurplus = hardSleeperSurplus-#{num5}
+        and hardSeatSurplus = hardSeatSurplus-#{num6}
+        where trainId = #{trainId}
+        and date=#{trainDate}
+    </update>
+    <select id="getTrainState" resultType="Boolean">
+        select haveCanceled
+        from trains
+        where trainId = #{trainId} and date = #{trainDate}
+    </select>
 
 </mapper>

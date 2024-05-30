@@ -117,6 +117,7 @@ public class TrainController {
         }};
     }
 
+    // 火车结算
     @PostMapping("/ticket/bill")
     public Map<String, Object> submitTrainOrder(@RequestBody Map<String, Object> map) {
         List<Map<String, String>> persons = (List<Map<String, String>>) map.get("person");
@@ -134,7 +135,7 @@ public class TrainController {
 
         orderService.addOrder(new Order(oid, userId, formattedDate, total, Order.OrderStatus.Paid, Order.OrderType.Train));
 
-        Integer num1 = 0, num2 = 0, num3 = 0, num4 = 0, num5 = 0, num6 = 0;
+        int num1 = 0, num2 = 0, num3 = 0, num4 = 0, num5 = 0, num6 = 0;
 
         for (Map<String, String> person : persons) {
             String type = person.get("seat_type");
@@ -161,6 +162,8 @@ public class TrainController {
             }
         }
         //火车数量--
+        trainService.updateTrainSeat(trainId, trainDate, num1, num2, num3, num4, num5, num6);
+
 
 //        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 //        Date date = new Date();
@@ -183,8 +186,7 @@ public class TrainController {
 
     @PostMapping("/ticket/cancel/{userID}/{oid}")
     public Map<String, Object> cancelTrainOrder(@PathVariable String userID,
-                                                @PathVariable String oid,
-                                                @RequestBody Map<String, Object> map) {
+                                                @PathVariable String oid) {
         Order order = orderService.getOrderByOidAndUid(oid, userID);
         if (order == null) {
             return new HashMap<>() {{
@@ -193,22 +195,54 @@ public class TrainController {
             }};
         } else {
             orderService.cancelOrder(order);
-            String cancelTime = map.get("cancel_time").toString();
-            orderService.setCancelTime(oid, cancelTime);
 
-            TrainOrder trainMap = trainService.getTrainOrdersByOid(oid).get(0);
-            String trainId = trainMap.getTrainId();
-            String trainDate = trainMap.getTrainDate();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = new Date();
+            String formattedDate = formatter.format(date);
+
+            orderService.setCancelTime(oid, formattedDate);
+
+            List<TrainOrder> trainMap = trainService.getTrainOrdersByOid(oid);
+
+            int num1 = 0, num2 = 0, num3 = 0, num4 = 0, num5 = 0, num6 = 0;
+            for (TrainOrder orderDetail : trainMap) {
+                String type = orderDetail.getSeatType();
+                //trainService.addTrainOrderDetail(oid, trainId, trainDate, person.get("name"), person.get("identification"), type);
+                switch (type) {
+                    case "商务座":
+                        num1 -= 1;
+                        break;
+                    case "一等座":
+                        num2 -= 1;
+                        break;
+                    case "二等座":
+                        num3 -= 1;
+                        break;
+                    case "软卧":
+                        num4 -= 1;
+                        break;
+                    case "硬卧":
+                        num5 -= 1;
+                        break;
+                    case "硬座":
+                        num6 -= 1;
+                        break;
+                }
+            }
+
+            String trainId = trainMap.get(0).getTrainId();
+            String trainDate = trainMap.get(0).getTrainDate();
             Map<String, Object> train = trainService.getTrainByIdAndDate(trainId, trainDate);
+
+            // 恢复座位数
+            trainService.updateTrainSeat(trainId, trainDate, num1, num2, num3, num4, num5, num6);
+
 
             // 取消该trainOrder对应的foodOrder
             foodService.getFoodOrdersByTrain(trainId, trainDate).forEach(foodOrder -> {
                 orderService.cancelOrder(orderService.getOrder(foodOrder.getOid()));
             });
 
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date date = new Date();
-            String formattedDate = formatter.format(date);
 
             //String content = "您已成功取消" +trainMap.getTrainDate() + " " + trainMap.getTrainId()+ "车次的列车" + food.getMealTime();
             String content = "【WerwerTrip】您已成功取消" + trainDate + "由" + train.get("startStation") + "站发往" + train.get("arrivalStation") + "站的" + trainId + "次列车车票";
@@ -283,42 +317,40 @@ public class TrainController {
     @GetMapping("/getTid/{userID}")
     public Map<String, Object> getSelfOrder(@PathVariable String userID,
                                             @RequestParam(value = "status", defaultValue = "all") String status) {
-        List<Map<String, Object>> orders = new ArrayList<>();
-        if (status.equals("paid"))
-            status = "Paid";
-        else if (status.equals("cancel"))
-            status = "Canceled";
-        else if (status.equals("done"))
-            status = "Done";
-        if (status.equals("all"))
-            orders = orderService.getIdByUid(userID);
-        else
-            orders = orderService.getIdByUidAndStatus(userID, status);
+
+        // System.out.println("参数"+status);
+        List<Order> orders = switch (status) {
+            case "paid" -> orderService.getOrdersByUidAndStatus(userID, Order.OrderStatus.Paid, Order.OrderType.Train);
+            case "cancel" ->
+                    orderService.getOrdersByUidAndStatus(userID, Order.OrderStatus.Canceled, Order.OrderType.Train);
+            case "done" -> orderService.getOrdersByUidAndStatus(userID, Order.OrderStatus.Done, Order.OrderType.Train);
+            default -> orderService.getOrderByUid(userID, Order.OrderType.Train);
+        };
+
+
         List<Object> result = new ArrayList<>();
-        String orderStatus;
-        for (Map<String, Object> order : orders) {
-            Map<String, Object> orderMap = trainService.getSelfOrderDetail(order.get("oid").toString(), userID);
+        for (Order order : orders) {
+            Map<String, Object> orderMap = trainService.getSelfOrderDetail(order.getOid(), userID);
             if (orderMap != null) {
-                // System.out.println(order);
-                orderStatus = order.get("orderStatus").toString();
-                if (orderStatus.equals("Paid"))
-                    orderStatus = "已支付";
-                else if (orderStatus.equals("Canceled"))
-                    orderStatus = "已取消";
-                else if (orderStatus.equals("Done"))
-                    orderStatus = "已完成";
-                String finalOrderStatus = orderStatus;
+                System.out.println(order.getOrderStatus());
                 result.add(new HashMap<>() {{
                     put("tid", orderMap.get("trainId"));
-                    put("oid", order.get("oid"));
-                    put("status", finalOrderStatus);
+                    put("oid", order.getOid());
+                    put("status", switch (order.getOrderStatus()) {
+                        case Paid -> "已支付";
+                        case Done -> "已完成";
+                        case Canceled -> "已取消";
+                    });
+                    //put("status", finalOrderStatus);
 
                     Map<String, Object> trainMap = trainService.getTrainByIdAndDate(orderMap.get("trainId").toString(), orderMap.get("trainDate").toString());
                     LocalDateTime startTime = (LocalDateTime) trainMap.get("startTime");
                     String formattedStartTime = startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                     LocalDateTime arrivalTime = (LocalDateTime) trainMap.get("arrivalTime");
                     String formattedArrivalTime = arrivalTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-                    LocalDateTime billTime = (LocalDateTime) order.get("billTime");
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+                    LocalDateTime billTime = LocalDateTime.parse(order.getBillTime(), formatter);
                     String formattedBillTime = billTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
                     put("start_station", trainMap.get("startStation"));
@@ -329,7 +361,7 @@ public class TrainController {
                     put("arrive_station", trainMap.get("arrivalStation"));
                     put("date", orderMap.get("trainDate"));
                     put("seat_type", orderMap.get("seatType"));
-                    put("price", order.get("total"));
+                    put("price", order.getTotal());
                 }});
             }
 

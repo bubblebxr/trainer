@@ -27,6 +27,15 @@ public class Train {
     }
 
     private TrainType type;
+    private Boolean haveCanceled;
+
+    public Boolean getHaveCanceled() {
+        return haveCanceled;
+    }
+
+    public void setHaveCanceled(Boolean haveCanceled) {
+        this.haveCanceled = haveCanceled;
+    }
 
     public TrainType getType() {
         return type;

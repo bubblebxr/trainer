@@ -58,7 +58,7 @@ public class TrainServiceImpl implements ITrainService {
     }
 
     @Override
-    public String getStartTime(String trainId, String trainDate) {
+    public Map<String,Object> getStartTime(String trainId, String trainDate) {
         return trainMapper.getStartTime(trainId, trainDate);
     }
 
@@ -69,6 +69,11 @@ public class TrainServiceImpl implements ITrainService {
     @Override
     public void updateTrainSeat(String trainId, String trainDate, Integer num1, Integer num2, Integer num3, Integer num4, Integer num5, Integer num6){
         trainMapper.updateTrainSeat(trainId,trainDate,num1,num2,num3,num4,num5,num6);
+    }
+
+    @Override
+    public Boolean getTrainState(String trainId,String trainDate){
+        return trainMapper.getTrainState(trainId, trainDate);
     }
 
 }

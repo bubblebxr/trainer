@@ -56,25 +56,33 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public List<Map<String, Object>> getIdByUidAndStatus(String userID, String status) {
+    public List<Order> getIdByUidAndStatus(String userID, String status) {
         return orderMapper.getIdByUidAndStatus(userID, status);
     }
 
     @Override
-    public List<Map<String, Object>> getIdByUid(String userID) {
+    public List<Order> getIdByUid(String userID) {
         return orderMapper.getIdByUid(userID);
     }
 
     @Override
-    public List<Map<String, Object>> getAllTrain() {
+    public List<Order> getAllTrain() {
         return orderMapper.getAllTrainOrder();
     }
-@Override
-    public Boolean getMessageSend(String orderId){
+
+    @Override
+    public Boolean getMessageSend(String orderId) {
         return orderMapper.getMessageSend(orderId);
-}
-@Override
-    public void setMessageHaveSend(String orderId){
+    }
+
+    @Override
+    public void setMessageHaveSend(String orderId) {
         orderMapper.setMessageHaveSend(orderId);
-}
+    }
+
+    @Override
+    public void finishOrder(String oid) {
+        orderMapper.finishOrder(oid);
+    }
+
 }

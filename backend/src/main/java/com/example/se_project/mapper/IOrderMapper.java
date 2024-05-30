@@ -34,18 +34,21 @@ public interface IOrderMapper {
     @Update("update orders set cancelTime = #{cancelTime} where oid=#{oid}")
     void setCancelTime(String oid, String cancelTime);
 
-    @Select("select oid,orderStatus,total,billTime from orders where uid=#{userID} and orderType='Train'")
-    List<Map<String, Object>> getIdByUid(String userID);
+    @Select("select * from orders where uid=#{userID} and orderType='Train'")
+    List<Order> getIdByUid(String userID);
 
-    @Select("select oid from orders where uid=#{userID} and orderStatus=#{status} and orderType='Train'")
-    List<Map<String, Object>> getIdByUidAndStatus(String userID, String status);
+    @Select("select * from orders where uid=#{userID} and orderStatus=#{status} and orderType='Train'")
+    List<Order> getIdByUidAndStatus(String userID, String status);
 
-    @Select("select * from orders where orderType='Train' and orderStatus='Paid'")
-    List<Map<String, Object>> getAllTrainOrder();
+    @Select("select * from orders where orderStatus='Paid'")
+    List<Order> getAllTrainOrder();
 
     @Select("select haveSend from orders where oid=#{orderId}")
     Boolean getMessageSend(String orderId);
 
     @Update("update orders set haveSend = true where oid = #{orderId}")
     void setMessageHaveSend(String orderId);
+
+    @Update("update orders set orderStatus = 'Done' where oid = #{oid}")
+    void finishOrder(String oid);
 }

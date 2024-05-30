@@ -25,14 +25,16 @@ public interface IOrderService {
 
     void setCancelTime(String oid, String cancelTime);
 
-    List<Map<String, Object>> getIdByUid(String userID);
+    List<Order> getIdByUid(String userID);
 
-    List<Map<String, Object>> getIdByUidAndStatus(String userID, String status);
+    List<Order> getIdByUidAndStatus(String userID, String status);
 
-    List<Map<String, Object>> getAllTrain();
+    List<Order> getAllTrain();
 
     Boolean getMessageSend(String orderId);
 
     void setMessageHaveSend(String orderId);
+
+    void finishOrder(String oid);
 
 }

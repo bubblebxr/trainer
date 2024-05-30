@@ -6,9 +6,9 @@
       <div class="select">
         <el-autocomplete v-model="arrive_station" :fetch-suggestions="queryStation" placeholder="到达地"
           class="item" @select="handleArrive" clearable :popper-class="popperClass" />
-        <el-date-picker class="item" v-model="arrive_date" type="date" placeholder="到达时间" :shortcuts="shortcuts"
+        <el-date-picker class="item" v-model="arrive_date" type="date" placeholder="到达时间" :shortcuts="shortcuts" :disabled-date="disabledDate"
           :size="20" @change="checkTime" format="YYYY-MM-DD" value-format="YYYY-MM-DD"/>
-        <el-date-picker class="item" v-model="Ideparture_date" type="date" placeholder="离开时间" :shortcuts="shortcuts"
+        <el-date-picker class="item" v-model="Ideparture_date" type="date" placeholder="离开时间" :shortcuts="shortcuts" :disabled-date="disabledDate"
           :size="20" @change="checkTime" format="YYYY-MM-DD" value-format="YYYY-MM-DD"/>
         <el-icon style="width: 30px;">
           <Search @click="search"
@@ -173,8 +173,18 @@ const fetchSearchResult = async () => {
   try {
     const response = await getHotel(arrive_station.value,arrive_date.value,Ideparture_date.value,sort_type.value);
     var a = response.data.result;
-    listData = a;
-    console.log("获取查询信息成功", a);
+    listData.value = a;
+    if(listData.value.length === 0){
+      ElMessage({
+        message: '暂无数据可显示',
+      })
+    }else{
+      ElMessage({
+        message: '查询成功',
+        type: 'success',
+      })
+      console.log("获取查询信息成功", a);
+    }
     //重新加载页面
       window.location.href = window.location.href;
   } catch (error) {
@@ -202,16 +212,13 @@ const search = () => {
         })
     } else if (searchValid.value === true) {
         ElMessage({
-            message: '没有查询到酒店',
+            message: '没有检索到该地点',
             type: 'error',
             plain: true,
         })
     } else {
         fetchSearchResult();
-        ElMessage({
-            message: '查询成功',
-            type: 'success',
-        })
+        
     }
 }
 

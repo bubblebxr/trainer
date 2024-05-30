@@ -6,8 +6,8 @@ export const getStation = () => {
 
 export const getSearchResult = (startCity, arriveCity, date, isGD, sortType, seatType, isHide) => {
     const queryString = `?is_GD=${isGD}&sort_type=${sortType}&seat_type=${seatType}&isHide=${isHide}`;
-    const start=encodeURIComponent(startCity);
-    const arrive=encodeURIComponent(arriveCity);
+    const start = encodeURIComponent(startCity);
+    const arrive = encodeURIComponent(arriveCity);
     return api.post(`/trains/${start}/${arrive}/${date}${queryString}`);
 };
 
@@ -72,9 +72,10 @@ export const getPassengers = (id) => {
     return api.post(`/passengersInfo/${id}`);
 };
 
-export const deletePassengers = (id, identification) => {
-    const queryString = `?identification=${identification}`;
-    return api.delete(`/deletePassengers/${id}${queryString}`);
+/* 删除乘车人 */
+export const deletePassengers = (id,name, identification) => {
+    const queryString = `?name=${encodeURIComponent(name)}&identification=${identification}`;
+    return api.post(`/deletePassengers/${id}${queryString}`);
 };
 
 export const updatePassengers = (id, oldidentification, newname, newidentification, newphone) => {
@@ -90,7 +91,6 @@ export const insertPassengers = (id, name, identification, phone) => {
 /*提交火车票订单*/
 export const postTicketBill = (persons, userID, tid, date, sum_price) => {
     var person = JSON.parse(persons);
-    // console.log(person.seat_type);
     return api.post(`/ticket/bill`,
         {
             "person": person,
@@ -175,12 +175,13 @@ export const cancelHotelOrder = (userID, oid) => {
 }
 
 /*提交个人注册信息*/
-export const postRegister = (userID, name, password, email) => {
+export const postRegister = (userID, name, password, email, time) => {
     return api.post(`/register`, {
         "id": userID,
         "name": name,
         "password": password,
-        "email": email
+        "email": email,
+        "time": time
     }, {
         headers: {
             'Content-Type': 'application/json'

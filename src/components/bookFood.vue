@@ -118,7 +118,7 @@ import foodCart from "./foodCart.vue";
 import { getFoods, getThisTicket, postFoodBill } from "@/api/api";
 import { useRouter } from "vue-router";
 const router = useRouter();
-import { ElMessage,ElNotification  } from "element-plus";
+import { ElMessage,ElNotification,ElMessageBox  } from "element-plus";
 const userID = localStorage.getItem('user_id'); //当前用户ID
 const tid = ref("");
 const date = ref(""); 
@@ -174,7 +174,7 @@ const fetchTids = async () => {
 };
 const submitBill = async (sum_price) =>{
   try{
-  const responce = await (order_foods.value, userID, tid.value, date.value, time.value, sum_price);
+  const responce = await postFoodBill(order_foods.value, userID, tid.value, date.value, time.value, sum_price);
   if(responce.data.result)
   {ElNotification({
     title: '订单已提交',
@@ -192,7 +192,7 @@ const submitBill = async (sum_price) =>{
     console.log("提交订单失败：",error);
     ElNotification({
     title: '提交订单失败T^T',
-    message: '网络似乎开小差了~',
+    message: '网络似乎开小差了',
     type: 'error',
   })
   }
@@ -210,6 +210,14 @@ watch(
 );
 onMounted(() => {
   fetchTids();
+  console.log("已购车票：",Paidticket.value);
+  if(Paidticket.value){
+    ElMessageBox.alert('只有订好车票后才能订火车餐哦', '您还没有订购车票', {
+    confirmButtonText: '我知道了',
+    callback: (action) => {
+    },
+  })
+  }
   tid.value = router.currentRoute.value.query.tid;
   date.value=router.currentRoute.value.query.date;
 });

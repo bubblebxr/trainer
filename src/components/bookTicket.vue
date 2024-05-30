@@ -81,7 +81,7 @@
             </el-row>
         </div>
         <div style="margin-top:0.2%;  width:100%;display: block;padding-left:1%;margin-bottom:3%;">
-            <el-table :data="searchResult" height="520" :header-cell-style="{ background: '#8abbe7', color: 'white', }"
+            <el-table :data="searchResult" height="480" :header-cell-style="{ background: '#8abbe7', color: 'white', }"
                 empty-text="没有列车信息">
                 <el-table-column prop="tid" label="车次" width="160">
                     <template #default="scope">
@@ -328,6 +328,18 @@ const fetchSearchResult = async () => {
             }
             searchResult.value = a;
             console.log("获取查询信息成功", a);
+            if (searchResult.value.length == 0) {
+                ElMessage({
+                    message: '您所查询的时间暂时没有班次~',
+                    type: 'info',
+                })
+            } else {
+                ElMessage({
+                    message: '查询成功',
+                    type: 'success',
+                })
+            }
+            show.value = true;
         } catch (error) {
             console.error('获取查询信息失败', error);
         }
@@ -348,18 +360,6 @@ const search = () => {
         })
     } else {
         fetchSearchResult();
-        if(searchResult.value.length==0){
-            ElMessage({
-                message: '您所查询的时间暂时没有班次~',
-                type: 'info',
-            })
-        }else{
-            ElMessage({
-                message: '查询成功',
-                type: 'success',
-            })
-        }
-        show.value = true;
     }
 }
 const startInvalid = ref(false);

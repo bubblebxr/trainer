@@ -63,27 +63,23 @@
               <a-button @click="login" style="width:170px;">
                 登录
               </a-button>
-              <a-modal v-model:open="openLogin" title="登录" @ok="handleLoginOk">
-                <div style="margin-top:20px;">
-                  <el-input v-model="my_id" style="max-width: 600px;height: 40px;" placeholder="输入身份证号">
+              <a-modal v-model:open="openLogin" title="登录"  style="color:white" :cancel-button-props="{ style: { display: 'none' } }" :ok-button-props="{ style: { display: 'none' } }">
+                <div style="margin-top:13px;">
+                  <el-input v-model="my_id" style="max-width: 600px;height: 40px;" placeholder="输入身份证号" :prefix-icon="User">
                     
                   </el-input>
                 </div>
-                <div style="margin-top:20px;">
-                  <el-input v-model="my_password" style="max-width: 600px;height: 40px;" placeholder="输入密码">
+                <div style="margin-top:13px;">
+                  <el-input show-password v-model="my_password" style="max-width: 600px;height: 40px;" placeholder="输入密码" :prefix-icon="Lock">
                     
                   </el-input>
                 </div>
-                <button
-                  style="
-                    margin-top: 20px;
-                    color: #61bbff;
-                    text-decoration: underline;
-                  "
-                  @click="changeToRegister"
-                >
+                <button style="margin-top:8px;color:#61bbff;text-decoration:underline;" @click="changeToRegister">
                   先去注册
                 </button>
+                <div style="display: flex; justify-content: center;margin-top:17px;">
+                  <el-button style="width:470px;height:36px;font-size:17px;letter-spacing: 2px;" type="primary" @click="handleLoginOk">登录 </el-button>
+                </div>
               </a-modal>
             </div>
             <!-- 注册 -->
@@ -94,58 +90,42 @@
               >
                 注册
               </a-button>
-              <a-modal v-model:open="openRegister" title="注册" @ok="handleRegisterOk" ok-text="确认信息" style="color:white"
-                :cancel-button-props="{ style: { display: 'none' } }">
-                <div style="margin-top:20px;">
-                  <el-input v-model="my_id" style="max-width: 600px;height: 40px;" placeholder="输入身份证号">
+              <a-modal v-model:open="openRegister" title="注册" style="color:white"
+                :cancel-button-props="{ style: { display: 'none' } }" :ok-button-props="{ style: { display: 'none' } }" >
+                <div style="margin-top:13px;">
+                  <el-input v-model="my_id" style="max-width: 600px;height: 40px;" placeholder="输入身份证号" :prefix-icon="Document">
                     
                   </el-input>
                 </div>
-                <div style="margin-top:20px;">
-                  <el-input v-model="my_name" style="max-width: 600px;height: 40px;" placeholder="输入姓名">
+                <div style="margin-top:13px;">
+                  <el-input v-model="my_name" style="max-width: 600px;height: 40px;" placeholder="输入姓名" :prefix-icon="User">
                     
                   </el-input>
                 </div>
-                <div style="margin-top:20px;">
-                  <el-input v-model="my_password" style="max-width: 600px;height: 40px;" placeholder="输入密码">
+                <div style="margin-top:13px;">
+                  <el-input show-password v-model="my_password" style="max-width: 600px;height: 40px;" placeholder="输入密码" :prefix-icon="Lock">
                     
                   </el-input>
                 </div>
-                <div style="margin-top:20px;">
-                  <el-input v-model="my_email" style="max-width: 600px;height: 40px;" placeholder="输入邮箱">
+                <div style="margin-top:13px;">
+                  <el-input v-model="my_email" style="max-width: 600px;height: 40px;" placeholder="输入邮箱" :prefix-icon="Message">
                    
                   </el-input>
                 </div>
+                <div style="display: flex; justify-content: center;margin-top:17px;">
+                  <el-button style="width:470px;height:36px;font-size:17px;letter-spacing: 2px;" type="primary" @click="handleRegisterOk">提交信息</el-button>
+                </div>
               </a-modal>
             </div>
-            <a-modal
-              v-model:open="openVerification"
-              title="注册"
-              :cancel-button-props="{ style: { display: 'none' } }"
-              :ok-button-props="{ style: { display: 'none' } }"
-            >
-              <div style="margin-top: 20px">
-                <el-button
-                  style="width: 100px; margin-right: 20px"
-                  @click="sendVerificationOk"
-                  :disabled="countingDown"
-                >
-                  {{ buttonText }}
-                </el-button>
-                <el-input
-                  v-model="my_code"
-                  style="max-width: 230px"
-                  placeholder="输入验证码"
-                >
-                  <template #prepend>验证码</template>
+            <a-modal v-model:open="openVerification" title="注册" :cancel-button-props="{ style: { display: 'none' } }" width="400px"
+              :ok-button-props="{ style: { display: 'none' } }">
+
+              <div style="margin-top:20px;">
+                <el-input v-model="my_code" style="max-width: 230px" placeholder="输入验证码" :prefix-icon="Check">
                 </el-input>
-                <el-button
-                  @click="handleVerificationOk"
-                  style="margin-left: 20px"
-                  type="primary"
-                >
-                  提交验证码
-                </el-button>
+                <el-button style="width:100px;margin-left:20px;" @click="sendVerificationOk" :disabled="countingDown">
+                  {{buttonText }} </el-button>
+                <el-button @click="handleVerificationOk" style="width:350px;margin-top:17px;color:white" type="primary"> 提交验证码 </el-button>
               </div>
             </a-modal>
           </el-popover>
@@ -198,6 +178,7 @@
           style="border-radius: 15px; margin-bottom: 5%"
           @click="
             item.haveRead = true;
+            setRead(item.mid);
             jumpToOrder(item.orderType, item.orderId);
           "
         >
@@ -228,8 +209,9 @@
 import { ref, onMounted, computed, inject,provide } from "vue";
 import { useRouter } from "vue-router";
 import eventBus from "@/eventBus.js";
-import { getMessage } from "@/api/api.js";
-import { ElMessage, ElMessageBox } from "element-plus";
+import { getMessage ,haveReadMessage} from "@/api/api.js";
+import { ElMessage, ElMessageBox } from 'element-plus'
+import {User,Lock,Message,Document,Check} from '@element-plus/icons-vue'
 const router = useRouter();
 const activeIndex = ref("1");
 provide('activeIndex', activeIndex);
@@ -289,31 +271,19 @@ const selectMenu = (key) => {
     }
   }
 };
-// const message = ref([
-//   {
-//     title: "车票提醒",
-//     messageTime: "2020-03-10",
-//     content:
-//       "您已购买2024-05-09 G5车次 杭州--->北京车次，发车时间05月09日08:00。请合理安排出行时间。",
-//     haveRead: true,
-//     orderType:"3",
-//     orderId: "string3",
-//   },
-//   {
-//     title: "订单取消",
-//     messageTime: "2024-09-12",
-//     content: "您已下单2024-10-20 G81车次 午餐餐品。将由列车员送到座位上。",
-//     haveRead: false,
-//     orderType:"5",
-//     orderId: "string4",
-//   },
-// ]);
 const message = ref([]);
 const userID = localStorage.getItem("user_id");
 const unReadNum = computed(() => {
   return message.value.filter((msg) => !msg.haveRead).length;
 });
-
+//设置已读
+const setRead = async (mid)=>{
+  try{
+    haveReadMessage(mid);
+  }catch(error){
+    console.log("设置已读失败,消息id为：",mid);
+  }
+}
 //登录
 
 import { postLogin } from "@/api/api";
@@ -378,12 +348,7 @@ const register = () => {
 
 const postmyRegister = async () => {
   try {
-    const response = await postRegister(
-      my_id.value,
-      my_name.value,
-      my_password.value,
-      my_email.value
-    );
+    const response = await postRegister(my_id.value, my_name.value, my_password.value, my_email.value,1);
     if (response.data.result) {
       ElMessage({
         message: "提交成功",
@@ -403,6 +368,25 @@ const postmyRegister = async () => {
   }
 };
 //发送验证码
+const verifymyRegister = async () => {
+  try {
+    const response = await postRegister(my_id.value, my_name.value, my_password.value, my_email.value,2);
+    if (response.data.result) {
+      ElMessage({
+        message: "注册成功",
+        type: "success",
+      });
+      localStorage.setItem('user_id', my_id.value);
+      localStorage.setItem('email', my_email.value);
+      localStorage.setItem('password', my_password.value);
+      localStorage.setItem('name', my_name.value);
+    } else {
+      ElMessage.error("注册失败:" + response.data.reason);
+    }
+  } catch (error) {
+    console.error("注册失败:", error);
+  }
+}
 
 const sendVerificationOk = async () => {
   try {
@@ -428,10 +412,7 @@ const handleVerificationOk = async () => {
   try {
     const response = await postCodeVeryfication(my_code.value, my_email.value);
     if (response.data.result) {
-      ElMessage({
-        message: "注册成功",
-        type: "success",
-      });
+      verifymyRegister();
       openVerification.value = false;
       localStorage.setItem("isLoggedIn", true);
       updateUI();
@@ -444,6 +425,7 @@ const handleVerificationOk = async () => {
     console.error("验证码发送失败:", error);
   }
 };
+
 //倒计时
 const countdownSeconds = 120;
 const countingDown = ref(false);
@@ -604,4 +586,5 @@ const jumpToOrder = (orderType, orderId) => {
 .menu-change {
   height: 100%;
 }
+
 </style>

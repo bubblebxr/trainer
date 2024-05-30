@@ -254,7 +254,6 @@ const ordersCommit = async () => {
         var temp = value.value[i].match(regex)[1];
         info.push({ name: passengersTable.value[i]['name'], identification: passengersTable.value[i]['identification'], seat_type: temp });
     }
-    // console.log(info);
     try {
         const responce = await postTicketBill(
             JSON.stringify(info),
@@ -311,17 +310,11 @@ const getInfo = async () => {
     }
 };
 const handleChecked = (e) => {
-    // console.log("handle!" + e);
-    const temp = person.value.filter(name => !e.includes(name));
-    for (var i = 0; i < temp.length; i++) {
-        value.value.pop(i);
-        passengersTable.value.pop(passengers.value.find(p => p.name === temp[i]));
-    }
+    console.log("handle!" + e);
+    passengersTable.value=[];
     for (var i = 0; i < e.length; i++) {
-        if (!passengersTable.value.find(passenger => passenger.name === e[i])) {
-            passengersTable.value.push(passengers.value.find(p => p.name === e[i]));
-            value.value[passengersTable.value.length - 1] = options.value[0];
-        }
+        passengersTable.value.push(passengers.value.find(p => p.name === e[i]));
+        value.value[passengersTable.value.length - 1] = options.value[0];
     }
 };
 const singleDelete = async (index) => {

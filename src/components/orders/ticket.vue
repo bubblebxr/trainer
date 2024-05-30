@@ -154,6 +154,7 @@ const scrollToOrder = (orderId) => {
 };
 const cancelOrders = async (oid,tid) => {
     try {
+        console.log(oid);
         const responce = await cancelTicketOrder(userID, oid);
         if (responce.data.result) {
             ElMessage({
@@ -188,8 +189,8 @@ const hideMiddle = (val) => {
 }
 const getOrders = async () => {
     try {
-        const response = await getTicketOrders(userID, status.value);
         console.log(status.value);
+        const response = await getTicketOrders(userID, status.value);
         ticketOrders.value = response.data.result;
     } catch (error) {
         console.error("获取火车票订单数组失败:", error);

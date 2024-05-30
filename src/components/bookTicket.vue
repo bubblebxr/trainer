@@ -9,8 +9,8 @@
                 </el-icon>
                 <el-autocomplete v-model="destinationStation" :fetch-suggestions="queryStartStation" placeholder="到达地"
                     class="item" @select="handleDestination" clearable :popper-class="popperClass" />
-                <el-date-picker class="item" v-model="date" type="date" placeholder="出发日期" :shortcuts="shortcuts" value-format="YYYY-MM-DD"
-                    :size="20" :disabled-date="disabledDate" />
+                <el-date-picker class="item" v-model="date" type="date" placeholder="出发日期" :shortcuts="shortcuts"
+                    value-format="YYYY-MM-DD" :size="20" :disabled-date="disabledDate" />
                 <el-icon style="width:30px;">
                     <Search @click="search"
                         style="background-color:orange;width:30px;;height:200%;border-radius: 5px;" />
@@ -69,11 +69,11 @@
                 </el-col>
             </el-row>
         </div>
-        <div style="margin-top:0.7%;  width:100%; height:3%;display: block;padding-left:1%;" v-if="show===true">
+        <div style="margin-top:0.7%;  width:100%; height:3%;display: block;padding-left:1%;" v-if="show === true">
             <el-row :gutter="40">
                 <el-col :span="9">
                     <el-text tag="i" style="color:gray;">{{ startStation }}到{{ destinationStation }}共{{
-                        searchResult.length}}个车次</el-text>
+                    searchResult.length }}个车次</el-text>
                 </el-col>
                 <el-col :span="2" style="margin-top:-0.7%;" :offset="12">
                     <el-checkbox v-model="isHide" label="隐藏冲突列车信息" size="large" />
@@ -88,9 +88,10 @@
                         <el-popover effect="light" trigger="hover" placement="right" width="auto">
                             <template #default>
                                 <el-table :data="scope.row.station_info">
-                                    <el-table-column width="100" property="id" label="站序" />
-                                    <el-table-column width="100" property="arrive" label="到站时间" />
-                                    <el-table-column width="100" property="departure" label="出发时间" />
+                                    <el-table-column width="50" property="id" label="站序" />
+                                    <el-table-column width="70" property="name" label="站名" />
+                                    <el-table-column width="250" property="arrive" label="到站时间" />
+                                    <el-table-column width="250" property="departure" label="出发时间" />
                                     <el-table-column width="100" property="stop" label="停留时间" />
                                 </el-table>
                             </template>
@@ -157,7 +158,7 @@ import { ref, onMounted, watch, watchEffect } from 'vue'
 import { getStation, getSearchResult } from '../api/api';
 import { ElMessage } from 'element-plus'
 import { useRouter, useRoute } from "vue-router";
-const show=ref(false);
+const show = ref(false);
 const router = useRouter();
 const route = useRoute()
 const date = ref('');/**出发时间 */
@@ -187,14 +188,14 @@ const submitTicket = (lineIndex) => {
     // });
     // window.open(url.value.href,"_blank");
     isLoggedIn.value = localStorage.getItem('isLoggedIn');
-    if (isLoggedIn.value === "true"){
+    if (isLoggedIn.value === "true") {
         router.push({
             path: "/home/ticketDetail",
             query: {
                 line: JSON.stringify(searchResult.value[lineIndex]),
             },
         });
-    }else{
+    } else {
         ElMessage({
             message: '请先登录',
             type: 'error',
@@ -235,6 +236,8 @@ const fetchSearchResult = async () => {
                 delete a[i].start_station;
                 delete a[i].arrive_station;
                 if (a[i].business) {
+                    a[i].business_remain = a[i].business.remain;
+                    a[i].business_price = a[i].business.price;
                     if (a[i].business.remain != 0) {
                         var temp = a[i].business.price;
                         delete a[i].business;
@@ -242,11 +245,14 @@ const fetchSearchResult = async () => {
                     } else {
                         delete a[i].business;
                         a[i].business = "无票";
+                        a[i].business_remain = "无票";
                     }
                 } else {
                     a[i].business = "无票";
                 }
                 if (a[i].one) {
+                    a[i].one_remain = a[i].one.remain;
+                    a[i].one_price = a[i].one.price;
                     if (a[i].one.remain != 0) {
                         var temp = a[i].one.price;
                         delete a[i].one;
@@ -254,11 +260,14 @@ const fetchSearchResult = async () => {
                     } else {
                         delete a[i].one;
                         a[i].one = "无票";
+                        a[i].one_remain = "无票";
                     }
                 } else {
                     a[i].one = "无票";
                 }
                 if (a[i].two) {
+                    a[i].two_remain = a[i].two.remain;
+                    a[i].two_price = a[i].two.price;
                     if (a[i].two.remain != 0) {
                         var temp = a[i].two.price;
                         delete a[i].two;
@@ -266,11 +275,14 @@ const fetchSearchResult = async () => {
                     } else {
                         delete a[i].two;
                         a[i].two = "无票";
+                        a[i].two_remain = "无票";
                     }
                 } else {
                     a[i].two = "无票";
                 }
                 if (a[i].soft_sleeper) {
+                    a[i].soft_sleeper_remain = a[i].soft_sleeper.remain;
+                    a[i].soft_sleeper_price = a[i].soft_sleeper.price;
                     if (a[i].soft_sleeper.remain != 0) {
                         var temp = a[i].soft_sleeper.price;
                         delete a[i].soft_sleeper;
@@ -278,11 +290,14 @@ const fetchSearchResult = async () => {
                     } else {
                         delete a[i].soft_sleeper;
                         a[i].soft_sleeper = "无票";
+                        a[i].soft_sleeper_remain = "无票";
                     }
                 } else {
                     a[i].soft_sleeper = "无票";
                 }
                 if (a[i].hard_sleeper) {
+                    a[i].hard_sleeper_remain = a[i].hard_sleeper.remain;
+                    a[i].hard_sleeper_price = a[i].hard_sleeper.price;
                     if (a[i].hard_sleeper.remain != 0) {
                         var temp = a[i].hard_sleeper.price;
                         delete a[i].hard_sleeper;
@@ -290,11 +305,14 @@ const fetchSearchResult = async () => {
                     } else {
                         delete a[i].hard_sleeper;
                         a[i].hard_sleeper = "无票";
+                        a[i].hard_sleeper_remain = "无票";
                     }
                 } else {
                     a[i].hard_sleeper = "无票";
                 }
                 if (a[i].hard_seat) {
+                    a[i].hard_seat_remain = a[i].hard_seat.remain;
+                    a[i].hard_seat_price = a[i].hard_seat.price;
                     if (a[i].hard_seat.remain != 0) {
                         var temp = a[i].hard_seat.price;
                         delete a[i].hard_seat;
@@ -302,6 +320,7 @@ const fetchSearchResult = async () => {
                     } else {
                         delete a[i].hard_seat;
                         a[i].hard_seat = "无票";
+                        a[i].hard_seat_remain = "无票";
                     }
                 } else {
                     a[i].hard_seat = "无票";
@@ -309,6 +328,18 @@ const fetchSearchResult = async () => {
             }
             searchResult.value = a;
             console.log("获取查询信息成功", a);
+            if (searchResult.value.length == 0) {
+                ElMessage({
+                    message: '您所查询的时间暂时没有班次~',
+                    type: 'info',
+                })
+            } else {
+                ElMessage({
+                    message: '查询成功',
+                    type: 'success',
+                })
+            }
+            show.value = true;
         } catch (error) {
             console.error('获取查询信息失败', error);
         }
@@ -329,12 +360,6 @@ const search = () => {
         })
     } else {
         fetchSearchResult();
-        ElMessage({
-            message: '查询成功',
-            type: 'success',
-            plain: true,
-        })
-        show.value=true;
     }
 }
 const startInvalid = ref(false);

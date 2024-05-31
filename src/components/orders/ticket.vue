@@ -159,10 +159,6 @@ const cancelOrders = async (oid,tid) => {
         console.log(oid);
         const responce = await cancelTicketOrder(userID, oid);
         if (responce.data.result) {
-            ElMessage({
-                message: '取消订单成功，退款将原路返回。',
-                type: "success",
-            });
             ElNotification({
                 title: '退票成功',
                 message: "您成功取消了" + tid + "班次的列车，如果您预定了此班次的火车餐也将为您取消，退款将于1~5个工作日原路返回。",
@@ -171,7 +167,7 @@ const cancelOrders = async (oid,tid) => {
             emitter.emit('getAllMessage');
         }
         else {
-            ElMessage.error("取消订单失败~");
+            ElMessage.error("取消订单失败");
         }
     } catch (error) {
         console.error("取消订单失败", error);

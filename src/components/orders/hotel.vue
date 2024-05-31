@@ -78,13 +78,9 @@ const cancelOrders=async(oid)=>{
     try {
         const responce = await cancelHotelOrder(userID, oid);
         if (responce.data.result) {
-            ElMessage({
-                message: '取消订单成功，退款将原路返回。',
-                type: "success",
-            });
             ElNotification({
                 title: '取消订单成功',
-                message: "",//TODO
+                message: "退款将于1~5个工作日原路返回。",//TODO
                 type: 'success',
             });
             emitter.emit('getAllMessage');

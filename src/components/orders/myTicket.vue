@@ -69,7 +69,7 @@
 <script setup>
 import { onMounted, ref, watch } from "vue";
 import { getThisTicket, cancelTicketOrder } from "../../api/api.js";
-import { ElMessage } from "element-plus";
+import { ElMessage,ElNotification } from "element-plus";
 import emitter from '@/emitter.js';
 
 const status = ref("all");
@@ -79,10 +79,6 @@ const cancelOrders = async (oid) => {
     try {
         const responce = await cancelTicketOrder(userID, oid);
         if (responce.data.result) {
-            ElMessage({
-                message: '取消订单成功，退款将原路返回。',
-                type: "success",
-            });
             ElNotification({
                 title: '退票成功',
                 message: "您成功取消了" + tid + "班次的列车，如果您预定了此班次的火车餐也将为您取消，退款将于1~5个工作日原路返回。",

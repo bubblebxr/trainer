@@ -157,7 +157,7 @@ const cancelOrder = async (oid) => {
     if (responce.data.result) {
       ElNotification({
         title: "订单取消提醒",
-        message: "您刚刚取消了一个火车餐订单，订单号为" + oid,
+        message: "您刚刚取消了单号为" + oid +"的火车餐订单,退款将于1~5个工作日原路返回。",
         type: "success",
       });
       emitter.emit('getAllMessage');

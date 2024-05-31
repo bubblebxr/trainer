@@ -140,6 +140,8 @@ import { onMounted, ref, watch } from "vue";
 import { getTicketOrders, cancelTicketOrder } from "../../api/api.js";
 import { ElMessage, ElNotification } from "element-plus";
 import { useRoute } from "vue-router";
+import emitter from '@/emitter.js';
+
 const status = ref("all");
 const userID = localStorage.getItem('user_id');
 const ticketOrders = ref([]);
@@ -163,9 +165,10 @@ const cancelOrders = async (oid,tid) => {
             });
             ElNotification({
                 title: '退票成功',
-                message: "您成功取消了" + tid + "班次的列车，如果您预定了此班次的火车餐也已自动帮您取消，退款将于1~5个工作日原路返回。",
+                message: "您成功取消了" + tid + "班次的列车，如果您预定了此班次的火车餐也将为您取消，退款将于1~5个工作日原路返回。",
                 type: 'success',
             });
+            emitter.emit('getAllMessage');
         }
         else {
             ElMessage.error("取消订单失败~");
@@ -200,6 +203,14 @@ watch(status, (newValue) => {
     console.log("状态切换为", newValue);
     getOrders();
 });
+watch(route,(newValue)=>{
+    console.log('orderId changed:', newValue.query.orderId);
+    if(newValue.query.orderId){
+        setTimeout(() => {
+      scrollToOrder(newValue.query.orderId);
+    }, 500);
+    }
+});
 onMounted(() => {
     getOrders();
     const orderId = route.query.orderId;
@@ -209,6 +220,7 @@ onMounted(() => {
     }, 500);
   }
 });
+setInterval(getOrders,60000);
 </script>
 <style scoped>
 .el-card /deep/ .el-card__header {

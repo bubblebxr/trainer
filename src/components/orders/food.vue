@@ -205,7 +205,15 @@ watch(status, (newValue) => {
   console.log("状态切换为", newValue);
   getOrders();
 });
-//setInterval(getOrders,1000);
+watch(route,(newValue)=>{
+    console.log('orderId changed:', newValue.query.orderId);
+    if(newValue.query.orderId){
+        setTimeout(() => {
+      scrollToOrder(newValue.query.orderId);
+    }, 500);
+    }
+});
+setInterval(getOrders,60000);
 </script>
 
 <style scoped>

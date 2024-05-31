@@ -524,7 +524,6 @@ const getAllMessage = async () => {
 const jumpToOrder = (orderType, orderId) => {
   eventBus.HeaderKey = "4";
   activeIndex.value = "4";
-  //TODO 依据不同情况修改
   eventBus.MyOrdersActiveKey = orderType;
   if (orderType === "3") {
     router.push("/home/orders/ticketOrders");

@@ -23,8 +23,8 @@ public interface ITrainMapper extends BaseMapper<Train> {
     @Select("select * from trainorders where oid = #{oid}")
     List<TrainOrder> getTrainOrdersByOid(String oid);
 
-    @Select("select * from trainorders where identification = #{identification} and trainDate = #{date}")
-    TrainOrder getTrainOrdersByIdentificationAndDate(String identification, String date);
+    @Select("select * from trainorders where trainId = #{traindId} and identification = #{identification} and trainDate = #{date}")
+    TrainOrder getTrainOrderByTrainAndIdentification(String trainId, String date, String identification);
 
     void addTrainOrderDetail(String oid, String trainId, String trainDate, String name, String identification, String seatType);
 

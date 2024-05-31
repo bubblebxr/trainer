@@ -133,9 +133,16 @@ public class TrainController {
         Date date = new Date();
         String formattedDate = formatter.format(date);
 
-        orderService.addOrder(new Order(oid, userId, formattedDate, total, Order.OrderStatus.Paid, Order.OrderType.Train));
 
         int num1 = 0, num2 = 0, num3 = 0, num4 = 0, num5 = 0, num6 = 0;
+        for (Map<String, String> person : persons) {
+            if (trainService.getTrainOrderByTrainAndIdentification(trainId, trainDate, person.get("identification")) != null) {
+                return new HashMap<>() {{
+                    put("info", "下单失败");
+                }};
+            }
+        }
+        orderService.addOrder(new Order(oid, userId, formattedDate, total, Order.OrderStatus.Paid, Order.OrderType.Train));
 
         for (Map<String, String> person : persons) {
             String type = person.get("seat_type");

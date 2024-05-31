@@ -18,7 +18,7 @@ public interface ITrainService {
 
     public List<TrainOrder> getTrainOrdersByOid(String oid);
 
-    public TrainOrder getTrainOrdersByIdentificationAndDate(String identification, String date);
+    public TrainOrder getTrainOrderByTrainAndIdentification(String trainId, String date, String identification);
 
     public void addTrainOrderDetail(String oid, String trainId, String trainDate, String name, String identification, String seatType);
 

@@ -110,30 +110,9 @@ import {
 } from "../../api/api.js";
 import { ElMessage, ElNotification } from "element-plus";
 import { useRoute } from "vue-router";
-
+import emitter from '@/emitter.js';
 const activeNames = ref([]);
 const foodOrders = ref([]);
-
-// const foodOrders = ref([
-//   {
-//     tid: "strin1",
-//     oid: "12222",
-//     date: "string",
-//     time: "午餐",
-//     order_time: "string",
-//     status: "已支付",
-//     sum_price: 100,
-//     foods: [
-//       {
-//         food_name: "string",
-//         count: 1,
-//         photo:
-//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
-//       },
-//     ],
-//   },
-
-// ]);
 
 const status = ref("all");
 const userID = localStorage.getItem("user_id");
@@ -181,6 +160,7 @@ const cancelOrder = async (oid) => {
         message: "您刚刚取消了一个火车餐订单，订单号为" + oid,
         type: "success",
       });
+      emitter.emit('getAllMessage');
     } else {
       ElNotification({
         title: "取消订单失败",

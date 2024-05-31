@@ -206,9 +206,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, inject } from "vue";
+import { ref, onMounted,onBeforeUnmount, computed, inject } from "vue";
 import { useRouter } from "vue-router";
 import eventBus from "@/eventBus.js";
+import emitter  from "@/emitter.js";
 import { getMessage ,haveReadMessage} from "@/api/api.js";
 import { ElMessage, ElMessageBox } from 'element-plus'
 import {User,Lock,Message,Document,Check} from '@element-plus/icons-vue'
@@ -506,10 +507,13 @@ const quit = () => {
 onMounted(() => {
   router.push("/home/ticket");
   getAllMessage();
+  emitter.on('getAllMessage', getAllMessage);
   updateUI();
 });
+onBeforeUnmount(() => {
+  emitter.off('getAllMessage', getAllMessage);
+});
 const getAllMessage = async () => {
-  //TODO 判断是否登录
   try {
     const responce = await getMessage(userID);
     message.value = responce.data.result;
@@ -541,7 +545,7 @@ const jumpToOrder = (orderType, orderId) => {
   }
 };
 
-// setInterval(getAllMessage,1000);
+setInterval(getAllMessage,60000);//每分钟获取一次
 </script>
 
 <style>

@@ -140,6 +140,8 @@ import { onMounted, ref, watch } from "vue";
 import { getTicketOrders, cancelTicketOrder } from "../../api/api.js";
 import { ElMessage, ElNotification } from "element-plus";
 import { useRoute } from "vue-router";
+import emitter from '@/emitter.js';
+
 const status = ref("all");
 const userID = localStorage.getItem('user_id');
 const ticketOrders = ref([]);
@@ -165,6 +167,7 @@ const cancelOrders = async (oid,tid) => {
                 message: "您成功取消了" + tid + "班次的列车，如果您预定了此班次的火车餐也已自动帮您取消，退款将于1~5个工作日原路返回。",
                 type: 'success',
             });
+            emitter.emit('getAllMessage');
         }
         else {
             ElMessage.error("取消订单失败~");

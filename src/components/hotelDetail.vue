@@ -417,7 +417,8 @@ const input_name = ref(['']);
 const input_id = ref(['']);
 
 //支付
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage, ElMessageBox,ElNotification } from 'element-plus'
+import emitter from '@/emitter.js';
 const money=ref();
 const updateMoney = () => {
   money.value=selectedRoom.value.price*roomCount.value;
@@ -441,7 +442,13 @@ const pay = async () =>{
                 message: "下单成功",
                 type: "success",
             });
-            //todo:页面跳转
+            ElNotification({
+                title: '订票成功',
+                message: "您已成功预定酒店"+ "，入住时间"+check_in.value+",祝您旅途愉快！",//TODO:酒店名
+                type: 'success',
+            })
+            emitter.emit('getAllMessage');
+            open.value = false;
         }else{
             ElMessage({
                 message: "下单失败",

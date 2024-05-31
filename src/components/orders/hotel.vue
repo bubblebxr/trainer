@@ -60,6 +60,8 @@ import { onMounted, ref, watch } from "vue";
 import { getHotelOrders, cancelHotelOrder } from "../../api/api.js";
 import { ElMessage, ElNotification } from "element-plus";
 import { useRoute } from "vue-router";
+import emitter from '@/emitter.js';
+
 const status = ref("all");
 const userID = localStorage.getItem('user_id');
 const hotelOrders = ref([]);
@@ -80,12 +82,12 @@ const cancelOrders=async(oid)=>{
                 message: '取消订单成功，退款将原路返回。',
                 type: "success",
             });
-            //TODO 通知消息弹窗
             ElNotification({
                 title: '取消订单成功',
                 message: "",//TODO
                 type: 'success',
             });
+            emitter.emit('getAllMessage');
         }
         else {
             ElMessage.error("取消订单失败");

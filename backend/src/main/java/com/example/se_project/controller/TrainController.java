@@ -51,7 +51,25 @@ public class TrainController {
         List<Train> trains = trainService.searchTrain(start_city, arrive_city, date,
                 is_GD, sort_type, seat_type, isHide);
         List<Object> result = new ArrayList<>();
-        trains.forEach(e -> {
+        for (Train e : trains) {
+            boolean[] haveTicketsToShow = {false};
+            if (seat_type.get(0) && e.getBusinessSeatSurplus() > 0) {
+                haveTicketsToShow[0] = true;
+            } else if (seat_type.get(1) && e.getFirstClassSeatSurplus() > 0) {
+                haveTicketsToShow[0] = true;
+            } else if (seat_type.get(2) && e.getSecondClassSeatSurplus() > 0) {
+                haveTicketsToShow[0] = true;
+            } else if (seat_type.get(3) && e.getSoftSleeperSurplus() > 0) {
+                haveTicketsToShow[0] = true;
+            } else if (seat_type.get(4) && e.getHardSleeperSurplus() > 0) {
+                haveTicketsToShow[0] = true;
+            } else if (seat_type.get(5) && e.getHardSeatSurplus() > 0) {
+                haveTicketsToShow[0] = true;
+            }
+            if (!haveTicketsToShow[0]) {
+                continue;
+            }
+
             result.add(new HashMap<>() {{
                 String trainId = e.getTrainId();
                 put("tid", trainId);
@@ -111,7 +129,7 @@ public class TrainController {
                 });
                 put("station_info", stationInfo);
             }});
-        });
+        }
         return new HashMap<>() {{
             put("result", result);
         }};

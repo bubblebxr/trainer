@@ -36,7 +36,7 @@ public class FoodController {
                                    @PathVariable String userID,
                                    @PathVariable String date,
                                    @PathVariable String time) {
-        TrainOrder trainOrder = trainService.getTrainOrdersByIdentificationAndDate(userID, date);
+        TrainOrder trainOrder = trainService.getTrainOrderByTrainAndIdentification(tid, date, userID);
         boolean[] haveTicket = {false};
         String info = "没有购买当日该车次车票";
         if (orderService.getOrder(trainOrder.getOid()).getOrderStatus() != Order.OrderStatus.Canceled) {
@@ -54,12 +54,14 @@ public class FoodController {
                 if (time.equals("lunch")) {
                     if (!startTime.isBefore(lunchStartTime) && !arriveTime.isAfter(lunchEndTime)) {
                         haveTicket[0] = true;
+                        info = "购买成功";
                     } else {
                         info = "午餐点您不在车上哦";
                     }
                 } else {
                     if (!startTime.isBefore(dinnerStartTime) && !arriveTime.isAfter(dinnerEndTime)) {
                         haveTicket[0] = true;
+                        info = "购买成功";
                     } else {
                         info = "晚餐点您不在车上哦";
                     }

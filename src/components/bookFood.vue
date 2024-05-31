@@ -210,14 +210,16 @@ watch(
 );
 onMounted(() => {
   fetchTids();
-  console.log("已购车票：",Paidticket.value);
-  if(Paidticket.value){
-    ElMessageBox.alert('只有订好车票后才能订火车餐哦', '您还没有订购车票', {
-    confirmButtonText: '我知道了',
-    callback: (action) => {
-    },
-  })
-  }
+  setTimeout(()=>{
+    console.log("已购车票：", Paidticket.value);
+    if (Paidticket.value.length === 0) {
+      ElMessageBox.alert('只有订好车票后才能订火车餐哦', '您还没有订购车票', {
+        confirmButtonText: '我知道了',
+        callback: (action) => {
+        },
+      })
+    }
+  },500);
   tid.value = router.currentRoute.value.query.tid;
   date.value=router.currentRoute.value.query.date;
 });

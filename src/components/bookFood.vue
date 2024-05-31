@@ -32,7 +32,6 @@
             type="date"
             placeholder="出发日期"
             :disabled-date="disabledDate"
-
             :size="20"
             value-format="YYYY-MM-DD"
           />
@@ -113,22 +112,22 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, nextTick } from "vue";
 import foodCart from "./foodCart.vue";
 import { getFoods, getThisTicket, postFoodBill } from "@/api/api";
 import { useRouter } from "vue-router";
 const router = useRouter();
-import { ElMessage,ElNotification,ElMessageBox  } from "element-plus";
-const userID = localStorage.getItem('user_id'); //当前用户ID
+import { ElMessage, ElNotification, ElMessageBox } from "element-plus";
+const userID = localStorage.getItem("user_id"); //当前用户ID
 const tid = ref("");
-const date = ref(""); 
+const date = ref("");
 const time = ref("lunch");
 const foodList = ref([]);
 
 const order_foods = ref([]); //已点的食物
 const Paidticket = ref([]);
 const disabledDate = (time) => {
-    return time.getTime() < Date.now() - 8.64e7
+  return time.getTime() < Date.now() - 8.64e7;
 };
 const search = () => {
   if (tid.value === "" || time.value === "" || date.value === "") {
@@ -143,7 +142,7 @@ const search = () => {
 };
 const fetchFoods = async () => {
   try {
-    const response = await getFoods(userID,tid.value, date.value, time.value);
+    const response = await getFoods(userID, tid.value, date.value, time.value);
     if (response.data.haveTicket) {
       foodList.value = response.data.result;
       ElMessage({
@@ -172,29 +171,36 @@ const fetchTids = async () => {
     console.error("获取车站数组失败：", error);
   }
 };
-const submitBill = async (sum_price) =>{
-  try{
-  const responce = await postFoodBill(order_foods.value, userID, tid.value, date.value, time.value, sum_price);
-  if(responce.data.result)
-  {ElNotification({
-    title: '订单已提交',
-    message: '您成功预订了火车餐！预祝您用餐愉快~',
-    type: 'success',
-  })}
-  else{
+const submitBill = async (sum_price) => {
+  try {
+    const responce = await postFoodBill(
+      order_foods.value,
+      userID,
+      tid.value,
+      date.value,
+      time.value,
+      sum_price
+    );
+    if (responce.data.result) {
+      ElNotification({
+        title: "订单已提交",
+        message: "您成功预订了火车餐！预祝您用餐愉快~",
+        type: "success",
+      });
+    } else {
+      ElNotification({
+        title: "提交订单失败T^T",
+        message: responce.data.info,
+        type: "error",
+      });
+    }
+  } catch (error) {
+    console.log("提交订单失败：", error);
     ElNotification({
-    title: '提交订单失败T^T',
-    message: responce.data.info,
-    type: 'error',
-  })
-  }
-}catch (error){
-    console.log("提交订单失败：",error);
-    ElNotification({
-    title: '提交订单失败T^T',
-    message: '网络似乎开小差了',
-    type: 'error',
-  })
+      title: "提交订单失败T^T",
+      message: "网络似乎开小差了",
+      type: "error",
+    });
   }
 };
 
@@ -210,18 +216,18 @@ watch(
 );
 onMounted(() => {
   fetchTids();
-  setTimeout(()=>{
+  setTimeout(() => {
     console.log("已购车票：", Paidticket.value);
     if (Paidticket.value.length === 0) {
-      ElMessageBox.alert('只有订好车票后才能订火车餐哦', '您还没有订购车票', {
-        confirmButtonText: '我知道了',
-        callback: (action) => {
-        },
-      })
+      ElMessageBox.alert("只有订好车票后才能订火车餐哦", "您还没有订购车票", {
+        confirmButtonText: "我知道了",
+        callback: (action) => {},
+      });
     }
-  },500);
+  }, 500);
+
   tid.value = router.currentRoute.value.query.tid;
-  date.value=router.currentRoute.value.query.date;
+  date.value = router.currentRoute.value.query.date;
 });
 </script>
 

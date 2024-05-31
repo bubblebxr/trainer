@@ -176,7 +176,7 @@ const fetchSearchResult = async () => {
     listData.value = a;
     if(listData.value.length === 0){
       ElMessage({
-        message: '暂无数据可显示',
+        message: '暂时没有合适的酒店……',
       })
     }else{
       ElMessage({

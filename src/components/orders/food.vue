@@ -110,30 +110,9 @@ import {
 } from "../../api/api.js";
 import { ElMessage, ElNotification } from "element-plus";
 import { useRoute } from "vue-router";
-
+import emitter from '@/emitter.js';
 const activeNames = ref([]);
 const foodOrders = ref([]);
-
-// const foodOrders = ref([
-//   {
-//     tid: "strin1",
-//     oid: "12222",
-//     date: "string",
-//     time: "午餐",
-//     order_time: "string",
-//     status: "已支付",
-//     sum_price: 100,
-//     foods: [
-//       {
-//         food_name: "string",
-//         count: 1,
-//         photo:
-//           "https://c-ssl.duitang.com/uploads/blog/202203/17/20220317122044_7f0a8.jpeg",
-//       },
-//     ],
-//   },
-
-// ]);
 
 const status = ref("all");
 const userID = localStorage.getItem("user_id");
@@ -178,9 +157,10 @@ const cancelOrder = async (oid) => {
     if (responce.data.result) {
       ElNotification({
         title: "订单取消提醒",
-        message: "您刚刚取消了一个火车餐订单，订单号为" + oid,
+        message: "您刚刚取消了单号为" + oid +"的火车餐订单,退款将于1~5个工作日原路返回。",
         type: "success",
       });
+      emitter.emit('getAllMessage');
     } else {
       ElNotification({
         title: "取消订单失败",
@@ -225,7 +205,15 @@ watch(status, (newValue) => {
   console.log("状态切换为", newValue);
   getOrders();
 });
-//setInterval(getOrders,1000);
+watch(route,(newValue)=>{
+    console.log('orderId changed:', newValue.query.orderId);
+    if(newValue.query.orderId){
+        setTimeout(() => {
+      scrollToOrder(newValue.query.orderId);
+    }, 500);
+    }
+});
+setInterval(getOrders,60000);
 </script>
 
 <style scoped>

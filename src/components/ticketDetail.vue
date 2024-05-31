@@ -168,6 +168,8 @@ import { useRouter } from "vue-router";
 import { ref, onMounted, watch, inject } from 'vue';
 import { getPassengers, postTicketBill } from '../api/api';
 import { ElNotification, ElMessage } from 'element-plus';
+import emitter from '@/emitter.js';
+
 const router = useRouter();
 const line = ref(null);
 const start_station = ref('');
@@ -275,6 +277,7 @@ const ordersCommit = async () => {
                 type: 'success',
             })
             change.value = true;
+            emitter.emit('getAllMessage');
         } else {
             ElMessage({
                 message: "下单失败，建议您刷新重试",

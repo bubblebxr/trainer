@@ -21,7 +21,6 @@ export const getThisTicket = (userID, status) => {
 };
 /*提交火车餐表单*/
 export const postFoodBill = (foods, userID, tid, date, time, sum_price) => {
-    var nowtime = new Date();
     return api.post(`/food/bill`,
         {
             "foods": [
@@ -34,7 +33,6 @@ export const postFoodBill = (foods, userID, tid, date, time, sum_price) => {
             "tid": tid,
             "date": date,
             "time": time,
-            "bill_time": nowtime,
             "sum_price": sum_price
         }, {
         headers: {

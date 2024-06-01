@@ -117,6 +117,8 @@ import { getFoods, getThisTicket, postFoodBill } from "@/api/api";
 import { useRouter } from "vue-router";
 const router = useRouter();
 import { ElMessage, ElNotification, ElMessageBox } from "element-plus";
+import emitter from '@/emitter.js';
+
 const userID = localStorage.getItem("user_id"); //当前用户ID
 const tid = ref("");
 const date = ref("");
@@ -189,6 +191,7 @@ const submitBill = async (sum_price) => {
         message: "您成功预订了火车餐！预祝您用餐愉快~",
         type: "success",
       });
+      emitter.emit('getAllMessage');
     } else {
       ElNotification({
         title: "提交订单失败T^T",

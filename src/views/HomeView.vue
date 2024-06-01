@@ -173,6 +173,10 @@
 
     <!-- 弹出消息栏 -->
     <el-drawer v-model="drawer" title="消息" direction="rtl" size="35%">
+      <template #title>
+        <span>消息</span>
+        <el-button @click="setAllRead()">全部已读</el-button>
+      </template>
       <div v-for="(item, index) in message" :key="index">
         <el-card
           style="border-radius: 15px; margin-bottom: 5%"
@@ -210,7 +214,7 @@ import { ref, onMounted,onBeforeUnmount, computed, inject,provide } from "vue";
 import { useRouter } from "vue-router";
 import eventBus from "@/eventBus.js";
 import emitter  from "@/emitter.js";
-import { getMessage ,haveReadMessage} from "@/api/api.js";
+import { getMessage ,haveReadMessage,haveReadAllMessage} from "@/api/api.js";
 import { ElMessage, ElMessageBox } from 'element-plus'
 import {User,Lock,Message,Document,Check} from '@element-plus/icons-vue'
 const router = useRouter();
@@ -280,10 +284,19 @@ const unReadNum = computed(() => {
 //设置已读
 const setRead = async (mid)=>{
   try{
-    haveReadMessage(mid);
+    await haveReadMessage(mid);
   }catch(error){
     console.log("设置已读失败,消息id为：",mid);
   }
+}
+//全部已读
+const setAllRead = async ()=>{
+  try{
+    await haveReadAllMessage(userID);
+  }catch(error){
+    console.log("设置已读失败");
+  }
+  getAllMessage();
 }
 //登录
 

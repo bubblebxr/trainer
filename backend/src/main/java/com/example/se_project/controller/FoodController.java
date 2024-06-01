@@ -112,8 +112,6 @@ public class FoodController {
                 int num = Integer.parseInt(e.get("count"));
                 foodService.addFoodOrder(new FoodOrder(oid, e.get("food_name"),
                         num, trainId, mealTime, mealDate, f.getPhoto()));
-                // 减少数量
-                foodService.reduceFoodNum(f, num);
             });
         } catch (Exception e) {
             e.printStackTrace();
@@ -206,9 +204,7 @@ public class FoodController {
             orderService.cancelOrder(order);
 
             FoodOrder food = foodService.getFoodOrdersByOid(oid).get(0);
-            // 恢复数量
-            foodService.reduceFoodNum(foodService.findFoodByAllKeys(food.getTrainId(),
-                    food.getTrainDate(), food.getMealTime(), food.getFoodName()), -food.getCount());
+
 
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = new Date();

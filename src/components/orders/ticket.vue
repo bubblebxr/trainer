@@ -196,7 +196,7 @@ const getOrders = async () => {
     }
 };
 watch(status, (newValue) => {
-    console.log("状态切换为", newValue);
+    // console.log("状态切换为", newValue);
     getOrders();
 });
 watch(route,(newValue)=>{

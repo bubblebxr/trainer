@@ -173,8 +173,10 @@ const fetchTids = async () => {
 };
 const submitBill = async (sum_price) => {
   try {
+     var info=order_foods.value;
+    console.log("front",order_foods.value);
     const responce = await postFoodBill(
-      order_foods.value,
+      JSON.stringify(info),
       userID,
       tid.value,
       date.value,
@@ -209,7 +211,7 @@ watch(
   (newFoodList) => {
     // 当 num 大于 0 时，将该项加入 order_foods
     order_foods.value = newFoodList.filter((item) => item.number > 0);
-    console.log("修改了购物车内容");
+    console.log("修改了购物车内容",order_foods.value);
   },
   { deep: true },
   { immediate: true }

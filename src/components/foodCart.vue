@@ -171,6 +171,7 @@ const resetValue = () => {
 
 onMounted(() => {});
 watch(model, (newmodel) => {
+  console.log("购物车",newmodel);
   const total = newmodel.reduce((acc, item) => {
     return acc + item.price * item.number;
   }, 0);

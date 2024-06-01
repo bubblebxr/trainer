@@ -100,7 +100,8 @@ public class FoodController {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date bill = new Date();
         String billTime = formatter.format(bill);
-        Double total = (Double)map.get("sum_price");
+        Number sumPrice = (Number)(map.get("sum_price"));
+        Double total = sumPrice.doubleValue();
 
         String oid = Order.generateOrderId();
 

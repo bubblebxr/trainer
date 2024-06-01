@@ -71,8 +71,23 @@ public class TrainController {
             if (!haveTicketsToShow[0]) {
                 continue;
             }
-            // 隐藏冲突
 
+
+            if (isHide) {
+                // 隐藏冲突
+                boolean[] conflict = {false};
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                List<TrainOrder> trainOrders = trainService.getTrainOrderByTrainAndIdentification(e.getTrainId(),
+                        formatter.format(e.getDate()), userid);
+                for (TrainOrder to : trainOrders) {
+                    if (orderService.getOrder(to.getOid()).getOrderStatus() == Order.OrderStatus.Paid) {
+                        conflict[0] = true;
+                    }
+                }
+                if (conflict[0]) {
+                    continue;
+                }
+            }
 
             result.add(new HashMap<>() {{
                 String trainId = e.getTrainId();

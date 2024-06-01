@@ -21,14 +21,11 @@ export const getThisTicket = (userID, status) => {
 };
 /*提交火车餐表单*/
 export const postFoodBill = (foods, userID, tid, date, time, sum_price) => {
+    var foodss = JSON.parse(foods);
+    console.log("foodss:",foodss);
     return api.post(`/food/bill`,
         {
-            "foods": [
-                {
-                    "food_name": foods.food_name,
-                    "count": foods.num
-                }
-            ],
+            "foods":foodss,
             "userID": userID,
             "tid": tid,
             "date": date,

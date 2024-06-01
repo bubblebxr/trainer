@@ -59,7 +59,6 @@
             <Search
               @click="search"
               style="
-                background-color: orange;
                 width: 30px;
                 height: 200%;
                 border-radius: 5px;
@@ -98,7 +97,7 @@
             <template #footer>
               <div style="display: flex; justify-content: space-between">
                 <text>数量</text>
-                <el-input-number v-model="item.num" size="small" :min="0" />
+                <el-input-number v-model="item.number" size="small" :min="0" />
               </div>
             </template>
           </el-card>
@@ -149,6 +148,7 @@ const fetchFoods = async () => {
         message: "查询成功",
         type: "success",
       });
+      console.log("食物；",foodList.value);
     } else {
       ElMessage.error("查询失败T^T" + response.data.info);
       foodList.value = [];
@@ -173,8 +173,10 @@ const fetchTids = async () => {
 };
 const submitBill = async (sum_price) => {
   try {
+     var info=order_foods.value;
+    console.log("front",order_foods.value);
     const responce = await postFoodBill(
-      order_foods.value,
+      JSON.stringify(info),
       userID,
       tid.value,
       date.value,
@@ -208,8 +210,8 @@ watch(
   foodList,
   (newFoodList) => {
     // 当 num 大于 0 时，将该项加入 order_foods
-    order_foods.value = newFoodList.filter((item) => item.num > 0);
-    console.log("修改了购物车内容");
+    order_foods.value = newFoodList.filter((item) => item.number > 0);
+    console.log("修改了购物车内容",order_foods.value);
   },
   { deep: true },
   { immediate: true }

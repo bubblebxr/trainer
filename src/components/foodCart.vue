@@ -21,10 +21,10 @@
             font-weight: bold;
             color: #ffa31a;
           "
-          >￥{{ item.price * item.num }}</span
+          >￥{{ item.price * item.number }}</span
         >
         <el-input-number
-          v-model="item.num"
+          v-model="item.number"
           size="small"
           :min="0"
           style="width: 6em"
@@ -74,7 +74,7 @@
           style="display: flex; justify-content: space-between"
         >
           <div style="display: inline-block; width: 6em">
-            {{ item.name }}×{{ item.num }}
+            {{ item.name }}×{{ item.number }}
           </div>
           <div
             style="
@@ -84,7 +84,7 @@
               color: #ffa31a;
             "
           >
-            ￥{{ item.price * item.num }}
+            ￥{{ item.price * item.number }}
           </div>
         </div>
       </div>
@@ -150,7 +150,7 @@ const clickCart = () => {
 };
 const clear = () => {
   for (const item of model.value) {
-    item.num = 0;
+    item.number = 0;
   }
 };
 const toPay = () => {
@@ -172,7 +172,7 @@ const resetValue = () => {
 onMounted(() => {});
 watch(model, (newmodel) => {
   const total = newmodel.reduce((acc, item) => {
-    return acc + item.price * item.num;
+    return acc + item.price * item.number;
   }, 0);
   // 将总价存储在 sum_price 中
   sum_price = total;

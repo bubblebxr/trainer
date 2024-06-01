@@ -216,7 +216,7 @@ onMounted(() => {
     }, 500);
   }
 });
-setInterval(getOrders,60000);
+// setInterval(getOrders,60000);
 </script>
 <style scoped>
 .el-card /deep/ .el-card__header {

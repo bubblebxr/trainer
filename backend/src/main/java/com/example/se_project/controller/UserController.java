@@ -9,6 +9,7 @@ import com.example.se_project.service.Impl.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -171,5 +172,26 @@ public class UserController {
                 put("message","验证码发送失败");
             }};
         }
+    }
+
+    @PostMapping("id/idCode/{idCode}/{id}")
+    public Map<String, Object> idCodeByEmail(@PathVariable String idCode,
+                                             @PathVariable String id){
+        String email = userService.getEmail(id);
+        VerificationCode code = verificationCodeService.getVerificationCode(email);
+
+        if (code != null) {
+            if (code.getCode().equals(idCode)) {
+                LocalDateTime now = LocalDateTime.now();
+                if (now.isAfter(code.getGeneratedAt()) && now.isBefore(code.getExpiresAt())) {
+                    return new HashMap<>() {{
+                        put("result", true);
+                    }};
+                }
+            }
+        }
+        return new HashMap<>() {{
+            put("result", false);
+        }};
     }
 }

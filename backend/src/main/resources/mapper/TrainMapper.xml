@@ -14,7 +14,7 @@
             <when test="is_GD == 2">
                 AND (type = 'Gaotie' OR type = 'Huoche')
             </when>
-            <when test="is_GD}== 1">
+            <when test="is_GD== 1">
                 AND type = 'Huoche'
             </when>
             <when test="is_GD == 0">

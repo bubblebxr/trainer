@@ -109,9 +109,10 @@ public class FoodController {
 
         try {
             ((List<HashMap<String, Object>>) (map.get("foods"))).forEach(e -> {
-                Food f = foodService.findFoodByAllKeys(trainId, mealDate, mealTime, (String)e.get("food_name"));
+                Food f = foodService.findFoodByAllKeys(trainId, mealDate, mealTime, (String)e.get("name"));
                 int num = (int)(e.get("number"));
-                foodService.addFoodOrder(new FoodOrder(oid, (String)(e.get("food_name")),
+                String foodName = (String)(e.get("name"));
+                foodService.addFoodOrder(new FoodOrder(oid, foodName,
                         num, trainId, mealTime, mealDate, f.getPhoto()));
             });
         } catch (Exception e) {
@@ -136,6 +137,7 @@ public class FoodController {
         emailService.sendSimpleMail(userService.getEmail(userId),"餐饮订单支付成功",content);
         return new HashMap<>() {{
             put("info", "下单成功！");
+            put("result",true);
         }};
     }
 
@@ -155,6 +157,7 @@ public class FoodController {
             HashMap<String, Object> map = new HashMap<>();
 
             List<FoodOrder> foodOrders = foodService.getFoodOrdersByOid(order.getOid());
+            System.out.println(order.getOid());
             map.put("tid", foodOrders.get(0).getTrainId());
             map.put("oid", order.getOid());
             map.put("order_time", order.getBillTime());

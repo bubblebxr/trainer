@@ -33,12 +33,12 @@ public class TrainController {
     // sort_type:1start_time升序,2start_tiem降序,3duration升序
     // seat_type:
     // is_Hide: true隐藏冲突列车
-    @PostMapping("/trains/{start_city}/{arrive_city}/{date}/{userid}")
+    @PostMapping("/trains/{start_city}/{arrive_city}/{date}/{userID}")
     public Map<String, Object> trainQuery(
             @PathVariable String start_city,
             @PathVariable String arrive_city,
             @PathVariable String date,
-            @PathVariable String userid,
+            @PathVariable String userID,
             @RequestParam(value = "is_GD", defaultValue = "2") Integer is_GD,
             @RequestParam(value = "sort_type", defaultValue = "1") Integer sort_type,
             @RequestParam(value = "seat_type", defaultValue = "true,true,true,true,true,true") List<Boolean> seat_type,
@@ -78,7 +78,7 @@ public class TrainController {
                 boolean[] conflict = {false};
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                 List<TrainOrder> trainOrders = trainService.getTrainOrderByTrainAndIdentification(e.getTrainId(),
-                        formatter.format(e.getDate()), userid);
+                        formatter.format(e.getDate()), userID);
                 for (TrainOrder to : trainOrders) {
                     if (orderService.getOrder(to.getOid()).getOrderStatus() == Order.OrderStatus.Paid) {
                         conflict[0] = true;

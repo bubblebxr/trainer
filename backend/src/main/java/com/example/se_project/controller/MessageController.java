@@ -48,4 +48,12 @@ public class MessageController {
         // 标记已读
         messageService.setHaveread(mid);
     }
+
+    @PostMapping("/message/setAllRead/{userId}")
+    public void setAllRead(@PathVariable String userId){
+        List<Map<String, Object>> messageMap = messageService.getMessage(userId);
+        for(Map<String, Object> message : messageMap){
+            messageService.setHaveread(message.get("mid").toString());
+        }
+    }
 }

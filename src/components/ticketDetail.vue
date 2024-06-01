@@ -98,7 +98,7 @@
             </el-card>
             <div style="display: flex;justify-content: center;margin-top:1%;">
                 <el-button type="info" plain size="large" style="width:10%;" @click="goBack()">返回</el-button>
-                <el-button type="success" plain size="large" style="width:10%;" @click="finishBook">提交</el-button>
+                <el-button type="success" plain size="large" style="width:10%;" @click="finishBook">购买</el-button>
             </div>
         </el-main>
         <el-aside width="25%" style="height:88vh;display: block;">
@@ -314,17 +314,21 @@ const getInfo = async () => {
 };
 const handleChecked = (e) => {
     passengersTable.value = [];
-    for (var i = 0; i < e.length; i++) {
-        passengersTable.value.push(passengers.value.find(p => p.name === e[i]));
-        value.value[i] = options.value[0];
+    console.log("value"+value.value);
+    for (var i = 0; i < person.value.length; i++) {
+        if(e.includes(person.value[i])){
+            passengersTable.value.push(passengers.value.find(p => p.name === person.value[i]));
+            value.value[i] = options.value[0];
+        }
     }
-    // console.log("handle!" + e);
-    // console.log("yuan"+value.value);
+    console.log(passengersTable.value);
     for(var i=0;i<person.value.length;i++){
         if (!e.includes(person.value[i])){
             value.value[i]=null;
         }
     }
+    value.value = value.value.filter((item) => item !== null);
+    console.log("value" + value.value);
 };
 const singleDelete = async (index) => {
     var name = passengersTable.value[index]['name'];

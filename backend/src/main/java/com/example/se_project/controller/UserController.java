@@ -1,8 +1,11 @@
 package com.example.se_project.controller;
 
 import com.example.se_project.entity.User;
+import com.example.se_project.entity.VerificationCode;
 import com.example.se_project.service.IPassengerService;
 import com.example.se_project.service.IUserService;
+import com.example.se_project.service.IVerificationCodeService;
+import com.example.se_project.service.Impl.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +21,10 @@ public class UserController {
     private User user;
     @Autowired
     private IPassengerService passengerService;
+    @Autowired
+    private EmailService emailService;
+    @Autowired
+    private IVerificationCodeService verificationCodeService;
 
     @PostMapping(value = "/register")
     public Map<String, Object> userRegister(@RequestBody Map<String, Object> registerMap) {
@@ -126,6 +133,42 @@ public class UserController {
         } else {
             return new HashMap<>() {{
                 put("result", true);
+            }};
+        }
+    }
+
+    @GetMapping("/getbackPassword/{id}")
+    public Map<String, Object> forgetPassword(@PathVariable String id){
+        if (!id.matches("^[1-9]\\d{5}(18|19|([23]\\d))\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$")) {
+            return new HashMap<>() {{
+                put("result", false);
+                put("message","身份证号格式错误");
+            }};
+
+        }
+        String email = userService.getEmail(id);
+
+        if(email==null){
+            return new HashMap<>() {{
+                put("result", false);
+                put("message","未注册");
+            }};
+        }
+        VerificationCode code = new VerificationCode(email);
+        verificationCodeService.addVerificationCode(code);
+
+        emailService.sendSimpleMail(email, "Verification Code",
+                "【WerwerTrip】Your verification code is " + code.getCode());
+
+        if (verificationCodeService.getVerificationCode(email) != null) {
+            return new HashMap<>() {{
+                put("result", true);
+                put("message","成功发送验证码");
+            }};
+        } else {
+            return new HashMap<>() {{
+                put("result", false);
+                put("message","验证码发送失败");
             }};
         }
     }

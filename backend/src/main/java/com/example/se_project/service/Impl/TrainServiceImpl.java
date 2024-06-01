@@ -37,7 +37,7 @@ public class TrainServiceImpl implements ITrainService {
     }
 
     @Override
-    public TrainOrder getTrainOrderByTrainAndIdentification(String trainId, String date, String identification) {
+    public List<TrainOrder> getTrainOrderByTrainAndIdentification(String trainId, String date, String identification) {
         return trainMapper.getTrainOrderByTrainAndIdentification(trainId, date, identification);
     }
 

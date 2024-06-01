@@ -154,10 +154,12 @@ public class TrainController {
 
         int num1 = 0, num2 = 0, num3 = 0, num4 = 0, num5 = 0, num6 = 0;
         for (Map<String, String> person : persons) {
-            if (trainService.getTrainOrderByTrainAndIdentification(trainId, trainDate, person.get("identification")) != null) {
-                return new HashMap<>() {{
-                    put("info", "下单失败");
-                }};
+            for(TrainOrder trainOrder: trainService.getTrainOrderByTrainAndIdentification(trainId, trainDate, person.get("identification"))) {
+                if (orderService.getOrder(trainOrder.getOid()).getOrderStatus() == Order.OrderStatus.Paid) {
+                    return new HashMap<>() {{
+                        put("info", "下单失败");
+                    }};
+                }
             }
         }
         orderService.addOrder(new Order(oid, userId, formattedDate, total, Order.OrderStatus.Paid, Order.OrderType.Train));

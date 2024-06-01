@@ -28,7 +28,7 @@ public class AuthController {
         verificationCodeService.addVerificationCode(code);
 
         emailService.sendSimpleMail(email, "Verification Code",
-                "【WerwerTrip】Your verification code is " + code.getCode());
+                "【WerwerTrip】你的验证码是：" + code.getCode() + "，5分钟内有效");
 
         if (verificationCodeService.getVerificationCode(email) != null) {
             return new HashMap<>() {{

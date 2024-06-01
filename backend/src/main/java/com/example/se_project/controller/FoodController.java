@@ -36,38 +36,40 @@ public class FoodController {
                                    @PathVariable String userID,
                                    @PathVariable String date,
                                    @PathVariable String time) {
-        TrainOrder trainOrder = trainService.getTrainOrderByTrainAndIdentification(tid, date, userID);
+        List<TrainOrder> trainOrders = trainService.getTrainOrderByTrainAndIdentification(tid, date, userID);
         boolean[] haveTicket = {false};
         String info = "没有购买当日该车次车票";
-        if (orderService.getOrder(trainOrder.getOid()).getOrderStatus() != Order.OrderStatus.Canceled) {
-            Train train = trainService.getTrainByTidAndDate(tid, date);
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            try {
-                LocalTime startTime = LocalTime.parse(train.getStartTime(), formatter);
-                LocalTime arriveTime = LocalTime.parse(train.getArrivalTime(), formatter);
+        for (TrainOrder trainOrder: trainOrders) {
+            if (orderService.getOrder(trainOrder.getOid()).getOrderStatus() == Order.OrderStatus.Paid) {
+                Train train = trainService.getTrainByTidAndDate(tid, date);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                try {
+                    LocalTime startTime = LocalTime.parse(train.getStartTime(), formatter);
+                    LocalTime arriveTime = LocalTime.parse(train.getArrivalTime(), formatter);
 
-                LocalTime lunchStartTime = LocalTime.of(12, 0, 0);
-                LocalTime lunchEndTime = LocalTime.of(14, 0, 0);
-                LocalTime dinnerStartTime = LocalTime.of(17, 0, 0);
-                LocalTime dinnerEndTime = LocalTime.of(19, 0, 0);
+                    LocalTime lunchStartTime = LocalTime.of(12, 0, 0);
+                    LocalTime lunchEndTime = LocalTime.of(14, 0, 0);
+                    LocalTime dinnerStartTime = LocalTime.of(17, 0, 0);
+                    LocalTime dinnerEndTime = LocalTime.of(19, 0, 0);
 
-                if (time.equals("lunch")) {
-                    if (!startTime.isBefore(lunchStartTime) && !arriveTime.isAfter(lunchEndTime)) {
-                        haveTicket[0] = true;
-                        info = "购买成功";
+                    if (time.equals("lunch")) {
+                        if (!startTime.isBefore(lunchStartTime) && !arriveTime.isAfter(lunchEndTime)) {
+                            haveTicket[0] = true;
+                            info = "购买成功";
+                        } else {
+                            info = "午餐点您不在车上哦";
+                        }
                     } else {
-                        info = "午餐点您不在车上哦";
+                        if (!startTime.isBefore(dinnerStartTime) && !arriveTime.isAfter(dinnerEndTime)) {
+                            haveTicket[0] = true;
+                            info = "购买成功";
+                        } else {
+                            info = "晚餐点您不在车上哦";
+                        }
                     }
-                } else {
-                    if (!startTime.isBefore(dinnerStartTime) && !arriveTime.isAfter(dinnerEndTime)) {
-                        haveTicket[0] = true;
-                        info = "购买成功";
-                    } else {
-                        info = "晚餐点您不在车上哦";
-                    }
+                } catch (DateTimeParseException e) {
+                    System.out.println("时间格式解析错误: " + e.getMessage());
                 }
-            } catch (DateTimeParseException e) {
-                System.out.println("时间格式解析错误: " + e.getMessage());
             }
         }
 
@@ -94,7 +96,10 @@ public class FoodController {
         String trainId = (String) map.get("tid");
         String mealDate = (String) map.get("date");
         String mealTime = (String) map.get("time");
-        String billTime = (String) map.get("bill_time");
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date bill = new Date();
+        String billTime = formatter.format(bill);
         Double total = Double.parseDouble((String) map.get("sum_price"));
 
         String oid = Order.generateOrderId();
@@ -115,7 +120,6 @@ public class FoodController {
             return null;
         }
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date();
         String formattedDate = formatter.format(date);
         String time;

@@ -178,7 +178,8 @@ const startStationOptions = ref([]);/**所有站点信息 */
 const stations = ref([]);/*车站信息*/
 const searchValid = ref(false);
 const searchResult = ref([]);
-const isLoggedIn = ref(localStorage.getItem('isLoggedIn'))
+const isLoggedIn = ref(localStorage.getItem('isLoggedIn'));
+const userID = localStorage.getItem("user_id"); //当前用户ID
 const submitTicket = (lineIndex) => {
     // url.value=router.resolve({
     //     path: "/home/ticketDetail",
@@ -226,7 +227,7 @@ const fetchSearchResult = async () => {
         else if (normalTrain.value === true && train.value === false) isGD = 0;
         var seatType = [business.value, one.value, two.value, soft_sleeper.value, hard_sleeper.value, hard_seat.value];
         try {
-            const response = await getSearchResult(startStation.value, destinationStation.value, date.value, isGD, sortType.value, seatType, isHide.value);
+            const response = await getSearchResult(startStation.value, destinationStation.value, date.value, isGD, sortType.value, seatType, isHide.value,userID);
             var a = response.data.result;
             for (let i = 0; i < a.length; i++) {
                 a[i].startEnd = `${a[i].start_time}\n${a[i].arrive_time}`;

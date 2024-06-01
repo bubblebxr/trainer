@@ -84,13 +84,13 @@
                   </el-popconfirm>
                 </span>
 
-                <span>
+                <!-- <span>
                   <el-popconfirm title="确定要删除这个订单吗？删除后将不可恢复。" @confirm="deleteOrder(item.oid)">
                     <template #reference>
                       <el-button type="info" text bg>删除订单</el-button>
                     </template>
                   </el-popconfirm>
-                </span>
+                </span> -->
               </div>
             </el-aside>
           </el-container>

@@ -8,7 +8,7 @@ export const getSearchResult = (startCity, arriveCity, date, isGD, sortType, sea
     const queryString = `?is_GD=${isGD}&sort_type=${sortType}&seat_type=${seatType}&isHide=${isHide}`;
     const start = encodeURIComponent(startCity);
     const arrive = encodeURIComponent(arriveCity);
-    return api.post(`/trains/${start}/${arrive}/${date}/${userID}/${queryString}`);
+    return api.post(`/trains/${start}/${arrive}/${date}/${userID}${queryString}`);
 };
 
 export const getFoods = (userID, tid, date, time) => {

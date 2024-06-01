@@ -23,12 +23,7 @@ export const getThisTicket = (userID, status) => {
 export const postFoodBill = (foods, userID, tid, date, time, sum_price) => {
     return api.post(`/food/bill`,
         {
-            "foods": [
-                {
-                    "food_name": foods.food_name,
-                    "count": foods.num
-                }
-            ],
+            "foods":foods,
             "userID": userID,
             "tid": tid,
             "date": date,

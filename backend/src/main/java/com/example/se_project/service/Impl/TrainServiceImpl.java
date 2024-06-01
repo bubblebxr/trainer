@@ -17,8 +17,8 @@ public class TrainServiceImpl implements ITrainService {
     private ITrainMapper trainMapper;
 
     @Override
-    public List<Train> searchTrain(String start_station, String arrive_station, String date, Integer isGD, Integer sort_type, List<Boolean> seat_type, Boolean isHide) {
-        return trainMapper.searchTrain(start_station, arrive_station, date, isGD, sort_type, seat_type, isHide);
+    public List<Train> searchTrain(String start_station, String arrive_station, String date, Integer isGD, Integer sort_type, List<Boolean> seat_type) {
+        return trainMapper.searchTrain(start_station, arrive_station, date, isGD, sort_type, seat_type);
     }
 
     @Override

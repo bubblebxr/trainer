@@ -13,7 +13,7 @@ import java.util.Map;
 @Mapper
 public interface ITrainMapper extends BaseMapper<Train> {
 
-    List<Train> searchTrain(String start_station, String arrive_station, String date, Integer is_GD, Integer sort_type, List<Boolean> seat_type, Boolean isHide);
+    List<Train> searchTrain(String start_station, String arrive_station, String date, Integer is_GD, Integer sort_type, List<Boolean> seat_type);
 
     @Select("select * from trains where (trainId, date) = (#{tid}, #{date})")
     Train getTrainByTidAndDate(String tid, String date);

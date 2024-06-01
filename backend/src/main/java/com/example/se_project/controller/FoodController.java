@@ -107,10 +107,10 @@ public class FoodController {
         orderService.addOrder(new Order(oid, userId, billTime, total, Order.OrderStatus.Paid, Order.OrderType.Food));
 
         try {
-            ((List<HashMap<String, String>>) (map.get("foods"))).forEach(e -> {
-                Food f = foodService.findFoodByAllKeys(trainId, mealDate, mealTime, e.get("food_name"));
-                int num = Integer.parseInt(e.get("count"));
-                foodService.addFoodOrder(new FoodOrder(oid, e.get("food_name"),
+            ((List<HashMap<String, Object>>) (map.get("foods"))).forEach(e -> {
+                Food f = foodService.findFoodByAllKeys(trainId, mealDate, mealTime, (String)e.get("food_name"));
+                int num = (int)(e.get("number"));
+                foodService.addFoodOrder(new FoodOrder(oid, (String)(e.get("food_name")),
                         num, trainId, mealTime, mealDate, f.getPhoto()));
             });
         } catch (Exception e) {

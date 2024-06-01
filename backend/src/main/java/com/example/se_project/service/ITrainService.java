@@ -10,7 +10,7 @@ import java.util.Map;
 
 @Component
 public interface ITrainService {
-    public List<Train> searchTrain(String start_station, String arrive_station, String date, Integer isGD, Integer sort_type, List<Boolean> seat_type, Boolean isHide);
+    public List<Train> searchTrain(String start_station, String arrive_station, String date, Integer isGD, Integer sort_type, List<Boolean> seat_type);
 
     public Train getTrainByTidAndDate(String tid, String date);
 

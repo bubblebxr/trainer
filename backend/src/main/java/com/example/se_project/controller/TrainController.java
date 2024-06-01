@@ -33,11 +33,12 @@ public class TrainController {
     // sort_type:1start_time升序,2start_tiem降序,3duration升序
     // seat_type:
     // is_Hide: true隐藏冲突列车
-    @PostMapping("/trains/{start_city}/{arrive_city}/{date}")
+    @PostMapping("/trains/{start_city}/{arrive_city}/{date}/{userid}")
     public Map<String, Object> trainQuery(
             @PathVariable String start_city,
             @PathVariable String arrive_city,
             @PathVariable String date,
+            @PathVariable String userid,
             @RequestParam(value = "is_GD", defaultValue = "2") Integer is_GD,
             @RequestParam(value = "sort_type", defaultValue = "1") Integer sort_type,
             @RequestParam(value = "seat_type", defaultValue = "true,true,true,true,true,true") List<Boolean> seat_type,
@@ -49,9 +50,10 @@ public class TrainController {
 //        System.out.println("start end: " + URLEncoder.encode("上海", StandardCharsets.UTF_8) +"/"+ URLEncoder.encode("北京",StandardCharsets.UTF_8));
 
         List<Train> trains = trainService.searchTrain(start_city, arrive_city, date,
-                is_GD, sort_type, seat_type, isHide);
+                is_GD, sort_type, seat_type);
         List<Object> result = new ArrayList<>();
         for (Train e : trains) {
+            // 如果所选类型都无票则不显示
             boolean[] haveTicketsToShow = {false};
             if (seat_type.get(0) && e.getBusinessSeatSurplus() > 0) {
                 haveTicketsToShow[0] = true;
@@ -69,6 +71,8 @@ public class TrainController {
             if (!haveTicketsToShow[0]) {
                 continue;
             }
+            // 隐藏冲突
+
 
             result.add(new HashMap<>() {{
                 String trainId = e.getTrainId();

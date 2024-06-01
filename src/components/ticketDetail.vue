@@ -313,11 +313,17 @@ const getInfo = async () => {
     }
 };
 const handleChecked = (e) => {
-    console.log("handle!" + e);
-    passengersTable.value=[];
+    passengersTable.value = [];
     for (var i = 0; i < e.length; i++) {
         passengersTable.value.push(passengers.value.find(p => p.name === e[i]));
-        value.value[passengersTable.value.length - 1] = options.value[0];
+        value.value[i] = options.value[0];
+    }
+    // console.log("handle!" + e);
+    // console.log("yuan"+value.value);
+    for(var i=0;i<person.value.length;i++){
+        if (!e.includes(person.value[i])){
+            value.value[i]=null;
+        }
     }
 };
 const singleDelete = async (index) => {
@@ -330,8 +336,9 @@ watch(value, () => {
     total.value = 0;
     for (var i = 0; i < value.value.length; i++) {
         const regex = /(\d+)/;
-        total.value += parseInt(value.value[i].match(regex), 10);;
+        if (value.value[i] != null) total.value += parseInt(value.value[i].match(regex), 10);
     }
+    console.log("金额改变！");
 }, {
     deep: true
 });
@@ -380,22 +387,22 @@ onMounted(async () => {
 
     getInfo();
     if (two.value != '无票' && two_price.value != 0) {
-        options.value.push('二等座（￥' + two.value + "元）");
+        options.value.push('二等座（' + two.value + "）");
     }
     if (one.value != '无票' && one_price.value != 0) {
-        options.value.push('一等座（￥' + one.value + "元）");
+        options.value.push('一等座（' + one.value + "）");
     }
     if (business.value != '无票' && business_price.value != 0) {
-        options.value.push('商务座（￥' + business.value + "元）");
+        options.value.push('商务座（' + business.value + "）");
     }
     if (soft_sleeper.value != '无票' && soft_sleeper_price.value != 0) {
-        options.value.push('软卧（￥' + soft_sleeper.value + "元）");
+        options.value.push('软卧（' + soft_sleeper.value + "）");
     }
     if (hard_sleeper.value != '无票' && hard_sleeper_price.value != 0) {
-        options.value.push('硬卧（￥' + hard_sleeper.value + "元）");
+        options.value.push('硬卧（' + hard_sleeper.value + "）");
     }
     if (hard_seat.value != '无票' && hard_seat_price.value != 0) {
-        options.value.push('硬座（￥' + hard_seat.value + "元）");
+        options.value.push('硬座（' + hard_seat.value + "）");
     }
     value.value[0] = options.value[0];
     const regex = /(\d+)/;

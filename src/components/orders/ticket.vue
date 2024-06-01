@@ -188,7 +188,7 @@ const hideMiddle = (val) => {
 }
 const getOrders = async () => {
     try {
-        console.log(status.value);
+        // console.log(status.value);
         const response = await getTicketOrders(userID, status.value);
         ticketOrders.value = response.data.result;
     } catch (error) {

@@ -84,13 +84,6 @@
                   </el-popconfirm>
                 </span>
 
-                <!-- <span>
-                  <el-popconfirm title="确定要删除这个订单吗？删除后将不可恢复。" @confirm="deleteOrder(item.oid)">
-                    <template #reference>
-                      <el-button type="info" text bg>删除订单</el-button>
-                    </template>
-                  </el-popconfirm>
-                </span> -->
               </div>
             </el-aside>
           </el-container>
@@ -106,7 +99,6 @@ import { onMounted, ref, watch } from "vue";
 import {
   getFoodOrders,
   cancelFoodOrder,
-  deleteFoodOrder,
 } from "../../api/api.js";
 import { ElMessage, ElNotification } from "element-plus";
 import { useRoute } from "vue-router";
@@ -174,23 +166,7 @@ const cancelOrder = async (oid) => {
   }
   getOrders();
 };
-const deleteOrder = async (oid) => {
-  try {
-    const responce = await deleteFoodOrder(userID, oid);
-    if (responce.data.result) {
-      ElMessage({
-        message: "删除订单成功",
-        type: "success",
-      });
-    } else {
-      ElMessage.error("删除订单失败，订单不存在");
-    }
-  } catch (error) {
-    console.error("删除订单失败", error);
-    ElMessage.error("删除订单失败");
-  }
-  getOrders();
-};
+
 
 onMounted(() => {
   getOrders();

@@ -119,6 +119,10 @@ export const getMessage = (userID) => {
 export const haveReadMessage = (mid) => {
     return api.post(`/message/setRead/${mid}`)
 }
+/*全部已读*/
+export const haveReadAllMessage = (userID) => {
+    return api.post(`/message/setAllRead/${userID}`)
+}
 /*城市查询*/
 export const getPlaces = () => {
     return api.get('/getPlaces');

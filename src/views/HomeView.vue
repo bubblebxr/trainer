@@ -71,7 +71,9 @@
                 </div>
                 <div style="margin-top:13px;">
                   <el-input show-password v-model="my_password" style="max-width: 600px;height: 40px;" placeholder="输入密码" :prefix-icon="Lock">
-                    
+                    <template #append style="background-color:white">
+                      <button  @click="forgotPassword1">忘记密码?</button>
+                    </template>
                   </el-input>
                 </div>
                 <button style="margin-top:8px;color:#61bbff;text-decoration:underline;" @click="changeToRegister">
@@ -79,6 +81,44 @@
                 </button>
                 <div style="display: flex; justify-content: center;margin-top:17px;">
                   <el-button style="width:470px;height:36px;font-size:17px;letter-spacing: 2px;" type="primary" @click="handleLoginOk">登录 </el-button>
+                </div>
+              </a-modal>
+              <a-modal v-model:open="backPassword1" title="填写账号"  style="color:white" :cancel-button-props="{ style: { display: 'none' } }" :ok-button-props="{ style: { display: 'none' } }" @cancel ="handleCancel">
+                <div style="margin-top:13px;">
+                  <el-input v-model="my_id" style="max-width: 300px;height: 35px;" placeholder="输入身份证号" :prefix-icon="User">
+                    
+                  </el-input>
+                  <el-button style="width:100px;margin-left:20px;color:black;height:35px" @click="getPassword" :disabled="countingDown">
+                    {{buttonText }} </el-button>
+                </div>
+                
+                <div style="margin-top:20px;">
+                  <el-input v-model="my_code" style="max-width: 230px" placeholder="输入验证码" :prefix-icon="Check">
+                  </el-input>
+                  
+                 
+                </div>
+                
+                <div style="display: flex; justify-content: center;margin-top:17px;">
+                  <el-button style="width:470px;height:36px;font-size:17px;letter-spacing: 2px;" type="primary" @click="forgotPassword2" :disabled=have_send>下一步</el-button>
+                </div>
+              </a-modal>
+              <a-modal v-model:open="backPassword2" title="更新密码"  style="color:white" :cancel-button-props="{ style: { display: 'none' } }" :ok-button-props="{ style: { display: 'none' } }">
+                
+                
+                <div style="margin-top:13px;">
+                  <el-input show-password v-model="my_newpassword1" style="max-width: 600px;height: 40px;" placeholder="输入新密码" :prefix-icon="Lock">
+    
+                  </el-input>
+                </div>
+                <div style="margin-top:13px;">
+                  <el-input show-password v-model="my_newpassword2" style="max-width: 600px;height: 40px;" placeholder="再次输入新密码" :prefix-icon="Lock">
+    
+                  </el-input>
+                </div>
+                
+                <div style="display: flex; justify-content: center;margin-top:17px;">
+                  <el-button style="width:470px;height:36px;font-size:17px;letter-spacing: 2px;" type="primary" @click="handleUpdateOk">确认更新</el-button>
                 </div>
               </a-modal>
             </div>
@@ -348,7 +388,7 @@ const my_name = ref("");
 const my_verify = ref("");
 const my_code = ref("");
 
-import { postRegister, postCode, postCodeVeryfication } from "@/api/api";
+import { postRegister, postCode, postCodeVeryfication,getbackPassword,idCodeVerification,updatePassword } from "@/api/api";
 const openRegister = ref(false);
 const openVerification = ref(false);
 
@@ -436,24 +476,39 @@ const handleVerificationOk = async () => {
   }
 };
 
+
+
 //倒计时
 const countdownSeconds = 120;
 const countingDown = ref(false);
-const buttonText = ref("发送验证码");
+const buttonText = ref("获取验证码");
+let countdownInterval = null;
 
 function startCountdown() {
   countingDown.value = true;
   let seconds = countdownSeconds;
   buttonText.value = `${seconds}s`;
-  const countdownInterval = setInterval(() => {
+  countdownInterval = setInterval(() => {
     seconds--;
     buttonText.value = `${seconds}s`;
     if (seconds <= 0) {
       clearInterval(countdownInterval);
       countingDown.value = false;
-      buttonText.value = "发送验证码";
+      buttonText.value = "再次获取验证码";
     }
   }, 1000);
+}
+
+function clearAll() {
+  if (countdownInterval) {
+    clearInterval(countdownInterval);
+    countdownInterval = null;
+    countingDown.value = false;
+    buttonText.value = "获取验证码";
+    my_newpassword1.value = '';
+    my_newpassword2.value = '';
+    my_code.value = '';
+  }
 }
 
 const handleRegisterOk = (e) => {
@@ -479,6 +534,112 @@ const changeToRegister = () => {
   openRegister.value = true;
   updateUI();
 };
+
+//忘记密码
+const backPassword1 = ref(false);
+const backPassword2 = ref(false);
+const have_send = ref(true);
+const my_newpassword1 = ref('');
+const my_newpassword2 = ref('');
+const handleCancel = ()=>{
+  have_send.value = true;
+  clearAll();
+}
+const forgotPassword1 = (e) => {
+    openLogin.value = false;
+    backPassword1.value = true;
+    buttonText.value = "获取验证码";
+};
+const forgotPassword2 = async() =>{
+  try{
+    if (my_code.value ==='' ) {
+      ElMessage({
+        message: "还没有填写验证码",
+        type: "error",
+        plain: true,
+      });
+    }else{
+      const response = await idCodeVerification(my_code.value,my_id.value);
+      if(response.data.result === true){
+        backPassword1.value = false;
+        backPassword2.value = true;
+        
+      }else{
+        ElMessage({
+        message: "验证码错误",
+        type: "error",
+        plain: true,
+      });
+      }
+    }
+    
+  }catch (error) {
+    console.error("验证失败", error);
+  }
+
+}
+
+const getPassword = async() => {
+  try{
+    if (my_id.value ==='' ) {
+      ElMessage({
+        message: "还没有填写账号",
+        type: "error",
+        plain: true,
+      });
+    }
+    else{
+      const response = await getbackPassword(my_id.value);
+    if (response.data.result) {
+        ElMessage({
+          message: "成功发送验证码",
+          type: "success",
+        });
+        localStorage.setItem("user_id", my_id.value);
+        have_send.value = false;
+        if (!countingDown.value) {
+          startCountdown();
+        // 在这里发送验证码的逻辑
+        }
+      }else{
+        ElMessage.error(response.data.message);
+      }
+    }
+  }catch (error) {
+    console.error("验证码发送失败", error);
+  }
+}
+
+const handleUpdateOk = async() =>{
+  try{
+    if(my_newpassword1.value != my_newpassword2.value){
+      ElMessage({
+        message: "两次密码不同",
+        type: "error",
+        plain: true,
+      });
+    }else{
+        const response = await updatePassword(localStorage.getItem("user_id"),my_newpassword1.value);
+        if(response.data.result === true){
+          ElMessage({
+            message: "更改密码成功，请重新登录",
+            type: "success",
+          });
+          backPassword2.value = false;
+          clearAll();
+        }else{
+          ElMessage({
+            message: "更改密码失败",
+            type: "error",
+            plain: true,
+          });
+        }
+    }
+  }catch (error) {
+    console.error("密码更新失败", error);
+  }
+}
+
 
 // 页面加载完成时执行
 document.addEventListener("DOMContentLoaded", function () {

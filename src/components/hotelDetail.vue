@@ -23,11 +23,7 @@
             <div style="margin-top:5px;margin-left:20px">
               <a-rate :value="hotelData.rank" style="font-size:30px;" disabled />
             </div>
-            <div style="width:50px;margin-top:10px;margin-left:600px;">
-              <button :class="{ 'before': !isPressed,'after': isPressed,'circle': true}" @click="toggleButton">
-               <BookOutlined  :style="{color: isPressed ? 'white' : 'black', fontSize: '23px'}"/>
-              </button>
-            </div>
+            
           </div>
           
           <div style="display:flex;margin-left:10px;color:grey">
@@ -38,24 +34,48 @@
         </div>
 
         <div v-if="hotelData" style="display:grid; grid-template-columns: 650px 245px 245px; grid-template-rows: 220px; grid-gap: 10px; border-color:#a3a3a3;border-style: solid;margin: 0 auto;" class="photo">
-    <a-image-preview-group>
+    
        <div class="big" style="grid-column-start: 1;">
-        <a-image :width="650" height="440" style="object-fit:cover;height:450px;width:650px;" :src="hotelData.photos[0]" />
+        <a-image :preview="{ visible: false }" @click="visible = true" :width="650" height="440" style="object-fit:cover;height:450px;width:650px;" :src="hotelData.photos[0]" />
        </div>
        <div class="small" style="grid-column-start: 2;">
-        <a-image :width="245" height="220" style="height:220px;width:245px; object-fit:cover; " :src="hotelData.photos[1]" />
+        <a-image :preview="{ visible: false }" @click="visible = true" :width="245" height="220" style="height:220px;width:245px; object-fit:cover; " :src="hotelData.photos[1]" />
         </div>
         <div class="small" style="grid-column-start: 3;">
-        <a-image :width="245" height="220" style="height:220px;width:245px; object-fit:cover; " :src="hotelData.photos[2]" />
+        <a-image :preview="{ visible: false }" @click="visible = true" :width="245" height="220" style="height:220px;width:245px; object-fit:cover; " :src="hotelData.photos[2]" />
         </div>
         <div class="small" style="grid-column-start: 2;">
-        <a-image :width="245" height="220" style="height:220px;width:245px; object-fit:cover; " :src="hotelData.photos[3]" />
+        <a-image :preview="{ visible: false }" @click="visible = true" :width="245" height="220" style="height:220px;width:245px; object-fit:cover; " :src="hotelData.photos[3]" />
         </div>
         <div class="small" style="grid-column-start: 3;">
-        <a-image :width="245" height="220" style="height:220px;width:245px; object-fit:cover;" :src="hotelData.photos[4]" />
+        <a-image :preview="{ visible: false }" @click="visible = true" :width="245" height="220" style="height:220px;width:245px; object-fit:cover;" :src="hotelData.photos[4]" />
         </div>
-    </a-image-preview-group>
+      <div style="display: none">
+        <a-image-preview-group :preview="{ visible, onVisibleChange: vis => (visible = vis) }">
+          <template v-for="(photo, index) in hotelData.photos" :key="index">
+            <a-image :src="photo" />
+          </template>
+        </a-image-preview-group>
   </div>
+  </div>
+    <el-dialog v-model="payVisible" title="确认订单" width="20em" align-center>
+                <div v-if="payVisible" >
+                    <img
+                      :src="payPicture"
+                      alt="2DPayPicture"
+                      style="width: 100%; height: 100%; object-fit: cover"
+                      id
+                    />
+                    <div>
+                      <el-button type="primary" style="margin-left:20px;margin-top:10px" @click="changePay"
+                        >换一种支付方式</el-button
+                        >
+                      <el-button type="success"style="margin-left:20px;margin-top:10px" @click="pay"
+                       >已完成支付</el-button
+                      >
+                    </div>
+                  </div>
+    </el-dialog>
 
         <div v-if="hotelData" style="display: flex;border-color:#a3a3a3;margin: 0 auto;margin-top:10px" class="other">
             <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick" size="large">
@@ -88,9 +108,11 @@
                                     {{ item.bed_size }}
                                 </span>
                                 
-                                <div style="margin-left: 200px">
-                                  <a-typography-title :level="2">¥ {{item.price}}</a-typography-title>         
+                                <div style="margin-left: 200px;display:flex">
+                                  
+                                  <a-typography-title :level="2"><span style="font-size: 20px;margin-right:5px">均 </span> ¥ {{item.price}} </a-typography-title>
                                 </div>
+                                
                                 <a-button :size="large" style="background-color: {{ item.num === 0 ? 'darkgray' : 'inherit' }}"  @click="showDrawer(item)" :disabled="item.num === 0">
                                 {{ item.num === 0 ? '已售完' : '点击预订' }}
                                 </a-button>
@@ -158,7 +180,7 @@
                                     <div>
                                      <p style="font-size:20px;margin-top:10px;">{{"需支付: ¥"+money}}</p>
                                     </div>
-                                    <a-button style="margin-left:70px;margin-top:5px;height:40px;width:110px;background-color:#0077ff;border-radius:5px;color:white;font-size:17px;font-weight:bold" @click="pay">
+                                    <a-button style="margin-left:70px;margin-top:5px;height:40px;width:110px;background-color:#0077ff;border-radius:5px;color:white;font-size:17px;font-weight:bold" @click="topay">
                                       点击支付
                                     </a-button>
                                   </div>
@@ -282,7 +304,7 @@
                       </div>
                     </div>
                   </div>
-
+                  
                
                 </el-tab-pane>
             </el-tabs>
@@ -302,6 +324,7 @@ import { BookOutlined,HeartOutlined,StarOutlined, LikeOutlined, MessageOutlined,
 //标签的选择的
 const activeName = ref('rooms');
 
+
 //Hotel
 var hotelData= ref();
 //comments
@@ -309,6 +332,7 @@ var commentData= ref([]);
 
 const hotelid = ref('');
 
+const visible = ref(false);
 
 
 //页面加载预处理
@@ -422,16 +446,40 @@ const money=ref();
 const updateMoney = () => {
   money.value=selectedRoom.value.price*roomCount.value;
 };
-
-const pay = async () =>{
-    
+const payPicture = ref(require("../assets/vxPay.jpg"));
+const payVisible = ref(false);
+const billVisible = ref(false);
+const topay = async () =>{
+        
+        if (input_name.value.length !== input_id.value.length) {
+          ElMessage({
+                message: "未填写全部信息",
+                type: "error",
+              });
+          return; // 直接退出函数
+        }
         const customers = [];
+        
+        if(input_name.value.length<roomCount.value || input_id.value.length<roomCount.value){
+          ElMessage({
+                message: "未填写全部信息",
+                type: "error",
+              });
+              return;
+        }
         if (input_name.value.length === input_id.value.length) {
-          for (let i = 0; i < input_name.value.length; i++) {
+          for (let i = 0; i < roomCount.value; i++) {
+            if(input_id.value[i]==='' || input_name.value[i]===''){
+                ElMessage({
+                message: "未填写全部信息",
+                type: "error",
+              });
+              return;
+            }
             customers.push({ id: input_id.value[i], name: input_name.value[i] });
           }
         } else {
-          console.error('input_name 和 input_id 的长度不一致');
+          console.error('未填写全部信息');
         }
         try{
         const response = await postHotelBill(hotelid.value,localStorage.getItem('user_id'),check_in.value,check_out.value,roomCount.value,1,customers,money.value);
@@ -442,6 +490,8 @@ const pay = async () =>{
                 type: "success",
             });
             //todo:页面跳转
+            open.value=false;
+            payVisible.value = true;
         }else{
             ElMessage({
                 message: "下单失败",
@@ -451,8 +501,28 @@ const pay = async () =>{
     }catch(error){
         console.log('提交酒店订单失败',error);
     }
+        
 };
 
+const pay =()=>{
+  payVisible.value = false;
+  ElMessage({
+      message: "支付成功",
+      type: "success",
+  });
+  input_name.value = ref(['']);
+  input_id.value = ref(['']);
+}
+const changePay = () => {
+  if (payPicture.value === require("../assets/vxPay.jpg"))
+    payPicture.value = require("../assets/zfbPay.jpg");
+  else payPicture.value = require("../assets/vxPay.jpg");
+};
+const resetValue = () => {
+  billVisible.value = false;
+  payVisible.value = false;
+  payPicture.value = require("../assets/vxPay.jpg");
+};
 
 //计算时间差,防止入住>退房
 const daysDiff = ref(0);
@@ -565,6 +635,7 @@ const recalculateDateDiff = () => {
 .date_picker .el-date-picker__editor {
   border: none; /* 去掉输入框的边框 */
 }
+
 
 
 </style>

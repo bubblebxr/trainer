@@ -6,8 +6,8 @@ export const getStation = () => {
 
 export const getSearchResult = (startCity, arriveCity, date, isGD, sortType, seatType, isHide) => {
     const queryString = `?is_GD=${isGD}&sort_type=${sortType}&seat_type=${seatType}&isHide=${isHide}`;
-    const start=encodeURIComponent(startCity);
-    const arrive=encodeURIComponent(arriveCity);
+    const start = encodeURIComponent(startCity);
+    const arrive = encodeURIComponent(arriveCity);
     return api.post(`/trains/${start}/${arrive}/${date}${queryString}`);
 };
 
@@ -231,4 +231,11 @@ export const updatePassword = (userID, newPassword, confirm) => {
         }
     }
     )
+}
+export const getbackPassword = (id) => {
+    return api.get(`/getbackPassword/${id}`);
+}
+
+export const idCodeVerification = (idcode, id) => {
+    return api.post(`/id/idCode/${idcode}/${id}`);
 }

@@ -38,8 +38,8 @@ public class FoodServiceImpl implements IFoodService {
     }
 
     @Override
-    public List<FoodOrder> getFoodOrdersByTrain(String tid, String date) {
-        return foodMapper.getFoodOrdersByTrain(tid, date);
+    public List<FoodOrder> getFoodOrdersByTrain(String trainId, String trainDate) {
+        return foodMapper.getFoodOrdersByTrain(trainId, trainDate);
     }
 
     @Override

@@ -83,9 +83,13 @@ public class Reminder {
                         if (finish.isNegative()) {
                             orderService.finishOrder(order.getOid());
                             // 取消该trainOrder对应的foodOrder
-                            foodService.getFoodOrdersByTrain(trainId, trainDate).forEach(foodOrder -> {
-                                orderService.finishOrder(orderService.getOrder(foodOrder.getOid()).getOid());
+                            foodService.getTrainRelatedFoodOrders(trainId, trainDate, userId).forEach(e-> {
+                                orderService.finishOrder(orderService.getOrder(e.getOid()).getOid());
+                                //orderService.cancelOrder(e);
                             });
+//                            foodService.getFoodOrdersByTrain(trainId, trainDate).forEach(foodOrder -> {
+//                                orderService.finishOrder(orderService.getOrder(foodOrder.getOid()).getOid());
+//                            });
                         }
                     }
                     // 车次取消
@@ -93,8 +97,8 @@ public class Reminder {
                         System.out.println("车次已取消");
                         orderService.cancelOrder(order);
                         // 取消该trainOrder对应的foodOrder
-                        foodService.getFoodOrdersByTrain(trainId, trainDate).forEach(foodOrder -> {
-                            orderService.cancelOrder(orderService.getOrder(foodOrder.getOid()));
+                        foodService.getTrainRelatedFoodOrders(trainId, trainDate, userId).forEach(e-> {
+                            orderService.cancelOrder(e);
                         });
                         // 距发车时间小于3h且未发送过消息
                         String content = "【WerwerTrip】非常抱歉，因铁路部门安排调整，您购买的" + trainDate + " " + trainId + "车次的" + "列车已取消，订单将自动取消并原路退回钱款";

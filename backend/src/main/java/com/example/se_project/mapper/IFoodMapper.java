@@ -23,8 +23,8 @@ public interface IFoodMapper extends BaseMapper<Food> {
     @Select("select * from foodOrders where oid = #{oid}")
     List<FoodOrder> getFoodOrdersByOid(String oid);
 
-    @Select("select * from foodOrders where trainId = #{tid} and trainDate = #{date}")
-    List<FoodOrder> getFoodOrdersByTrain(String tid, String date);
+    @Select("select * from foodOrders where trainId = #{trainId} and trainDate = #{trainDate}")
+    List<FoodOrder> getFoodOrdersByTrain(String trainId, String trainDate);
 
     List<Order> getTrainRelatedFoodOrders(String tid, String date, String uid);
 

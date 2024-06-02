@@ -177,7 +177,12 @@ public class FoodController {
                     map.put("date", foodOrder.getMealDate());
                 }
                 if (!map.containsKey("time")) {
-                    map.put("time", foodOrder.getMealTime());
+                    //map.put("time", foodOrder.getMealTime());
+                    String s = foodOrder.getMealTime();
+                    if(s.equals("lunch"))
+                        map.put("time","午餐");
+                    else
+                        map.put("time","晚餐");
                 }
 
                 foods.add(new HashMap<>() {{

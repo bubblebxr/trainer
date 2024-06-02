@@ -13,7 +13,7 @@
                     value-format="YYYY-MM-DD" :size="20" :disabled-date="disabledDate" />
                 <el-icon style="width:30px;">
                     <Search @click="search"
-                        style="background-color:orange;width:30px;;height:200%;border-radius: 5px;" />
+                        style="width:30px;;height:200%;border-radius: 5px;" />
                 </el-icon>
             </div>
             <div

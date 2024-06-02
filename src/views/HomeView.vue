@@ -198,7 +198,7 @@
           </template>
           <text>{{ item.content }}</text>
           <span style="vertical-align: middle; text-align: center">
-            <text style="color: #a0cfff">查看详细信息</text>
+            <text style="color: #a0cfff">双击查看详细信息</text>
             <el-icon style="color: #a0cfff">
               <DArrowRight />
             </el-icon>

@@ -1,297 +1,331 @@
 <template>
   <div class="home-container" style="overflow-y:scroll;overflow-x:hidden;">
     <el-scrollbar style="height: 100%">
-        <div class="top">
-             <div style="display: flex;border-color:#a3a3a3;border-style: solid;margin: 0 auto;" class="top-info">
-                <div style="height:25px;width:160px;margin-left:10px">
-                  <div style="margin-top:5px;padding-left:10px;color:#969696;height:18px;font-size:15px;">入住时间</div>
-                  <el-date-picker class="date_picker" v-model="check_in" format="YYYY-MM-DD" value-format="YYYY-MM-DD" type="date"  size="large" style="height:25px;width:160px;margin-top:0px;border:none" placeholder="请选择" bordered=0 suffixIcon=" " @change="recalculateDateDiff" />
-                </div>
-                <div style="height:25px;width:80px;margin-top:15px;margin-left:10px">
-                  <div style="background-color:#ededed;margin-top:5px;width:55px;padding-left:15px;color:black">{{ daysDiff }}晚</div>
-                </div>
-                <div style="height:25px;width:160px;">
-                  <div style="margin-top:5px;padding-left:10px;color:#969696;height:18px;font-size:15px;">退房时间</div>
-                  <el-date-picker class="date_picker" v-model="check_out" format="YYYY-MM-DD" value-format="YYYY-MM-DD" type="date" size="large" style="height:25px;width:160px;margin-top:0px;border:none" placeholder="请选择" bordered=0 suffixIcon=" " @change="recalculateDateDiff"/>
-                </div>  
-             </div>
-        </div>
-
-        <div v-if="hotelData" style="border-color:#a3a3a3;margin: 0 auto;" class="information">
-          <div style="display:flex;margin-left:10px;margin-top:10px;height:70px;">
-            <p style="font-size:40px;font-weight: bold;">{{hotelData.name}}</p>
-            <div style="margin-top:5px;margin-left:20px">
-              <a-rate :value="hotelData.rank" style="font-size:30px;" disabled />
-            </div>
-            <div style="width:50px;margin-top:10px;margin-left:600px;">
-              <button :class="{ 'before': !isPressed,'after': isPressed,'circle': true}" @click="toggleButton">
-               <BookOutlined  :style="{color: isPressed ? 'white' : 'black', fontSize: '23px'}"/>
-              </button>
-            </div>
+      <div class="top">
+        <div style="display: flex;border-color:#a3a3a3;border-style: solid;margin: 0 auto;" class="top-info">
+          <div style="height:25px;width:160px;margin-left:10px">
+            <div style="margin-top:5px;padding-left:10px;color:#969696;height:18px;font-size:15px;">入住时间</div>
+            <el-date-picker class="date_picker" v-model="check_in" format="YYYY-MM-DD" value-format="YYYY-MM-DD"
+              type="date" size="large" style="height:25px;width:160px;margin-top:0px;border:none" placeholder="请选择"
+              bordered=0 suffixIcon=" " @change="recalculateDateDiff" />
           </div>
-          
-          <div style="display:flex;margin-left:10px;color:grey">
-            <EnvironmentOutlined />
-            <p style="margin-left:3px;">{{hotelData.position}}</p>
+          <div style="height:25px;width:80px;margin-top:15px;margin-left:10px">
+            <div style="background-color:#ededed;margin-top:5px;width:55px;padding-left:15px;color:black">{{ daysDiff
+              }}晚</div>
           </div>
-        
+          <div style="height:25px;width:160px;">
+            <div style="margin-top:5px;padding-left:10px;color:#969696;height:18px;font-size:15px;">退房时间</div>
+            <el-date-picker class="date_picker" v-model="check_out" format="YYYY-MM-DD" value-format="YYYY-MM-DD"
+              type="date" size="large" style="height:25px;width:160px;margin-top:0px;border:none" placeholder="请选择"
+              bordered=0 suffixIcon=" " @change="recalculateDateDiff" />
+          </div>
+        </div>
+      </div>
+
+      <div v-if="hotelData" style="border-color:#a3a3a3;margin: 0 auto;" class="information">
+        <div style="display:flex;margin-left:10px;margin-top:10px;height:70px;">
+          <p style="font-size:40px;font-weight: bold;">{{hotelData.name}}</p>
+          <div style="margin-top:5px;margin-left:20px">
+            <a-rate :value="hotelData.rank" style="font-size:30px;" disabled />
+          </div>
+          <div style="width:50px;margin-top:10px;margin-left:600px;">
+            <button :class="{ 'before': !isPressed,'after': isPressed,'circle': true}" @click="toggleButton">
+              <BookOutlined :style="{color: isPressed ? 'white' : 'black', fontSize: '23px'}" />
+            </button>
+          </div>
         </div>
 
-        <div v-if="hotelData" style="display:grid; grid-template-columns: 650px 245px 245px; grid-template-rows: 220px; grid-gap: 10px; border-color:#a3a3a3;border-style: solid;margin: 0 auto;" class="photo">
-    <a-image-preview-group>
-       <div class="big" style="grid-column-start: 1;">
-        <a-image :width="650" height="440" style="object-fit:cover;height:450px;width:650px;" :src="hotelData.photos[0]" />
-       </div>
-       <div class="small" style="grid-column-start: 2;">
-        <a-image :width="245" height="220" style="height:220px;width:245px; object-fit:cover; " :src="hotelData.photos[1]" />
+        <div style="display:flex;margin-left:10px;color:grey">
+          <EnvironmentOutlined />
+          <p style="margin-left:3px;">{{hotelData.position}}</p>
         </div>
-        <div class="small" style="grid-column-start: 3;">
-        <a-image :width="245" height="220" style="height:220px;width:245px; object-fit:cover; " :src="hotelData.photos[2]" />
-        </div>
-        <div class="small" style="grid-column-start: 2;">
-        <a-image :width="245" height="220" style="height:220px;width:245px; object-fit:cover; " :src="hotelData.photos[3]" />
-        </div>
-        <div class="small" style="grid-column-start: 3;">
-        <a-image :width="245" height="220" style="height:220px;width:245px; object-fit:cover;" :src="hotelData.photos[4]" />
-        </div>
-    </a-image-preview-group>
-  </div>
 
-        <div v-if="hotelData" style="display: flex;border-color:#a3a3a3;margin: 0 auto;margin-top:10px" class="other">
-            <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick" size="large">
-                <el-tab-pane label="房型" name="rooms">
-                    <div style="height:50px;display:flex;margin-left:2px;">
-                        <el-space :size="size" :spacer="spacer">
-                          <el-check-tag :checked="checked1" type="primary" @change="onChange1" >
-                            标准双人间
-                          </el-check-tag>
-                          <el-check-tag :checked="checked2" type="primary" @change="onChange2">
-                            大床房
-                          </el-check-tag>
-                          <el-check-tag :checked="checked3" type="primary" @change="onChange3">
-                            家庭房
-                          </el-check-tag>
-                        </el-space>
-                    </div>
-                    <div style="width:1155px;display:flex;margin-left:2px;">
-                      <a-list item-layout="vertical" size="large" :pagination="pagination" :data-source="hotelData.rooms">
-                        <template #renderItem="{ item }">
-                          <a-list-item key="item.name" style="width:1155px">
-                            <template #actions>
-                                <ReconciliationOutlined />
-                                <span>
-                                  
-                                    {{ item.size }}
-                                </span>
-                                <span>
-                                  <ReconciliationOutlined />
-                                    {{ item.bed_size }}
-                                </span>
-                                
-                                <div style="margin-left: 200px">
-                                  <a-typography-title :level="2">¥ {{item.price}}</a-typography-title>         
+      </div>
+
+      <div v-if="hotelData"
+        style="display:grid; grid-template-columns: 650px 245px 245px; grid-template-rows: 220px; grid-gap: 10px; border-color:#a3a3a3;border-style: solid;margin: 0 auto;"
+        class="photo">
+        <a-image-preview-group>
+          <div class="big" style="grid-column-start: 1;">
+            <a-image :width="650" height="440" style="object-fit:cover;height:450px;width:650px;"
+              :src="hotelData.photos[0]" />
+          </div>
+          <div class="small" style="grid-column-start: 2;">
+            <a-image :width="245" height="220" style="height:220px;width:245px; object-fit:cover; "
+              :src="hotelData.photos[1]" />
+          </div>
+          <div class="small" style="grid-column-start: 3;">
+            <a-image :width="245" height="220" style="height:220px;width:245px; object-fit:cover; "
+              :src="hotelData.photos[2]" />
+          </div>
+          <div class="small" style="grid-column-start: 2;">
+            <a-image :width="245" height="220" style="height:220px;width:245px; object-fit:cover; "
+              :src="hotelData.photos[3]" />
+          </div>
+          <div class="small" style="grid-column-start: 3;">
+            <a-image :width="245" height="220" style="height:220px;width:245px; object-fit:cover;"
+              :src="hotelData.photos[4]" />
+          </div>
+        </a-image-preview-group>
+      </div>
+
+      <div v-if="hotelData" style="display: flex;border-color:#a3a3a3;margin: 0 auto;margin-top:10px" class="other">
+        <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick" size="large">
+          <el-tab-pane label="房型" name="rooms">
+            <div style="height:50px;display:flex;margin-left:2px;">
+              <el-space :size="size" :spacer="spacer">
+                <el-check-tag :checked="checked1" type="primary" @change="onChange1">
+                  标准双人间
+                </el-check-tag>
+                <el-check-tag :checked="checked2" type="primary" @change="onChange2">
+                  大床房
+                </el-check-tag>
+                <el-check-tag :checked="checked3" type="primary" @change="onChange3">
+                  家庭房
+                </el-check-tag>
+              </el-space>
+            </div>
+            <div style="width:1155px;display:flex;margin-left:2px;">
+              <a-list item-layout="vertical" size="large" :pagination="pagination" :data-source="hotelData.rooms">
+                <template #renderItem="{ item }">
+                  <a-list-item key="item.name" style="width:1155px">
+                    <template #actions>
+                      <ReconciliationOutlined />
+                      <span>
+
+                        {{ item.size }}
+                      </span>
+                      <span>
+                        <ReconciliationOutlined />
+                        {{ item.bed_size }}
+                      </span>
+
+                      <div style="margin-left: 200px">
+                        <a-typography-title :level="2">¥ {{item.price}}</a-typography-title>
+                      </div>
+                      <a-button :size="large" style="background-color: {{ item.num === 0 ? 'darkgray' : 'inherit' }}"
+                        @click="showDrawer(item)" :disabled="item.num === 0">
+                        {{ item.num === 0 ? '已售完' : '点击预订' }}
+                      </a-button>
+                      <a-drawer v-model:open="open" class="custom-class" root-class-name="root-class-name"
+                        :root-style="{ color: 'blue' }" style="color: black" title="预订信息" placement="right"
+                        @after-open-change="afterOpenChange">
+                        <div style="display: flex;border-color:#a3a3a3;margin: 0 auto;" class="top-info">
+                          <div style="height:25px;width:120px;">
+                            <div style="margin-top:5px;padding-left:10px;color:#969696;height:18px;font-size:15px;">入住时间
+                            </div>
+                            <el-date-picker disabled="true" ; v-model="check_in" size="large"
+                              style="height:25px;width:120px;border-style:none;margin-top:10px" placeholder="hihi"
+                              suffixIcon=" " />
+                          </div>
+                          <div style="height:25px;width:80px;margin-top:15px;margin-left:20px">
+                            <div
+                              style="background-color:#ededed;margin-top:5px;width:55px;padding-left:15px;color:black">
+                              {{daysDiff}}晚</div>
+                          </div>
+                          <div style="height:25px;width:130px;">
+                            <div style="margin-top:5px;padding-left:10px;color:#969696;height:18px;font-size:15px;">退房时间
+                            </div>
+                            <el-date-picker disabled="true" ; v-model="check_out" size="large"
+                              style="height:25px;width:130px;border-style:none;margin-top:10px" placeholder="hihi"
+                              suffixIcon=" " />
+                          </div>
+                        </div>
+                        <a-divider />
+                        <p style="font-size:17px;">住客资料</p>
+
+                        <p>房间数</p>
+                        <el-select v-model="roomCount" placeholder="Select" size="large"
+                          style="width: 300px;margin-bottom:10px;" @change="updateMoney">
+                          <el-scrollbar style="height:100px;">
+                            <el-option v-for="index in selectedRoom.num" :key="index" :label="index+'间'"
+                              :value="index" />
+                          </el-scrollbar>
+                        </el-select>
+                        <div
+                          style="height:50px;width:300px;background-color:#f8e8e2;border-type:solid;border-radius:2px;color:#eb775c;padding-top:4px;padding-left:6px;padding-right:3px;margin-bottom:15px;">
+                          请输入住客姓名以及身份证号，每间只需填1人，姓名不可重复。
+                        </div>
+                        <div style="height:250px;">
+                          <el-scrollbar style="height:250px;">
+                            <template v-for="i in roomCount">
+                              <div style="margin-top:1px;display:flex;">
+                                <div style="margin-top:8px;margin-right:10px;">
+                                  <p>住客{{i}}</p>
                                 </div>
-                                <a-button :size="large" style="background-color: {{ item.num === 0 ? 'darkgray' : 'inherit' }}"  @click="showDrawer(item)" :disabled="item.num === 0">
-                                {{ item.num === 0 ? '已售完' : '点击预订' }}
-                                </a-button>
-                                <a-drawer
-                                  v-model:open="open"
-                                  class="custom-class"
-                                  root-class-name="root-class-name"
-                                  :root-style="{ color: 'blue' }"
-                                  style="color: black"
-                                  title="预订信息"
-                                  placement="right"
-                                  @after-open-change="afterOpenChange"
-                                > 
-                                  <div style="display: flex;border-color:#a3a3a3;margin: 0 auto;" class="top-info">
-                                    <div style="height:25px;width:120px;">
-                                      <div style="margin-top:5px;padding-left:10px;color:#969696;height:18px;font-size:15px;">入住时间</div>
-                                      <el-date-picker disabled="true"; v-model="check_in" size="large" style="height:25px;width:120px;border-style:none;margin-top:10px" placeholder="hihi" suffixIcon=" " />
-                                    </div>
-                                    <div style="height:25px;width:80px;margin-top:15px;margin-left:20px">
-                                      <div style="background-color:#ededed;margin-top:5px;width:55px;padding-left:15px;color:black">{{daysDiff}}晚</div>
-                                    </div>
-                                    <div style="height:25px;width:130px;">
-                                      <div style="margin-top:5px;padding-left:10px;color:#969696;height:18px;font-size:15px;">退房时间</div>
-                                      <el-date-picker disabled="true"; v-model="check_out" size="large" style="height:25px;width:130px;border-style:none;margin-top:10px" placeholder="hihi" suffixIcon=" " />
-                                    </div>  
-                                  </div>
-                                  <a-divider />
-                                  <p style="font-size:17px;">住客资料</p>
-                                  
-                                  <p>房间数</p>
-                                  <el-select
-                                    v-model="roomCount"
-                                    placeholder="Select"
-                                    size="large"
-                                    style="width: 300px;margin-bottom:10px;"
-                                    @change="updateMoney"
-                                   >
-                                    <el-scrollbar style="height:100px;">
-                                      <el-option
-                                      v-for="index in selectedRoom.num"
-                                      :key="index"
-                                      :label="index+'间'"
-                                      :value="index"
-                                      />
-                                    </el-scrollbar>
-                                  </el-select>
-                                  <div style="height:50px;width:300px;background-color:#f8e8e2;border-type:solid;border-radius:2px;color:#eb775c;padding-top:4px;padding-left:6px;padding-right:3px;margin-bottom:15px;">
-                                    请输入住客姓名以及身份证号，每间只需填1人，姓名不可重复。
-                                  </div>
-                                  <div style="height:250px;">
-                                    <el-scrollbar style="height:250px;">
-                                    <template v-for="i in roomCount">
-                                      <div style="margin-top:1px;display:flex;">
-                                        <div style="margin-top:8px;margin-right:10px;">
-                                          <p>住客{{i}}</p>
-                                        </div>
-                                        <el-input v-model="input_name[i]" style="width: 70px;height:35px;margin-right:5px;" placeholder="姓名" />
-                                        <el-input v-model="input_id[i]" style="width: 180px;height:35px;" placeholder="身份证号" />
-                                      </div>
-                                    
-                                    </template>
-                                    </el-scrollbar>
-                                  </div>
-                                  <div style="height:50px;margin-top:50px;display:flex;">
-                                    <div>
-                                     <p style="font-size:20px;margin-top:10px;">{{"需支付: ¥"+money}}</p>
-                                    </div>
-                                    <a-button style="margin-left:70px;margin-top:5px;height:40px;width:110px;background-color:#0077ff;border-radius:5px;color:white;font-size:17px;font-weight:bold" @click="pay">
-                                      点击支付
-                                    </a-button>
-                                  </div>
-                                  
-                                </a-drawer>
+                                <el-input v-model="input_name[i]" style="width: 70px;height:35px;margin-right:5px;"
+                                  placeholder="姓名" />
+                                <el-input v-model="input_id[i]" style="width: 180px;height:35px;" placeholder="身份证号" />
+                              </div>
+
                             </template>
+                          </el-scrollbar>
+                        </div>
+                        <div style="height:50px;margin-top:50px;display:flex;">
+                          <div>
+                            <p style="font-size:20px;margin-top:10px;">{{"需支付: ¥"+money}}</p>
+                          </div>
+                          <a-button
+                            style="margin-left:70px;margin-top:5px;height:40px;width:110px;background-color:#0077ff;border-radius:5px;color:white;font-size:17px;font-weight:bold"
+                            @click="pay">
+                            点击支付
+                          </a-button>
+                        </div>
 
-                            <template #extra >
+                      </a-drawer>
+                    </template>
 
-                              <img :src="item.photo" width="360"  height="200" style="float:right"
-                              />
-                            </template>
+                    <template #extra>
 
-                            <a-list-item-meta :description="'余' + item.num + '间'">
-                              <template #title>
-                               <a-typography-title :level="3">{{ item.name }}</a-typography-title>
-                              </template>
-                            </a-list-item-meta>
-                              <a-typography-paragraph><blockquote>{{ item.others }}</blockquote></a-typography-paragraph>
-                          </a-list-item>
-                        </template>
-                      </a-list>
-                    </div>
+                      <img :src="item.photo" width="360" height="200" style="float:right" />
+                    </template>
 
-                </el-tab-pane>
-                <el-tab-pane label="评论" name="comments">
-                  <div style="width:1155px;display:flex;margin-left:2px;">
-                      <a-list  v-if="hotelData.comments && hotelData.comments.length > 0" item-layout="vertical" size="large" :pagination="pagination" :data-source="hotelData.comments">
-                        <template #renderItem="{ item }">
-                          <a-list-item key="item.name" style="width:1155px">
-                            <template #actions>
-                                <ReconciliationOutlined />
-                                <span>
-                                    {{ item.time }}                             
-                                </span>
-                                <span>
-                                    {{ "id:"+item.place }}                             
-                                </span>
-                               
-                                
-                            </template>
+                    <a-list-item-meta :description="'余' + item.num + '间'">
+                      <template #title>
+                        <a-typography-title :level="3">{{ item.name }}</a-typography-title>
+                      </template>
+                    </a-list-item-meta>
+                    <a-typography-paragraph>
+                      <blockquote>{{ item.others }}</blockquote>
+                    </a-typography-paragraph>
+                  </a-list-item>
+                </template>
+              </a-list>
+            </div>
 
-                            <template #extra >
-                              <div style="margin-top:20px;font-size:17px;color:white;background-color:black;width:40px;text-align:center;font-weight: bold;">
-                                {{item.rank}}
-                              </div> 
-                            </template>
+          </el-tab-pane>
+          <el-tab-pane label="评论" name="comments">
+            <div style="width:1155px;display:flex;margin-left:2px;">
+              <a-list v-if="hotelData.comments && hotelData.comments.length > 0" item-layout="vertical" size="large"
+                :pagination="pagination" :data-source="hotelData.comments">
+                <template #renderItem="{ item }">
+                  <a-list-item key="item.name" style="width:1155px">
+                    <template #actions>
+                      <ReconciliationOutlined />
+                      <span>
+                        {{ item.time }}
+                      </span>
+                      <span>
+                        {{ "id:"+item.place }}
+                      </span>
 
-                            <a-list-item-meta :description="item.room">
-                              <template #title>
-                               <a-typography-title :level="3">{{ item.name }}</a-typography-title>
-                              </template>
-                              <template #avatar><a-avatar :src="item.photo" /></template>
-                            </a-list-item-meta>
-                              <a-typography-paragraph style="font-size:18px"><blockquote>{{ item.content }}</blockquote></a-typography-paragraph>
-                          </a-list-item>
-                        </template>
-                      </a-list>
-                    </div>
-                </el-tab-pane>
-                <el-tab-pane label="政策" name="policy">
-                
-                  <div style="margin-bottom:20px;">
-                    <a-typography-title :level="3">{{"酒店政策"}}</a-typography-title>
+
+                    </template>
+
+                    <template #extra>
+                      <div
+                        style="margin-top:20px;font-size:17px;color:white;background-color:black;width:40px;text-align:center;font-weight: bold;">
+                        {{item.rank}}
+                      </div>
+                    </template>
+
+                    <a-list-item-meta :description="item.room">
+                      <template #title>
+                        <a-typography-title :level="3">{{ item.name }}</a-typography-title>
+                      </template>
+                      <template #avatar><a-avatar :src="item.photo" /></template>
+                    </a-list-item-meta>
+                    <a-typography-paragraph style="font-size:18px">
+                      <blockquote>{{ item.content }}</blockquote>
+                    </a-typography-paragraph>
+                  </a-list-item>
+                </template>
+              </a-list>
+            </div>
+          </el-tab-pane>
+          <el-tab-pane label="政策" name="policy">
+
+            <div style="margin-bottom:20px;">
+              <a-typography-title :level="3">{{"酒店政策"}}</a-typography-title>
+            </div>
+            <div style="display:grid;grid-template-columns: 280px 880px;grid-row-gap: 50px;grid-column-gap: 0;">
+              <div style="border-bottom:solid;border-bottom-color:#f0f0f0;font-size:18px;font-weight:bold">
+
+                {{"酒店简介"}}
+
+              </div>
+              <div style="border-bottom:solid;border-bottom-color:#f0f0f0;color:#4a4a4a;">
+                <div style="margin-bottom:40px;">
+                  {{hotelData.others.description}}
+                </div>
+              </div>
+              <div style="border-bottom:solid;border-bottom-color:#f0f0f0;font-size:18px;font-weight:bold">
+                {{"成立时间"}}
+              </div>
+              <div style="border-bottom:solid;border-bottom-color:#f0f0f0;color:#4a4a4a;">
+                <div style="margin-bottom:40px;">
+                  {{hotelData.others.set_time}}
+                </div>
+              </div>
+              <div style="border-bottom:solid;border-bottom-color:#f0f0f0;font-size:18px;font-weight:bold">
+                {{"联系电话"}}
+              </div>
+              <div style="border-bottom:solid;border-bottom-color:#f0f0f0;color:#4a4a4a;">
+                <div style="margin-bottom:40px;">
+                  {{hotelData.others.phone}}
+                </div>
+              </div>
+              <div style="border-bottom:solid;border-bottom-color:#f0f0f0;font-size:18px;font-weight:bold">
+                {{"关于早餐"}}
+              </div>
+              <div style="border-bottom:solid;border-bottom-color:#f0f0f0;color:#4a4a4a;">
+                <div style="margin-bottom:40px;">
+                  {{hotelData.others.breakfast_description}}
+                </div>
+              </div>
+              <div style="border-bottom:solid;border-bottom-color:#f0f0f0;font-size:18px;font-weight:bold">
+                {{"年龄限制"}}
+              </div>
+              <div style="border-bottom:solid;border-bottom-color:#f0f0f0;color:#4a4a4a;">
+                <div style="margin-bottom:40px;">
+                  {{hotelData.others.age_notion}}
+                </div>
+              </div>
+              <div style="border-bottom:solid;border-bottom-color:#f0f0f0;font-size:18px;font-weight:bold">
+                {{"入离时间"}}
+              </div>
+
+              <div>
+                <div style="margin-bottom:40px;">
+                  <div style="color:#4a4a4a;">
+                    {{"入住时间:"+hotelData.others.checkin_time}}
                   </div>
-                  <div style="display:grid;grid-template-columns: 280px 880px;grid-row-gap: 50px;grid-column-gap: 0;">
-                    <div style="border-bottom:solid;border-bottom-color:#f0f0f0;font-size:18px;font-weight:bold">
-                      
-                      {{"酒店简介"}}
-                      
-                    </div>
-                    <div style="border-bottom:solid;border-bottom-color:#f0f0f0;color:#4a4a4a;">
-                      <div style="margin-bottom:40px;">
-                      {{hotelData.others.description}}
-                      </div>
-                    </div>
-                    <div style="border-bottom:solid;border-bottom-color:#f0f0f0;font-size:18px;font-weight:bold">
-                      {{"成立时间"}}
-                    </div>
-                    <div style="border-bottom:solid;border-bottom-color:#f0f0f0;color:#4a4a4a;">
-                      <div style="margin-bottom:40px;">
-                      {{hotelData.others.set_time}}
-                      </div>
-                    </div>
-                    <div style="border-bottom:solid;border-bottom-color:#f0f0f0;font-size:18px;font-weight:bold">
-                      {{"联系电话"}}
-                    </div>
-                    <div style="border-bottom:solid;border-bottom-color:#f0f0f0;color:#4a4a4a;">
-                      <div style="margin-bottom:40px;">
-                      {{hotelData.others.phone}}
-                      </div>
-                    </div>
-                    <div style="border-bottom:solid;border-bottom-color:#f0f0f0;font-size:18px;font-weight:bold">
-                      {{"关于早餐"}}
-                    </div>
-                    <div style="border-bottom:solid;border-bottom-color:#f0f0f0;color:#4a4a4a;">
-                      <div style="margin-bottom:40px;">
-                      {{hotelData.others.breakfast_description}}
-                      </div>
-                    </div>
-                    <div style="border-bottom:solid;border-bottom-color:#f0f0f0;font-size:18px;font-weight:bold">
-                      {{"年龄限制"}}
-                    </div>
-                    <div style="border-bottom:solid;border-bottom-color:#f0f0f0;color:#4a4a4a;">
-                      <div style="margin-bottom:40px;">
-                      {{hotelData.others.age_notion}}
-                      </div>
-                    </div>
-                    <div style="border-bottom:solid;border-bottom-color:#f0f0f0;font-size:18px;font-weight:bold">
-                      {{"入离时间"}}
-                    </div>
-                     
-                    <div>
-                     <div style="margin-bottom:40px;">
-                      <div style="color:#4a4a4a;">
-                        {{"入住时间:"+hotelData.others.checkin_time}}
-                      </div>
-                      <div style="color:#4a4a4a;">
-                        {{"离开时间:"+hotelData.others.checkout_time}}
-                      </div>
-                      </div>
-                    </div>
+                  <div style="color:#4a4a4a;">
+                    {{ "离开时间:" + hotelData.others.checkout_time }}
                   </div>
-
-               
-                </el-tab-pane>
-            </el-tabs>
-        </div>
+                </div>
+              </div>
+            </div>
 
 
-   </el-scrollbar>
+          </el-tab-pane>
+        </el-tabs>
+      </div>
+
+
+    </el-scrollbar>
 
   </div>
+  <el-dialog v-model="billVisible" title="确认订单" width="20em" align-center>
+    <div style="
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          ">
+      <div>
+        <text>总金额：</text>
+        <text style="font-weight: bold; color: #ffa31a">￥{{ money }}</text>
+      </div>
+    </div>
+    <div>
+      <img :src="payPicture" alt="2DPayPicture" style="width: 100%; height: 100%; object-fit: cover;margin-top:3%;"
+        id />
+      <div style="margin-top:3%;display:flex;justify-content: center;">
+        <el-button type="primary" @click="changePay">换一种支付方式</el-button>
+        <el-button type="success" @click="ordersCommit">已完成支付</el-button>
+      </div>
+    </div>
+  </el-dialog>
 </template>
 
 <script setup>
@@ -301,14 +335,18 @@ import { ref,onMounted,watch, nextTick } from 'vue';
 import { BookOutlined,HeartOutlined,StarOutlined, LikeOutlined, MessageOutlined,EnvironmentOutlined } from '@ant-design/icons-vue'
 //标签的选择的
 const activeName = ref('rooms');
-
+const billVisible = ref(false);
 //Hotel
 var hotelData= ref();
 //comments
 var commentData= ref([]);
-
+const payPicture = ref(require("../assets/vxPay.jpg"));
 const hotelid = ref('');
-
+const changePay = () => {
+  if (payPicture.value === require("../assets/vxPay.jpg"))
+    payPicture.value = require("../assets/zfbPay.jpg");
+  else payPicture.value = require("../assets/vxPay.jpg");
+};
 
 
 //页面加载预处理
@@ -425,41 +463,43 @@ const updateMoney = () => {
 };
 
 const pay = async () =>{
-    
-        const customers = [];
-        if (input_name.value.length === input_id.value.length) {
-          for (let i = 0; i < input_name.value.length; i++) {
-            customers.push({ id: input_id.value[i], name: input_name.value[i] });
-          }
-        } else {
-          console.error('input_name 和 input_id 的长度不一致');
-        }
-        try{
-        const response = await postHotelBill(hotelid.value,localStorage.getItem('user_id'),check_in.value,check_out.value,roomCount.value,1,customers,money.value);
-        var result = response.data.result;
-        if(result){
-            ElMessage({
-                message: "下单成功",
-                type: "success",
-            });
-            ElNotification({
-                title: '订票成功',
-                message: "您已成功预定酒店"+ "，入住时间"+check_in.value+",祝您旅途愉快！",//TODO:酒店名
-                type: 'success',
-            })
-            emitter.emit('getAllMessage');
-            open.value = false;
-        }else{
-            ElMessage({
-                message: "下单失败",
-                type: "error",
-            });
-        }
-    }catch(error){
-        console.log('提交酒店订单失败',error);
-    }
+  billVisible.value = true;
 };
-
+const ordersCommit = async () => {
+  billVisible.value = false;
+  const customers = [];
+  if (input_name.value.length === input_id.value.length) {
+    for (let i = 0; i < input_name.value.length; i++) {
+      customers.push({ id: input_id.value[i], name: input_name.value[i] });
+    }
+  } else {
+    console.error('input_name 和 input_id 的长度不一致');
+  }
+  try {
+    const response = await postHotelBill(hotelid.value, localStorage.getItem('user_id'), check_in.value, check_out.value, roomCount.value, 1, customers, money.value);
+    var result = response.data.result;
+    if (result) {
+      ElMessage({
+        message: "下单成功",
+        type: "success",
+      });
+      ElNotification({
+        title: '订票成功',
+        message: "您已成功预定酒店" + "，入住时间" + check_in.value + ",祝您旅途愉快！",//TODO:酒店名
+        type: 'success',
+      })
+      emitter.emit('getAllMessage');
+      open.value = false;
+    } else {
+      ElMessage({
+        message: "下单失败",
+        type: "error",
+      });
+    }
+  } catch (error) {
+    console.log('提交酒店订单失败', error);
+  }
+}
 
 //计算时间差,防止入住>退房
 const daysDiff = ref(0);

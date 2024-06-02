@@ -20,5 +20,7 @@ public interface IFoodService {
 
     public List<FoodOrder> getFoodOrdersByTrain(String tid, String date);
 
+    public List<Order> getTrainRelatedFoodOrders(String tid, String date, String uid);
+
     public void reduceFoodNum(Food food, int num);
 }

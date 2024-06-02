@@ -43,6 +43,12 @@ public class FoodServiceImpl implements IFoodService {
     }
 
     @Override
+    public List<Order> getTrainRelatedFoodOrders(String tid, String date, String uid) {
+        return foodMapper.getTrainRelatedFoodOrders(tid, date, uid);
+    }
+
+
+    @Override
     public void reduceFoodNum(Food food, int n) {
         foodMapper.reduceFoodNum(food, n);
     }

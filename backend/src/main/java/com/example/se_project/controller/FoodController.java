@@ -74,14 +74,16 @@ public class FoodController {
         }
 
         List<Object> result = new ArrayList<>();
-        foodService.getAllFood(tid, date, time).forEach(e -> {
-            result.add(new HashMap<>() {{
-                put("name", e.getName());
-                put("price", e.getPrice().toString());
-                put("photo", e.getPhoto());
-                put("number", e.getNum());
-            }});
-        });
+        if (haveTicket[0]) {
+            foodService.getAllFood(tid, date, time).forEach(e -> {
+                result.add(new HashMap<>() {{
+                    put("name", e.getName());
+                    put("price", e.getPrice().toString());
+                    put("photo", e.getPhoto());
+                    put("number", e.getNum());
+                }});
+            });
+        }
         String finalInfo = info;
         return new HashMap<>() {{
             put("result", result);
@@ -112,7 +114,7 @@ public class FoodController {
                 Food f = foodService.findFoodByAllKeys(trainId, mealDate, mealTime, (String)e.get("food_name"));
                 int num = (int)(e.get("number"));
                 foodService.addFoodOrder(new FoodOrder(oid, (String)(e.get("food_name")),
-                        num, trainId, mealTime, mealDate, f.getPhoto()));
+                        num, trainId, mealDate, mealTime, mealDate, f.getPhoto()));
             });
         } catch (Exception e) {
             e.printStackTrace();

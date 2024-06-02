@@ -85,13 +85,14 @@ public class FoodOrder {
     }
 
 
-    public FoodOrder(String oid, String foodName, Integer count, String trainId, String mealTime, String mealDate, String photo) {
+    public FoodOrder(String oid, String foodName, Integer count, String trainId, String trainDate, String mealDate, String mealTime, String photo) {
         this.oid = oid;
         this.foodName = foodName;
         this.count = count;
         this.trainId = trainId;
-        this.mealTime = mealTime;
+        this.trainDate = trainDate;
         this.mealDate = mealDate;
+        this.mealTime = mealTime;
         this.photo = photo;
     }
 }

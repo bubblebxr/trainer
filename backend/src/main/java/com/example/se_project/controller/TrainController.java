@@ -285,8 +285,8 @@ public class TrainController {
 
 
             // 取消该trainOrder对应的foodOrder
-            foodService.getFoodOrdersByTrain(trainId, trainDate).forEach(foodOrder -> {
-                orderService.cancelOrder(orderService.getOrder(foodOrder.getOid()));
+            foodService.getTrainRelatedFoodOrders(trainId, trainDate, userID).forEach(e-> {
+                orderService.cancelOrder(e);
             });
 
 

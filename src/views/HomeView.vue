@@ -213,11 +213,16 @@
 
     <!-- 弹出消息栏 -->
     <el-drawer v-model="drawer" title="消息" direction="rtl" size="35%">
+      <template #title>
+        <span>消息</span>
+        <el-button @click="setAllRead()">全部已读</el-button>
+      </template>
       <div v-for="(item, index) in message" :key="index">
         <el-card
           style="border-radius: 15px; margin-bottom: 5%"
           @click="
             item.haveRead = true;
+            setRead(item.mid);
             jumpToOrder(item.orderType, item.orderId);
           "
         >
@@ -233,7 +238,7 @@
           </template>
           <text>{{ item.content }}</text>
           <span style="vertical-align: middle; text-align: center">
-            <text style="color: #a0cfff">查看详细信息</text>
+            <text style="color: #a0cfff">双击查看详细信息</text>
             <el-icon style="color: #a0cfff">
               <DArrowRight />
             </el-icon>
@@ -245,14 +250,16 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, inject } from "vue";
+import { ref, onMounted,onBeforeUnmount, computed, inject,provide } from "vue";
 import { useRouter } from "vue-router";
 import eventBus from "@/eventBus.js";
-import { getMessage } from "@/api/api.js";
+import emitter  from "@/emitter.js";
+import { getMessage ,haveReadMessage,haveReadAllMessage} from "@/api/api.js";
 import { ElMessage, ElMessageBox } from 'element-plus'
 import {User,Lock,Message,Document,Check} from '@element-plus/icons-vue'
 const router = useRouter();
 const activeIndex = ref("1");
+provide('activeIndex', activeIndex);
 const drawer = ref(false);
 const messageOpen = () => {
   const isLoggedIn = localStorage.getItem("isLoggedIn");
@@ -309,31 +316,28 @@ const selectMenu = (key) => {
     }
   }
 };
-// const message = ref([
-//   {
-//     title: "车票提醒",
-//     messageTime: "2020-03-10",
-//     content:
-//       "您已购买2024-05-09 G5车次 杭州--->北京车次，发车时间05月09日08:00。请合理安排出行时间。",
-//     haveRead: true,
-//     orderType:"3",
-//     orderId: "string3",
-//   },
-//   {
-//     title: "订单取消",
-//     messageTime: "2024-09-12",
-//     content: "您已下单2024-10-20 G81车次 午餐餐品。将由列车员送到座位上。",
-//     haveRead: false,
-//     orderType:"5",
-//     orderId: "string4",
-//   },
-// ]);
 const message = ref([]);
 const userID = localStorage.getItem("user_id");
 const unReadNum = computed(() => {
   return message.value.filter((msg) => !msg.haveRead).length;
 });
-
+//设置已读
+const setRead = async (mid)=>{
+  try{
+    await haveReadMessage(mid);
+  }catch(error){
+    console.log("设置已读失败,消息id为：",mid);
+  }
+}
+//全部已读
+const setAllRead = async ()=>{
+  try{
+    await haveReadAllMessage(userID);
+  }catch(error){
+    console.log("设置已读失败");
+  }
+  getAllMessage();
+}
 //登录
 
 import { postLogin } from "@/api/api";
@@ -678,10 +682,13 @@ const quit = () => {
 onMounted(() => {
   router.push("/home/ticket");
   getAllMessage();
+  emitter.on('getAllMessage', getAllMessage);
   updateUI();
 });
+onBeforeUnmount(() => {
+  emitter.off('getAllMessage', getAllMessage);
+});
 const getAllMessage = async () => {
-  //TODO 判断是否登录
   try {
     const responce = await getMessage(userID);
     message.value = responce.data.result;
@@ -692,7 +699,6 @@ const getAllMessage = async () => {
 const jumpToOrder = (orderType, orderId) => {
   eventBus.HeaderKey = "4";
   activeIndex.value = "4";
-  //TODO 依据不同情况修改
   eventBus.MyOrdersActiveKey = orderType;
   if (orderType === "3") {
     router.push("/home/orders/ticketOrders");
@@ -713,7 +719,7 @@ const jumpToOrder = (orderType, orderId) => {
   }
 };
 
-// setInterval(getAllMessage,1000);
+setInterval(getAllMessage,60000);//每分钟获取一次
 </script>
 
 <style>

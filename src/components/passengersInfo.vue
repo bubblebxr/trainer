@@ -35,8 +35,8 @@
             <el-form-item label="身份证号:" :rules="[{ required: true, message: '身份证号不能为空' },]">
                 <el-input v-model="form.identification" />
             </el-form-item>
-            <el-form-item label="联系方式:" :rules="[{ required: true, message: '联系方式不能为空' },]">
-                <el-input v-model="form.phone" />
+            <el-form-item label="邮箱:" :rules="[{ required: true, message: '邮箱不能为空' },]">
+                <el-input v-model="form.phone" placeholder="请输入邮箱" />
             </el-form-item>
         </el-form>
         <template #footer>
@@ -80,7 +80,7 @@ const form = reactive({
     phone: '',
 });
 const passengers = ref([]);
-const id = localStorage.getItem('user_id');;//暂时代替用户id
+const id = localStorage.getItem('user_id');//暂时代替用户id
 const multipleSelection = ref([]);
 const dialogFormVisible = ref(false);
 const insertTable = ref(false);
@@ -105,7 +105,7 @@ const getInfo = async () => {
 const singleDelete = async (index) => {
     console.log("delete" + passengers.value[index]['name']);
     var identification = passengers.value[index]['identification'];
-    const data = await deletePassengers(id, identification);
+    const data = await deletePassengers(id, passengers.value[index]['name'], identification);
     if (data.data.info === true) {
         passengers.value.splice(index, 1);
         ElMessage({
@@ -198,7 +198,8 @@ const editFinish = async () => {
 const mutipleDelete = async () => {
     for (var i = 0; i < multipleSelection.value.length; i++) {
         var identification = passengers.value[i]['identification'];
-        const data = await deletePassengers(id.value, identification);
+        var name = passengers.value[i]['name'];
+        const data = await deletePassengers(id, name, identification);
         if (data.data.info === true) {
             passengers.value.splice(i, 1);
             ElMessage({

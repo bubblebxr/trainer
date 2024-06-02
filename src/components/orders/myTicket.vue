@@ -2,7 +2,7 @@
     <el-radio-group v-model="status">
         <el-radio-button label="全部订单" value="all"></el-radio-button>
         <el-radio-button label="已支付" value="paid"></el-radio-button>
-        <el-radio-button label="已取消" value="cancle"></el-radio-button>
+        <el-radio-button label="已取消" value="cancel"></el-radio-button>
         <el-radio-button label="已完成" value="done"></el-radio-button>
     </el-radio-group>
     <div v-for="(item, index) in ticketOrders" :key="index">
@@ -69,7 +69,9 @@
 <script setup>
 import { onMounted, ref, watch } from "vue";
 import { getThisTicket, cancelTicketOrder } from "../../api/api.js";
-import { ElMessage } from "element-plus";
+import { ElMessage,ElNotification } from "element-plus";
+import emitter from '@/emitter.js';
+
 const status = ref("all");
 const userID = localStorage.getItem('user_id');
 const ticketOrders = ref([]);
@@ -77,11 +79,12 @@ const cancelOrders = async (oid) => {
     try {
         const responce = await cancelTicketOrder(userID, oid);
         if (responce.data.result) {
-            ElMessage({
-                message: '取消订单成功，退款将原路返回。',
-                type: "success",
+            ElNotification({
+                title: '退票成功',
+                message: "您成功取消了" + tid + "班次的列车，如果您预定了此班次的火车餐也将为您取消，退款将于1~5个工作日原路返回。",
+                type: 'success',
             });
-            //TODO 通知消息弹窗
+            emitter.emit('getAllMessage');
         }
         else {
             ElMessage.error("取消订单失败");

@@ -4,11 +4,11 @@ export const getStation = () => {
     return api.get('/station');
 };
 
-export const getSearchResult = (startCity, arriveCity, date, isGD, sortType, seatType, isHide) => {
+export const getSearchResult = (startCity, arriveCity, date, isGD, sortType, seatType, isHide, userID) => {
     const queryString = `?is_GD=${isGD}&sort_type=${sortType}&seat_type=${seatType}&isHide=${isHide}`;
     const start = encodeURIComponent(startCity);
     const arrive = encodeURIComponent(arriveCity);
-    return api.post(`/trains/${start}/${arrive}/${date}${queryString}`);
+    return api.post(`/trains/${start}/${arrive}/${date}/${userID}${queryString}`);
 };
 
 export const getFoods = (userID, tid, date, time) => {
@@ -21,20 +21,15 @@ export const getThisTicket = (userID, status) => {
 };
 /*提交火车餐表单*/
 export const postFoodBill = (foods, userID, tid, date, time, sum_price) => {
-    var nowtime = new Date();
+    var foodss = JSON.parse(foods);
+    console.log("foodss:", foodss);
     return api.post(`/food/bill`,
         {
-            "foods": [
-                {
-                    "food_name": foods.food_name,
-                    "count": foods.num
-                }
-            ],
+            "foods": foodss,
             "userID": userID,
             "tid": tid,
             "date": date,
             "time": time,
-            "bill_time": nowtime,
             "sum_price": sum_price
         }, {
         headers: {
@@ -72,9 +67,10 @@ export const getPassengers = (id) => {
     return api.post(`/passengersInfo/${id}`);
 };
 
-export const deletePassengers = (id, identification) => {
-    const queryString = `?identification=${identification}`;
-    return api.delete(`/deletePassengers/${id}${queryString}`);
+/* 删除乘车人 */
+export const deletePassengers = (id, name, identification) => {
+    const queryString = `?name=${encodeURIComponent(name)}&identification=${identification}`;
+    return api.post(`/deletePassengers/${id}${queryString}`);
 };
 
 export const updatePassengers = (id, oldidentification, newname, newidentification, newphone) => {
@@ -89,20 +85,13 @@ export const insertPassengers = (id, name, identification, phone) => {
 
 /*提交火车票订单*/
 export const postTicketBill = (persons, userID, tid, date, sum_price) => {
-    var nowtime = new Date();
+    var person = JSON.parse(persons);
     return api.post(`/ticket/bill`,
         {
-            "person": [
-                {
-                    "name": persons.name,
-                    "identification": persons.identification,
-                    "seat_type": persons.seat_type,
-                }
-            ],
+            "person": person,
             "userID": userID,
             "tid": tid,
             "date": date,
-            "bill_time": nowtime,
             "sum_price": sum_price
         }, {
         headers: {
@@ -129,6 +118,10 @@ export const getMessage = (userID) => {
 /*标记消息已读*/
 export const haveReadMessage = (mid) => {
     return api.post(`/message/setRead/${mid}`)
+}
+/*全部已读*/
+export const haveReadAllMessage = (userID) => {
+    return api.post(`/message/setAllRead/${userID}`)
 }
 /*城市查询*/
 export const getPlaces = () => {

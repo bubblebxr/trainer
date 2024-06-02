@@ -1,21 +1,26 @@
 <template>
   <div class="home-container" style="overflow-y:scroll;overflow-x:hidden;">
     <el-scrollbar style="height: 100%">
-        <div class="top">
-             <div style="display: flex;border-color:#a3a3a3;border-style: solid;margin: 0 auto;" class="top-info">
-                <div style="height:25px;width:160px;margin-left:10px">
-                  <div style="margin-top:5px;padding-left:10px;color:#969696;height:18px;font-size:15px;">入住时间</div>
-                  <el-date-picker class="date_picker" v-model="check_in" format="YYYY-MM-DD" value-format="YYYY-MM-DD" type="date"  size="large" style="height:25px;width:160px;margin-top:0px;border:none" placeholder="请选择" bordered=0 suffixIcon=" " @change="recalculateDateDiff" />
-                </div>
-                <div style="height:25px;width:80px;margin-top:15px;margin-left:10px">
-                  <div style="background-color:#ededed;margin-top:5px;width:55px;padding-left:15px;color:black">{{ daysDiff }}晚</div>
-                </div>
-                <div style="height:25px;width:160px;">
-                  <div style="margin-top:5px;padding-left:10px;color:#969696;height:18px;font-size:15px;">退房时间</div>
-                  <el-date-picker class="date_picker" v-model="check_out" format="YYYY-MM-DD" value-format="YYYY-MM-DD" type="date" size="large" style="height:25px;width:160px;margin-top:0px;border:none" placeholder="请选择" bordered=0 suffixIcon=" " @change="recalculateDateDiff"/>
-                </div>  
-             </div>
+      <div class="top">
+        <div style="display: flex;border-color:#a3a3a3;border-style: solid;margin: 0 auto;" class="top-info">
+          <div style="height:25px;width:160px;margin-left:10px">
+            <div style="margin-top:5px;padding-left:10px;color:#969696;height:18px;font-size:15px;">入住时间</div>
+            <el-date-picker class="date_picker" v-model="check_in" format="YYYY-MM-DD" value-format="YYYY-MM-DD"
+              type="date" size="large" style="height:25px;width:160px;margin-top:0px;border:none" placeholder="请选择"
+              bordered=0 suffixIcon=" " @change="recalculateDateDiff" />
+          </div>
+          <div style="height:25px;width:80px;margin-top:15px;margin-left:10px">
+            <div style="background-color:#ededed;margin-top:5px;width:55px;padding-left:15px;color:black">{{ daysDiff
+              }}晚</div>
+          </div>
+          <div style="height:25px;width:160px;">
+            <div style="margin-top:5px;padding-left:10px;color:#969696;height:18px;font-size:15px;">退房时间</div>
+            <el-date-picker class="date_picker" v-model="check_out" format="YYYY-MM-DD" value-format="YYYY-MM-DD"
+              type="date" size="large" style="height:25px;width:160px;margin-top:0px;border:none" placeholder="请选择"
+              bordered=0 suffixIcon=" " @change="recalculateDateDiff" />
+          </div>
         </div>
+      </div>
 
         <div v-if="hotelData" style="border-color:#a3a3a3;margin: 0 auto;" class="information">
           <div style="display:flex;margin-left:10px;margin-top:10px;height:70px;">
@@ -188,46 +193,49 @@
                                 </a-drawer>
                             </template>
 
-                            <template #extra >
+                    <template #extra>
 
-                              <img :src="item.photo" width="360"  height="200" style="float:right"
-                              />
-                            </template>
+                      <img :src="item.photo" width="360" height="200" style="float:right" />
+                    </template>
 
-                            <a-list-item-meta :description="'余' + item.num + '间'">
-                              <template #title>
-                               <a-typography-title :level="3">{{ item.name }}</a-typography-title>
-                              </template>
-                            </a-list-item-meta>
-                              <a-typography-paragraph><blockquote>{{ item.others }}</blockquote></a-typography-paragraph>
-                          </a-list-item>
-                        </template>
-                      </a-list>
-                    </div>
+                    <a-list-item-meta :description="'余' + item.num + '间'">
+                      <template #title>
+                        <a-typography-title :level="3">{{ item.name }}</a-typography-title>
+                      </template>
+                    </a-list-item-meta>
+                    <a-typography-paragraph>
+                      <blockquote>{{ item.others }}</blockquote>
+                    </a-typography-paragraph>
+                  </a-list-item>
+                </template>
+              </a-list>
+            </div>
 
-                </el-tab-pane>
-                <el-tab-pane label="评论" name="comments">
-                  <div style="width:1155px;display:flex;margin-left:2px;">
-                      <a-list  v-if="hotelData.comments && hotelData.comments.length > 0" item-layout="vertical" size="large" :pagination="pagination" :data-source="hotelData.comments">
-                        <template #renderItem="{ item }">
-                          <a-list-item key="item.name" style="width:1155px">
-                            <template #actions>
-                                <ReconciliationOutlined />
-                                <span>
-                                    {{ item.time }}                             
-                                </span>
-                                <span>
-                                    {{ "id:"+item.place }}                             
-                                </span>
-                               
-                                
-                            </template>
+          </el-tab-pane>
+          <el-tab-pane label="评论" name="comments">
+            <div style="width:1155px;display:flex;margin-left:2px;">
+              <a-list v-if="hotelData.comments && hotelData.comments.length > 0" item-layout="vertical" size="large"
+                :pagination="pagination" :data-source="hotelData.comments">
+                <template #renderItem="{ item }">
+                  <a-list-item key="item.name" style="width:1155px">
+                    <template #actions>
+                      <ReconciliationOutlined />
+                      <span>
+                        {{ item.time }}
+                      </span>
+                      <span>
+                        {{ "id:"+item.place }}
+                      </span>
 
-                            <template #extra >
-                              <div style="margin-top:20px;font-size:17px;color:white;background-color:black;width:40px;text-align:center;font-weight: bold;">
-                                {{item.rank}}
-                              </div> 
-                            </template>
+
+                    </template>
+
+                    <template #extra>
+                      <div
+                        style="margin-top:20px;font-size:17px;color:white;background-color:black;width:40px;text-align:center;font-weight: bold;">
+                        {{item.rank}}
+                      </div>
+                    </template>
 
                             <a-list-item-meta :description="item.room">
                               <template #title>
@@ -311,9 +319,29 @@
         </div>
 
 
-   </el-scrollbar>
+    </el-scrollbar>
 
   </div>
+  <el-dialog v-model="billVisible" title="确认订单" width="20em" align-center>
+    <div style="
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          ">
+      <div>
+        <text>总金额：</text>
+        <text style="font-weight: bold; color: #ffa31a">￥{{ money }}</text>
+      </div>
+    </div>
+    <div>
+      <img :src="payPicture" alt="2DPayPicture" style="width: 100%; height: 100%; object-fit: cover;margin-top:3%;"
+        id />
+      <div style="margin-top:3%;display:flex;justify-content: center;">
+        <el-button type="primary" @click="changePay">换一种支付方式</el-button>
+        <el-button type="success" @click="ordersCommit">已完成支付</el-button>
+      </div>
+    </div>
+  </el-dialog>
 </template>
 
 <script setup>
@@ -414,21 +442,7 @@ const afterOpenChange = (bool) => {
   console.log('open', bool);
 };
 
-const showDrawer = (item) => {
-  const isLoggedIn = localStorage.getItem('isLoggedIn');
-  if (isLoggedIn === 'true') {
-    selectedRoom.value = item;
-    money.value = item.price;
-    open.value = true;
-  } else {
-    ElMessage({
-      message: '请先登录',
-      type: 'error',
-      plain: true,
-    })
 
-  }
-};
 
 const value = ref('')
 
@@ -440,8 +454,27 @@ const roomCount=ref(1);
 const input_name = ref(['']);
 const input_id = ref(['']);
 
+const showDrawer = (item) => {
+  const isLoggedIn = localStorage.getItem('isLoggedIn');
+  if (isLoggedIn === 'true') {
+    selectedRoom.value = item;
+    money.value = item.price;
+    open.value = true;
+    input_name.value = [''];
+    input_id.value = [''];
+  } else {
+    ElMessage({
+      message: '请先登录',
+      type: 'error',
+      plain: true,
+    })
+
+  }
+};
+
 //支付
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage, ElMessageBox,ElNotification } from 'element-plus'
+import emitter from '@/emitter.js';
 const money=ref();
 const updateMoney = () => {
   money.value=selectedRoom.value.price*roomCount.value;
@@ -450,6 +483,12 @@ const payPicture = ref(require("../assets/vxPay.jpg"));
 const payVisible = ref(false);
 const billVisible = ref(false);
 const topay = async () =>{
+  console.log(roomCount.value);
+  console.log(input_name.value.length);
+  console.log(input_id.value.length);
+  console.log(input_id.value);
+  console.log(input_name.value);
+  
         
         if (input_name.value.length !== input_id.value.length) {
           ElMessage({
@@ -460,7 +499,7 @@ const topay = async () =>{
         }
         const customers = [];
         
-        if(input_name.value.length<roomCount.value || input_id.value.length<roomCount.value){
+        if(input_name.value.length<=roomCount.value || input_id.value.length<=roomCount.value){
           ElMessage({
                 message: "未填写全部信息",
                 type: "error",
@@ -468,7 +507,7 @@ const topay = async () =>{
               return;
         }
         if (input_name.value.length === input_id.value.length) {
-          for (let i = 0; i < roomCount.value; i++) {
+          for (let i = 1; i < roomCount.value; i++) {
             if(input_id.value[i]==='' || input_name.value[i]===''){
                 ElMessage({
                 message: "未填写全部信息",

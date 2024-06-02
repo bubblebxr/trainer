@@ -1,16 +1,15 @@
 package com.example.se_project.entity;
 
 import java.sql.Time;
-import java.util.Date;
 
 public class Stopover {
     private String stationId;
 
     private String stationName;
 
-    private Date arriveTime;
+    private String arriveTime;
 
-    private Date leaveTime;
+    private String leaveTime;
 
     private Time duration;
 
@@ -22,11 +21,11 @@ public class Stopover {
         this.stationName = stationName;
     }
 
-    public Date getArriveTime() {
+    public String getArriveTime() {
         return arriveTime;
     }
 
-    public void setArriveTime(Date arriveTime) {
+    public void setArriveTime(String arriveTime) {
         this.arriveTime = arriveTime;
     }
 
@@ -46,11 +45,11 @@ public class Stopover {
         this.stationId = stationId;
     }
 
-    public Date getLeaveTime() {
+    public String getLeaveTime() {
         return leaveTime;
     }
 
-    public void setLeaveTime(Date leaveTime) {
+    public void setLeaveTime(String leaveTime) {
         this.leaveTime = leaveTime;
     }
 }

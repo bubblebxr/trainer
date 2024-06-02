@@ -138,6 +138,7 @@ public class FoodController {
         emailService.sendSimpleMail(userService.getEmail(userId),"餐饮订单支付成功",content);
         return new HashMap<>() {{
             put("info", "下单成功！");
+            put("result",true);
         }};
     }
 

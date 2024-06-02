@@ -23,4 +23,6 @@ public interface IMessageMapper extends BaseMapper<Message> {
     @Update(("update messages set haveRead = true where mid=#{mid}"))
     void setHaveread(String mid);
 
+
+
 }

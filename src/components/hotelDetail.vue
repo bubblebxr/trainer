@@ -379,7 +379,7 @@
 
 
     </el-scrollbar>
-    </el-scrollbar>
+  
 
   </div>
   <el-dialog v-model="billVisible" title="确认订单" width="20em" align-center>

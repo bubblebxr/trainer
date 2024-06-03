@@ -149,12 +149,7 @@ export const postHotelBill = (hotelid, id, checkin_time, checkout_time, room_num
             "checkout_time": checkout_time,
             "room_num": room_num,
             "room_type": room_type,
-            "customers": [
-                {
-                    "name": customers.name,
-                    "id": customers.id
-                }
-            ],
+            "customers": customers,
             "money": money
         }, {
         headers: {

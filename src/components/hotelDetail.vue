@@ -778,14 +778,17 @@ const checked3 = ref(true);
 
 const onChange1 = (status) => {
   checked1.value = status;
+  roomType.value=1;
 };
 
 const onChange2 = (status) => {
   checked2.value = status;
+  roomType.value=2;
 };
 
 const onChange3 = (status) => {
   checked3.value = status;
+  roomType.value=3;
 };
 watch(
   [checked1, checked2, checked3, check_in, check_out],
@@ -844,6 +847,7 @@ const updateMoney = () => {
 const payPicture = ref(require("../assets/vxPay.jpg"));
 const payVisible = ref(false);
 const billVisible = ref(false);
+const roomType = ref(1);
 const topay = async () => {
   console.log(roomCount.value);
   console.log(input_name.value.length);
@@ -884,12 +888,14 @@ const topay = async () => {
   } else {
     console.error("未填写全部信息");
   }
+  console.log(customers.value);
   payVisible.value = true;
 };
 
 const pay = async () => {
   open.value = false;
   payVisible.value = false;
+  console.log(customers.value);
   try {
     const response = await postHotelBill(
       hotelid.value,
@@ -897,11 +903,12 @@ const pay = async () => {
       check_in.value,
       check_out.value,
       roomCount.value,
-      1,
+      roomType.value,
       customers.value,
       money.value
     );
     var result = response.data.result;
+    console.log(result);
     if (result) {
       ElNotification({
         title: "预订酒店成功",

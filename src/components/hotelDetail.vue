@@ -871,7 +871,7 @@ const topay = async () => {
     return;
   }
   if (input_name.value.length === input_id.value.length) {
-    for (let i = 1; i < roomCount.value; i++) {
+    for (let i = 1; i <= roomCount.value; i++) {
       if (input_id.value[i] === "" || input_name.value[i] === "") {
         ElMessage({
           message: "未填写全部信息",
@@ -924,6 +924,7 @@ const pay = async () => {
   }
   input_name.value = ref([""]);
   input_id.value = ref([""]);
+  fetchData();
 };
 const changePay = () => {
   if (payPicture.value === require("../assets/vxPay.jpg"))

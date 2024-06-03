@@ -111,9 +111,9 @@ public class FoodController {
 
         try {
             ((List<HashMap<String, Object>>) (map.get("foods"))).forEach(e -> {
-                Food f = foodService.findFoodByAllKeys(trainId, mealDate, mealTime, (String)e.get("food_name"));
+                Food f = foodService.findFoodByAllKeys(trainId, mealDate, mealTime, (String)e.get("name"));
                 int num = (int)(e.get("number"));
-                foodService.addFoodOrder(new FoodOrder(oid, (String)(e.get("food_name")),
+                foodService.addFoodOrder(new FoodOrder(oid, (String)(e.get("name")),
                         num, trainId, mealDate, mealTime, mealDate, f.getPhoto()));
             });
         } catch (Exception e) {

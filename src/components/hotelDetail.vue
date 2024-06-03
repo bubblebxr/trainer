@@ -875,7 +875,9 @@ const topay = async () => {
     return;
   }
   if (input_name.value.length === input_id.value.length) {
+    var p = /^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/;
     for (let i = 1; i <= roomCount.value; i++) {
+      
       if (input_id.value[i] === "" || input_name.value[i] === "") {
         ElMessage({
           message: "未填写全部信息",
@@ -883,13 +885,21 @@ const topay = async () => {
         });
         return;
       }
+      console.log(input_id.value[i]);
+      if (!p.test(input_id.value[i])) {
+        ElMessage({
+          message: "身份证号格式错误",
+          type: "error",
+        });
+        return;
+      }
       customers.value.push({ id: input_id.value[i], name: input_name.value[i] });
     }
+    payVisible.value = true;
   } else {
     console.error("未填写全部信息");
   }
-  console.log(customers.value);
-  payVisible.value = true;
+  
 };
 
 const pay = async () => {

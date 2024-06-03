@@ -507,7 +507,7 @@ const topay = async () =>{
               return;
         }
         if (input_name.value.length === input_id.value.length) {
-          for (let i = 1; i < roomCount.value; i++) {
+          for (let i = 1; i <= roomCount.value; i++) {
             if(input_id.value[i]==='' || input_name.value[i]===''){
                 ElMessage({
                 message: "未填写全部信息",
@@ -520,6 +520,7 @@ const topay = async () =>{
         } else {
           console.error('未填写全部信息');
         }
+        console.log(customers);
         try{
         const response = await postHotelBill(hotelid.value,localStorage.getItem('user_id'),check_in.value,check_out.value,roomCount.value,1,customers,money.value);
         var result = response.data.result;
@@ -532,10 +533,7 @@ const topay = async () =>{
             open.value=false;
             payVisible.value = true;
         }else{
-            ElMessage({
-                message: "下单失败",
-                type: "error",
-            });
+            ElMessage.error(response.data.message);
         }
     }catch(error){
         console.log('提交酒店订单失败',error);
@@ -551,6 +549,7 @@ const pay =()=>{
   });
   input_name.value = ref(['']);
   input_id.value = ref(['']);
+  fetchData();
 }
 const changePay = () => {
   if (payPicture.value === require("../assets/vxPay.jpg"))

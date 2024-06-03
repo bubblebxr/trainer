@@ -152,7 +152,7 @@ const insertFinish = async () => {
     } else {
         console.log("error");
         ElMessage({
-            message: "新增失败",
+            message: "身份证不合法~",
             type: "error",
             plain: true,
         });

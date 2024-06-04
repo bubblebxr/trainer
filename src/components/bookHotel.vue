@@ -142,8 +142,9 @@ const handleArrive = item => {
 
 onMounted(() => {
     fetchData();
-    
-    
+  arrive_station.value = router.currentRoute.value.query.arrive_station;
+    arrive_date.value = router.currentRoute.value.query.date;
+    // Ideparture_date.value = router.currentRoute.value.query.date;
 });
 //选择站
 const queryStation = (queryString, cb) => {

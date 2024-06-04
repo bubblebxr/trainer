@@ -267,10 +267,10 @@ const ordersCommit = async () => {
         var result = responce.data.info;
         // console.log("result"+result);
         if (result) {
-            ElMessage({
-                message: "下单成功",
-                type: "success",
-            });
+            // ElMessage({
+            //     message: "下单成功",
+            //     type: "success",
+            // });
             ElNotification({
                 title: '订票成功',
                 message: "您成功预定了" + tid.value + "班次的列车，请注意发车时间，祝您旅途顺利！",

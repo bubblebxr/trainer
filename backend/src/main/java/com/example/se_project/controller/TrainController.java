@@ -9,11 +9,13 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+@CrossOrigin
 @RestController
 public class TrainController {
     @Autowired
@@ -154,7 +156,13 @@ public class TrainController {
         }};
     }
 
-    // 火车结算
+    /**
+     * 提交火车订单并支付
+     *
+     * @param map 包含订单信息的Map对象，包括用户ID(userId)、火车ID(tid)、乘车日期(date)、乘客信息(person)等
+     * @return 返回包含提交结果信息的Map对象，如果下单成功则包含"info": "下单成功！"；如果下单失败则包含"info": "下单失败"
+     *
+     */
     @PostMapping("/ticket/bill")
     public Map<String, Object> submitTrainOrder(@RequestBody Map<String, Object> map) {
         List<Map<String, String>> persons = (List<Map<String, String>>) map.get("person");
@@ -315,7 +323,7 @@ public class TrainController {
             default -> orderService.getOrderByUid(userID, Order.OrderType.Train);
         };
 
-        List<Object> result = new ArrayList<>();
+        List<Map<String, Object>> result = new ArrayList<>();
         orders.forEach(order -> {
             HashMap<String, Object> map = new HashMap<>();
             String oid = order.getOid();
@@ -355,6 +363,27 @@ public class TrainController {
             result.add(map);
         });
 
+        // 创建一个 Comparator，按照 Map 中的 "orderTime" 字段降序排列
+        Comparator<Map<String, Object>> orderTimeComparator = (map1, map2) -> {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date1 = null;
+            try {
+                date1 = sdf.parse((String) map1.get("order_time"));
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+            Date date2 = null;
+            try {
+                date2 = sdf.parse((String) map2.get("order_time"));
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+            return date2.compareTo(date1);  // 降序排序
+        };
+
+        result.sort(orderTimeComparator);
+
+
         return new HashMap<>() {{
             put("result", result);
         }};
@@ -378,7 +407,7 @@ public class TrainController {
         for (Order order : orders) {
             Map<String, Object> orderMap = trainService.getSelfOrderDetail(order.getOid(), userID);
             if (orderMap != null) {
-                System.out.println(order.getOrderStatus());
+//                System.out.println(order.getOrderStatus());
                 result.add(new HashMap<>() {{
                     put("tid", orderMap.get("trainId"));
                     put("oid", order.getOid());

@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
+@CrossOrigin
 @RestController
 public class HotelController {
     @Autowired
@@ -128,7 +129,7 @@ public class HotelController {
 
         List<Object> roomInfo = new ArrayList<>();
         for (Map<String, Object> map : roomList) {
-            System.out.println(map);
+//            System.out.println(map);
             if (map.get("name").equals("标准双人间") && double_choose) {
                 roomInfo.add(new HashMap<>() {{
                     put("name", map.get("name"));
@@ -235,8 +236,12 @@ public class HotelController {
 
     @PostMapping("/hotel/bill")
     public Map<String, Object> submitHotelOrder(@RequestBody Map<String, Object> map) {
+//        System.out.println(map);
+//        System.out.println(map.get("customers"));
         List<Map<String, String>> customers = (List<Map<String, String>>) map.get("customers");
+//        System.out.println(customers);
         String id = map.get("hotel_id").toString();
+//        System.out.println(id);
         String userId = (String) map.get("id");
         String checkinTime = (String) map.get("checkin_time");
         String checkoutTime = (String) map.get("checkout_time");
@@ -268,7 +273,15 @@ public class HotelController {
 
         orderService.addOrder(new Order(oid, userId, formattedDate, total, Order.OrderStatus.Paid, Order.OrderType.Hotel));
         for (Map<String, String> customer : customers) {
+//            System.out.println(customer.get("id"));
+//            String identification = customer.get("id");
+//            if(!identification.matches("^[1-9]\\d{5}(18|19|([23]\\d))\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$"))
+//                return new HashMap<>(){{
+//                    put("result",false);
+//                    put("message","身份证号格式错误");
+//                }};
             hotelService.addHotelorderDetail(id, oid, checkinTime, checkoutTime, roomNum, roomType, customer.get("name"), customer.get("id"));
+            // hotelService.addHotelorderDetail(id, oid, checkinTime, checkoutTime, roomNum, roomType, "lyl", identification);
         }
         hotelService.updateNumWhenBill(id, checkinTime, checkoutTime, roomNum);
 
@@ -278,6 +291,7 @@ public class HotelController {
         emailService.sendSimpleMail(userService.getEmail(userId), "酒店订单支付成功", content);
         return new HashMap<>() {{
             put("result", true);
+            put("message", "下单成功");
         }};
 
     }
@@ -298,7 +312,7 @@ public class HotelController {
             HashMap<String, Object> map = new HashMap<>();
             String oid = order.getOid();
             List<Map<String, Object>> details = hotelService.getHotelOrderDetail(oid);
-
+//            System.out.println(oid);
             String hotelId = details.get(0).get("id").toString();
             Map<String, String> hotel = hotelService.getHotelName(hotelId);
             String checkinTime = details.get(0).get("checkinTime").toString();

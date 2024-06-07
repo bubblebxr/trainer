@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+@CrossOrigin
 @RestController
 public class PassengerController {
     @Autowired
@@ -19,16 +20,22 @@ public class PassengerController {
     private IUserService userService;
 
     @PostMapping("/insertPassengers/{id}")
-    public Map<String, Boolean> addPassenger(@PathVariable String id,
+    public Map<String, Object> addPassenger(@PathVariable String id,
                                              @RequestParam(value = "name") String name,
                                              @RequestParam(value = "identification") String identification,
                                              @RequestParam(value = "phone") String phone) {
+//        if(!identification.matches("^[1-9]\\d{5}(18|19|([23]\\d))\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$"))
+//            return new HashMap<>(){{
+//                put("info", false);
+//                put("message","身份证号格式错误");
+//            }};
         Integer res = passengerService.addPassenger(name, identification, phone, id);
         boolean result;
         result = res != 0;
         return new HashMap<>() {{
             put("info", result);
         }};
+
 
 
     }

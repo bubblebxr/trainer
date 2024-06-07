@@ -10,6 +10,7 @@
         select stationName from stations where (stationName = #{arrive_station} or cityName = #{arrive_station})
         )
         and date =#{date}
+          and haveCanceled = 0
         <choose>
             <when test="is_GD == 2">
                 AND (type = 'Gaotie' OR type = 'Huoche')

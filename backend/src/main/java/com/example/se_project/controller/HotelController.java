@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
+@CrossOrigin
 @RestController
 public class HotelController {
     @Autowired

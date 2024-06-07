@@ -7,6 +7,7 @@ import com.example.se_project.service.Impl.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -15,6 +16,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
+
+@CrossOrigin
 @Component
 public class Reminder {
     @Autowired
@@ -111,6 +114,7 @@ public class Reminder {
                 }
                 // 有order无trainorders
                 else {
+                    System.out.println(orderId);
                     System.out.println("获取订单详细信息失败");
                 }
             } else if (order.getOrderType() == Order.OrderType.Hotel) {

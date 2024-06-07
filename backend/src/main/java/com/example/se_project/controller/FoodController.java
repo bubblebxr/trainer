@@ -13,6 +13,7 @@ import java.time.format.DateTimeParseException;
 import java.util.*;
 
 
+@CrossOrigin
 @RestController
 public class FoodController {
     @Autowired

@@ -275,9 +275,9 @@
                         {{ item.bed_size }}
                       </span>
 
-                      <div style="margin-left: 200px; display: flex">
+                      <div style="margin-left: 200px; display: flex;width:170px;">
                         <a-typography-title :level="2"
-                          ><span style="font-size: 20px; margin-right: 5px"
+                          ><span style="font-size: 20px; margin-right: 5px;"
                             >均
                           </span>
                           ¥ {{ item.price }}
@@ -286,7 +286,7 @@
 
                       <a-button
                         :size="large"
-                        style="background-color: {{ item.num === 0 ? 'darkgray' : 'inherit' }}"
+                        style="background-color: {{ item.num === 0 ? 'darkgray' : 'inherit' }};right:10px;width:100px;"
                         @click="showDrawer(item)"
                         :disabled="item.num === 0"
                       >
@@ -419,7 +419,7 @@
                             margin-bottom: 15px;
                           "
                         >
-                          请输入住客姓名以及身份证号，每间只需填1人，姓名不可重复。
+                          请输入住客姓名以及身份证号，每间只需填1人。
                         </div>
                         <div style="height: 250px">
                           <el-scrollbar style="height: 250px">

@@ -70,7 +70,7 @@
                   </el-input>
                 </div>
                 <div style="margin-top:13px;">
-                  <el-input show-password v-model="my_password" style="max-width: 600px;height: 40px;" placeholder="输入密码" :prefix-icon="Lock">
+                  <el-input show-password v-model="my_password" style="max-width: 600px;height: 40px;" placeholder="输入密码(包含数字和字母，至少8位)" :prefix-icon="Lock">
                     <template #append style="background-color:white">
                       <button  @click="forgotPassword1">忘记密码?</button>
                     </template>
@@ -143,7 +143,7 @@
                   </el-input>
                 </div>
                 <div style="margin-top:13px;">
-                  <el-input show-password v-model="my_password" style="max-width: 600px;height: 40px;" placeholder="输入密码" :prefix-icon="Lock">
+                  <el-input show-password v-model="my_password" style="max-width: 600px;height: 40px;" placeholder="输入密码(包含数字和字母，至少8位)" :prefix-icon="Lock">
                     
                   </el-input>
                 </div>
@@ -377,7 +377,7 @@ const postmyLogin = async () => {
       localStorage.setItem('name', response.data.name);
       updateUI();
       //重新加载页面
-      window.location.href = window.location.href;
+      window.location.reload();
     } else {
       ElMessage.error("登录失败:用户ID或密码错误");
     }
@@ -414,6 +414,7 @@ const postmyRegister = async () => {
       localStorage.setItem('name', my_name.value);
       openRegister.value = false;
       openVerification.value = true;
+      window.location.reload();
     } else {
       ElMessage.error("提交失败:" + response.data.reason);
     }
@@ -663,6 +664,8 @@ function updateUI() {
     document.getElementById("loginButton").style.display = "block"; // 显示登录按钮
     document.getElementById("loggedInMessage").style.display = "none"; // 隐藏已登录的消息
   }
+  //想在这里刷新该页面
+  
 }
 //退出登录
 
@@ -677,6 +680,7 @@ const quit = () => {
     activeIndex.value = "1";
   }
   updateUI();
+  window.location.reload();
 };
 
 onMounted(() => {

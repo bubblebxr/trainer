@@ -11,7 +11,7 @@
             </template>
         </el-table-column>
         <el-table-column prop="identification" label="身份证号" />
-        <el-table-column prop="phone" label="联系方式" />
+        <el-table-column prop="phone" label="邮箱" />
         <el-table-column label="身份状态">
             <template #default="scope">
                 <img src="../assets/identificationSuccess.png" style="width:40px;height:35px;margin-top:3%;" />
@@ -54,7 +54,7 @@
             <el-form-item label="身份证号:" :rules="[{ required: true, message: '身份证号不能为空' },]">
                 <el-input v-model="form.identification" />
             </el-form-item>
-            <el-form-item label="联系方式:" :rules="[{ required: true, message: '联系方式不能为空' },]">
+            <el-form-item label="邮箱:" :rules="[{ required: true, message: '邮箱不能为空' },]">
                 <el-input v-model="form.phone" />
             </el-form-item>
         </el-form>

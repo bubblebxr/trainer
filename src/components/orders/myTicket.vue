@@ -81,7 +81,7 @@ const cancelOrders = async (oid) => {
         if (responce.data.result) {
             ElNotification({
                 title: '退票成功',
-                message: "您成功取消了" + tid + "班次的列车，如果您预定了此班次的火车餐也将为您取消，退款将于1~5个工作日原路返回。",
+                message: "您成功取消了列车，如果您预定了此班次的火车餐也将为您取消，退款将于1~5个工作日原路返回。",
                 type: 'success',
             });
             emitter.emit('getAllMessage');

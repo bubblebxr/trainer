@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.example.se_project.mapper.ITrainMapper">
-    <select id="searchTrain" resultType="com.example.se_project.entity.Train">
+<mapper namespace="com.buaa.werwertrip.mapper.ITrainMapper">
+    <select id="searchTrain" resultType="com.buaa.werwertrip.entity.Train">
         select * from trains
         where startStation in (
         select stationName from stations where (stationName = #{start_station} or cityName = #{start_station})
@@ -35,7 +35,7 @@
             </when>
         </choose>
     </select>
-    <select id="searchStopover" resultType="com.example.se_project.entity.Stopover">
+    <select id="searchStopover" resultType="com.buaa.werwertrip.entity.Stopover">
         select *
         from stopovers
         where trainId = #{trainId}

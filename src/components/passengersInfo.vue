@@ -196,12 +196,13 @@ const editFinish = async () => {
     }
 }
 const mutipleDelete = async () => {
+    console.log(multipleSelection.value);
     for (var i = 0; i < multipleSelection.value.length; i++) {
-        var identification = passengers.value[i]['identification'];
-        var name = passengers.value[i]['name'];
+        var identification = multipleSelection.value[i]['identification'];
+        var name = multipleSelection.value[i]['name'];
         const data = await deletePassengers(id, name, identification);
+        // console.log("name"+name+"  identification"+identification);
         if (data.data.info === true) {
-            passengers.value.splice(i, 1);
             ElMessage({
                 message: "删除成功",
                 type: "success",
@@ -214,6 +215,8 @@ const mutipleDelete = async () => {
             });
         }
     }
+    multipleSelection.value=[];
+    getInfo();
 };
 onMounted(() => {
     getInfo();

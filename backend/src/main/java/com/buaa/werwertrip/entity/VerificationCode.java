@@ -57,7 +57,7 @@ public class VerificationCode {
         this.email = email;
         this.code = VerificationCode.generateVerificationCode();
         this.generatedAt = LocalDateTime.now();
-        this.expiresAt = generatedAt.plusMinutes(5);
+        this.expiresAt = generatedAt.plusMinutes(2);
     }
 }
 

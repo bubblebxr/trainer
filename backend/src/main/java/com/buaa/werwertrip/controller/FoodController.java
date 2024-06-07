@@ -117,7 +117,7 @@ public class FoodController {
                 Food f = foodService.findFoodByAllKeys(trainId, mealDate, mealTime, (String)e.get("name"));
                 int num = (int)(e.get("number"));
                 foodService.addFoodOrder(new FoodOrder(oid, (String)(e.get("name")),
-                        num, trainId, mealDate, mealTime, mealDate, f.getPhoto()));
+                        num, trainId, mealDate, mealDate, mealTime, f.getPhoto()));
             });
         } catch (Exception e) {
             e.printStackTrace();

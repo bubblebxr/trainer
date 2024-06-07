@@ -7,10 +7,10 @@ import java.util.List;
 
 @Mapper
 public interface IOrderMapper {
-    @Select("select * from orders where uid = #{uid} and orderStatus = #{status} and orderType = #{type}")
+    @Select("select * from orders where uid = #{uid} and orderStatus = #{status} and orderType = #{type} order by billTime desc")
     List<Order> getOrdersByUidAndStatus(String uid, Order.OrderStatus status, Order.OrderType type);
 
-    @Select("select * from orders where uid = #{uid} and orderType = #{type}")
+    @Select("select * from orders where uid = #{uid} and orderType = #{type} order by billTime desc")
     List<Order> getOrderByUid(String uid, Order.OrderType type);
 
     @Select("select * from orders where oid = #{oid} and uid = #{uid}")

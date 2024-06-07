@@ -105,42 +105,42 @@ public class TrainController {
                 put("start_station", e.getStartStation());
                 put("arrive_station", e.getArrivalStation());
 
-                if (seat_type.get(0)) {
-                    put("business", new HashMap<>() {{
-                        put("price", e.getBusinessSeatPrice());
-                        put("remain", e.getBusinessSeatSurplus());
-                    }});
-                }
-                if (seat_type.get(1)) {
-                    put("one", new HashMap<>() {{
-                        put("price", e.getFirstClassSeatPrice());
-                        put("remain", e.getFirstClassSeatSurplus());
-                    }});
-                }
-                if (seat_type.get(2)) {
-                    put("two", new HashMap<>() {{
-                        put("price", e.getSecondClassSeatPrice());
-                        put("remain", e.getSecondClassSeatSurplus());
-                    }});
-                }
-                if (seat_type.get(3)) {
-                    put("soft_sleeper", new HashMap<>() {{
-                        put("price", e.getSoftSleeperPrice());
-                        put("remain", e.getSoftSleeperSurplus());
-                    }});
-                }
-                if (seat_type.get(4)) {
-                    put("hard_sleeper", new HashMap<>() {{
-                        put("price", e.getHardSleeperPrice());
-                        put("remain", e.getHardSleeperSurplus());
-                    }});
-                }
-                if (seat_type.get(5)) {
-                    put("hard_seat", new HashMap<>() {{
-                        put("price", e.getHardSeatPrice());
-                        put("remain", e.getHardSeatSurplus());
-                    }});
-                }
+
+                put("business", new HashMap<>() {{
+                    put("price", e.getBusinessSeatPrice());
+                    put("remain", e.getBusinessSeatSurplus());
+                }});
+
+
+                put("one", new HashMap<>() {{
+                    put("price", e.getFirstClassSeatPrice());
+                    put("remain", e.getFirstClassSeatSurplus());
+                }});
+
+
+                put("two", new HashMap<>() {{
+                    put("price", e.getSecondClassSeatPrice());
+                    put("remain", e.getSecondClassSeatSurplus());
+                }});
+
+
+                put("soft_sleeper", new HashMap<>() {{
+                    put("price", e.getSoftSleeperPrice());
+                    put("remain", e.getSoftSleeperSurplus());
+                }});
+
+
+                put("hard_sleeper", new HashMap<>() {{
+                    put("price", e.getHardSleeperPrice());
+                    put("remain", e.getHardSleeperSurplus());
+                }});
+
+
+                put("hard_seat", new HashMap<>() {{
+                    put("price", e.getHardSeatPrice());
+                    put("remain", e.getHardSeatSurplus());
+                }});
+
 
                 List<Object> stationInfo = new ArrayList<>();
                 trainService.searchStopover(trainId).forEach(e -> {

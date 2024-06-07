@@ -14,8 +14,11 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
-@CrossOrigin
+
+//@CrossOrigin(origins = "*",allowCredentials="true",allowedHeaders = "*",methods = {POST,GET})
 @RestController
 public class FoodController {
     @Autowired
@@ -161,6 +164,8 @@ public class FoodController {
             HashMap<String, Object> map = new HashMap<>();
 
             List<FoodOrder> foodOrders = foodService.getFoodOrdersByOid(order.getOid());
+            if(foodOrders.isEmpty())
+                System.out.println(order.getOid());
             map.put("tid", foodOrders.get(0).getTrainId());
             map.put("oid", order.getOid());
             map.put("order_time", order.getBillTime());

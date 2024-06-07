@@ -275,9 +275,9 @@
                         {{ item.bed_size }}
                       </span>
 
-                      <div style="margin-left: 200px; display: flex">
+                      <div style="margin-left: 200px; display: flex;width:170px;">
                         <a-typography-title :level="2"
-                          ><span style="font-size: 20px; margin-right: 5px"
+                          ><span style="font-size: 20px; margin-right: 5px;"
                             >均
                           </span>
                           ¥ {{ item.price }}
@@ -286,7 +286,7 @@
 
                       <a-button
                         :size="large"
-                        style="background-color: {{ item.num === 0 ? 'darkgray' : 'inherit' }}"
+                        style="background-color: {{ item.num === 0 ? 'darkgray' : 'inherit' }};right:10px;width:100px;"
                         @click="showDrawer(item)"
                         :disabled="item.num === 0"
                       >
@@ -419,7 +419,7 @@
                             margin-bottom: 15px;
                           "
                         >
-                          请输入住客姓名以及身份证号，每间只需填1人，姓名不可重复。
+                          请输入住客姓名以及身份证号，每间只需填1人。
                         </div>
                         <div style="height: 250px">
                           <el-scrollbar style="height: 250px">
@@ -778,14 +778,17 @@ const checked3 = ref(true);
 
 const onChange1 = (status) => {
   checked1.value = status;
+  roomType.value=1;
 };
 
 const onChange2 = (status) => {
   checked2.value = status;
+  roomType.value=2;
 };
 
 const onChange3 = (status) => {
   checked3.value = status;
+  roomType.value=3;
 };
 watch(
   [checked1, checked2, checked3, check_in, check_out],
@@ -844,6 +847,7 @@ const updateMoney = () => {
 const payPicture = ref(require("../assets/vxPay.jpg"));
 const payVisible = ref(false);
 const billVisible = ref(false);
+const roomType = ref(1);
 const topay = async () => {
   console.log(roomCount.value);
   console.log(input_name.value.length);
@@ -871,7 +875,9 @@ const topay = async () => {
     return;
   }
   if (input_name.value.length === input_id.value.length) {
+    var p = /^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/;
     for (let i = 1; i <= roomCount.value; i++) {
+      
       if (input_id.value[i] === "" || input_name.value[i] === "") {
         ElMessage({
           message: "未填写全部信息",
@@ -879,17 +885,27 @@ const topay = async () => {
         });
         return;
       }
+      console.log(input_id.value[i]);
+      if (!p.test(input_id.value[i])) {
+        ElMessage({
+          message: "身份证号格式错误",
+          type: "error",
+        });
+        return;
+      }
       customers.value.push({ id: input_id.value[i], name: input_name.value[i] });
     }
+    payVisible.value = true;
   } else {
     console.error("未填写全部信息");
   }
-  payVisible.value = true;
+  
 };
 
 const pay = async () => {
   open.value = false;
   payVisible.value = false;
+  console.log(customers.value);
   try {
     const response = await postHotelBill(
       hotelid.value,
@@ -897,11 +913,12 @@ const pay = async () => {
       check_in.value,
       check_out.value,
       roomCount.value,
-      1,
+      roomType.value,
       customers.value,
       money.value
     );
     var result = response.data.result;
+    console.log(result);
     if (result) {
       ElNotification({
         title: "预订酒店成功",

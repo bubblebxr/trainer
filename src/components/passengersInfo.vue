@@ -11,7 +11,7 @@
             </template>
         </el-table-column>
         <el-table-column prop="identification" label="身份证号" />
-        <el-table-column prop="phone" label="联系方式" />
+        <el-table-column prop="phone" label="邮箱" />
         <el-table-column label="身份状态">
             <template #default="scope">
                 <img src="../assets/identificationSuccess.png" style="width:40px;height:35px;margin-top:3%;" />
@@ -54,7 +54,7 @@
             <el-form-item label="身份证号:" :rules="[{ required: true, message: '身份证号不能为空' },]">
                 <el-input v-model="form.identification" />
             </el-form-item>
-            <el-form-item label="联系方式:" :rules="[{ required: true, message: '联系方式不能为空' },]">
+            <el-form-item label="邮箱:" :rules="[{ required: true, message: '邮箱不能为空' },]">
                 <el-input v-model="form.phone" />
             </el-form-item>
         </el-form>
@@ -152,7 +152,7 @@ const insertFinish = async () => {
     } else {
         console.log("error");
         ElMessage({
-            message: "新增失败",
+            message: "身份证不合法~",
             type: "error",
             plain: true,
         });
@@ -196,12 +196,13 @@ const editFinish = async () => {
     }
 }
 const mutipleDelete = async () => {
+    console.log(multipleSelection.value);
     for (var i = 0; i < multipleSelection.value.length; i++) {
-        var identification = passengers.value[i]['identification'];
-        var name = passengers.value[i]['name'];
+        var identification = multipleSelection.value[i]['identification'];
+        var name = multipleSelection.value[i]['name'];
         const data = await deletePassengers(id, name, identification);
+        // console.log("name"+name+"  identification"+identification);
         if (data.data.info === true) {
-            passengers.value.splice(i, 1);
             ElMessage({
                 message: "删除成功",
                 type: "success",
@@ -214,6 +215,8 @@ const mutipleDelete = async () => {
             });
         }
     }
+    multipleSelection.value=[];
+    getInfo();
 };
 onMounted(() => {
     getInfo();

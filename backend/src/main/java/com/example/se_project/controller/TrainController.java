@@ -378,7 +378,7 @@ public class TrainController {
         for (Order order : orders) {
             Map<String, Object> orderMap = trainService.getSelfOrderDetail(order.getOid(), userID);
             if (orderMap != null) {
-                System.out.println(order.getOrderStatus());
+//                System.out.println(order.getOrderStatus());
                 result.add(new HashMap<>() {{
                     put("tid", orderMap.get("trainId"));
                     put("oid", order.getOid());

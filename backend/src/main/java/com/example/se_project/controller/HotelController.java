@@ -128,7 +128,7 @@ public class HotelController {
 
         List<Object> roomInfo = new ArrayList<>();
         for (Map<String, Object> map : roomList) {
-            System.out.println(map);
+//            System.out.println(map);
             if (map.get("name").equals("标准双人间") && double_choose) {
                 roomInfo.add(new HashMap<>() {{
                     put("name", map.get("name"));
@@ -311,7 +311,7 @@ public class HotelController {
             HashMap<String, Object> map = new HashMap<>();
             String oid = order.getOid();
             List<Map<String, Object>> details = hotelService.getHotelOrderDetail(oid);
-            System.out.println(oid);
+//            System.out.println(oid);
             String hotelId = details.get(0).get("id").toString();
             Map<String, String> hotel = hotelService.getHotelName(hotelId);
             String checkinTime = details.get(0).get("checkinTime").toString();

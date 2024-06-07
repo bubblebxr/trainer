@@ -46,12 +46,12 @@ public class Reminder {
                 //System.out.println(trainMapList);
                 if (!trainMapList.isEmpty()) {
                     Map<String, Object> trainMap = trainMapList.get(0);
-                    System.out.println(trainMap);
+//                    System.out.println(trainMap);
 
                     String trainId = trainMap.get("trainId").toString();
                     String trainDate = trainMap.get("trainDate").toString();
-                    System.out.println(trainId);
-                    System.out.println(trainDate);
+//                    System.out.println(trainId);
+//                    System.out.println(trainDate);
 
                     //LocalDateTime startTime = (LocalDateTime) trainMap.get("startTime");
                     // String formattedStartTime = startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
@@ -61,20 +61,20 @@ public class Reminder {
                     String formattedStartTime = startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                     String formattedArrivaleTime = arrivalTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
-                    System.out.println(trainService.getTrainState(trainId, trainDate));
+//                    System.out.println(trainService.getTrainState(trainId, trainDate));
                     if (!trainService.getTrainState(trainId, trainDate)) // 车次存在
                     {
-                        System.out.println(startTime);
+//                        System.out.println(startTime);
                         LocalDateTime start = LocalDateTime.parse(formattedStartTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                         LocalDateTime arrive = LocalDateTime.parse(formattedArrivaleTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-                        System.out.println(now);
+//                        System.out.println(now);
                         Duration duration = Duration.between(now, start);
                         Duration finish = Duration.between(now, arrive);
 
                         if (duration.isPositive() && duration.toHours() < 3 && !orderService.getMessageSend(orderId)) {
                             // 距发车时间小于3h且未发送过消息
                             String content = "【WerwerTrip】距离您预定的" + trainDate + " " + trainId + "车次的" + "列车发车时间已不足3小时，请您合理安排出行时间，以免错过列车。";
-                            System.out.println(content);
+//                            System.out.println(content);
                             String Mcontent = "距离您预定的" + trainDate + " " + trainId + "车次的" + "列车发车时间已不足3小时，请您合理安排出行时间，以免错过列车。";
                             messageService.addMessage(userId, Message.generateMessageId(), orderId, "行程提醒", now.toString(), Mcontent, false, "2");
                             emailService.sendSimpleMail(email, "行程提醒", content);
@@ -94,7 +94,7 @@ public class Reminder {
                     }
                     // 车次取消
                     else {
-                        System.out.println("车次已取消");
+//                        System.out.println("车次已取消");
                         orderService.cancelOrder(order);
                         // 取消该trainOrder对应的foodOrder
                         foodService.getTrainRelatedFoodOrders(trainId, trainDate, userId).forEach(e-> {

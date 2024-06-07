@@ -53,14 +53,14 @@ public class FoodController {
                     LocalTime dinnerEndTime = LocalTime.of(19, 0, 0);
 
                     if (time.equals("lunch")) {
-                        if (!startTime.isBefore(lunchStartTime) && !arriveTime.isAfter(lunchEndTime)) {
+                        if (!arriveTime.isBefore(lunchStartTime) || !startTime.isAfter(lunchEndTime)) {
                             haveTicket[0] = true;
                             info = "购买成功";
                         } else {
                             info = "午餐点您不在车上哦";
                         }
                     } else {
-                        if (!startTime.isBefore(dinnerStartTime) && !arriveTime.isAfter(dinnerEndTime)) {
+                        if (!arriveTime.isBefore(dinnerStartTime) || !startTime.isAfter(dinnerEndTime)) {
                             haveTicket[0] = true;
                             info = "购买成功";
                         } else {

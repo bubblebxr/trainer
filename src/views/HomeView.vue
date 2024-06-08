@@ -414,7 +414,6 @@ const postmyRegister = async () => {
       localStorage.setItem('name', my_name.value);
       openRegister.value = false;
       openVerification.value = true;
-      window.location.reload();
     } else {
       ElMessage.error("提交失败:" + response.data.reason);
     }

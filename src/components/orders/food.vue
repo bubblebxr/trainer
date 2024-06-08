@@ -12,7 +12,7 @@
     <el-scrollbar id="outer">
     <el-collapse v-model="activeNames" @change="handleChange">
       <el-collapse-item v-for="(item, index) in foodOrders"
-        :id="item.oid" :name="index" >
+        :id="item.oid" :name="item.oid" >
         <template #title>
           <div style="width: 100%;">
             <el-row>
@@ -95,7 +95,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch,nextTick } from "vue";
 import {
   getFoodOrders,
   cancelFoodOrder,
@@ -109,14 +109,15 @@ const foodOrders = ref([]);
 const status = ref("all");
 const userID = localStorage.getItem("user_id");
 const route = useRoute();
-const scrollToOrder = (orderId) => {
+const scrollToOrder = async (orderId) => {
   const orderElement = document.getElementById(orderId);
   console.log("滚动到：", orderId);
   console.log("查询的orderELemnet:", orderElement);
   if (orderElement) {
     orderElement.scrollIntoView({ behavior: "smooth", block: "center" });
+    await nextTick();
     setTimeout(() => {
-      const tempActiveNames = [orderElement.__vueParentComponent.props.name];
+      const tempActiveNames = [orderId];
       activeNames.value = tempActiveNames;
       console.log("模拟点击展开", activeNames.value);
     }, 300); // 延迟一段时间，确保滚动完成

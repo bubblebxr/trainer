@@ -62,9 +62,9 @@
                 </el-col>
                 <el-col :span="10" style="margin-top:-0.5%;">
                     <el-radio-group v-model="sortType" class="ml-4">
-                        <el-radio value="1" size="large">出发时间升序</el-radio>
-                        <el-radio value="2" size="large">出发时间降序</el-radio>
-                        <el-radio value="3" size="large">旅途总时长升序</el-radio>
+                        <el-radio value="1" size="large">发时最早</el-radio>
+                        <el-radio value="2" size="large">发时最晚</el-radio>
+                        <el-radio value="3" size="large">耗时最短</el-radio>
                     </el-radio-group>
                 </el-col>
             </el-row>

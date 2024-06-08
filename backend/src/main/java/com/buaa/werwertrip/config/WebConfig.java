@@ -16,8 +16,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins("*") // 指定允许的来源，或者使用特定的来源列表
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*")
-                .allowCredentials(true);
+                .allowedHeaders("Origin", "X-Requested-With", "Content-Type", "Accept");
     }
 }
 

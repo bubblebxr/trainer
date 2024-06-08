@@ -45,7 +45,7 @@ public class FoodController {
         List<TrainOrder> trainOrders = trainService.getTrainOrderByTrainAndIdentification(tid, date, userID);
         boolean[] haveTicket = {false};
         String info = "没有购买当日该车次车票";
-        for (TrainOrder trainOrder: trainOrders) {
+        for (TrainOrder trainOrder : trainOrders) {
             if (orderService.getOrder(trainOrder.getOid()).getOrderStatus() == Order.OrderStatus.Paid) {
                 Train train = trainService.getTrainByTidAndDate(tid, date);
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -108,7 +108,7 @@ public class FoodController {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date bill = new Date();
         String billTime = formatter.format(bill);
-        Number sumPrice = (Number)(map.get("sum_price"));
+        Number sumPrice = (Number) (map.get("sum_price"));
         Double total = sumPrice.doubleValue();
 
         String oid = Order.generateOrderId();
@@ -117,9 +117,9 @@ public class FoodController {
 
         try {
             ((List<HashMap<String, Object>>) (map.get("foods"))).forEach(e -> {
-                Food f = foodService.findFoodByAllKeys(trainId, mealDate, mealTime, (String)e.get("name"));
-                int num = (int)(e.get("number"));
-                foodService.addFoodOrder(new FoodOrder(oid, (String)(e.get("name")),
+                Food f = foodService.findFoodByAllKeys(trainId, mealDate, mealTime, (String) e.get("name"));
+                int num = (int) (e.get("number"));
+                foodService.addFoodOrder(new FoodOrder(oid, (String) (e.get("name")),
                         num, trainId, mealDate, mealDate, mealTime, f.getPhoto()));
             });
         } catch (Exception e) {
@@ -139,12 +139,12 @@ public class FoodController {
         String content = "【WerwerTrip】您成功预订了" + mealDate + " " + trainId + "车次的" + time + "。感谢您的购买，祝您用餐愉快！";
         String Mcontent = "您成功预订了" + mealDate + " " + trainId + "车次的" + time + "。感谢您的购买，祝您用餐愉快！";
 
-        messageService.addMessage(userId,Message.generateMessageId(), oid, "餐饮订单支付成功", formattedDate, Mcontent, false, "5");
+        messageService.addMessage(userId, Message.generateMessageId(), oid, "餐饮订单支付成功", formattedDate, Mcontent, false, "5");
 
-        emailService.sendSimpleMail(userService.getEmail(userId),"餐饮订单支付成功",content);
+        emailService.sendSimpleMail(userService.getEmail(userId), "餐饮订单支付成功", content);
         return new HashMap<>() {{
             put("info", "下单成功！");
-            put("result",true);
+            put("result", true);
         }};
     }
 
@@ -164,7 +164,7 @@ public class FoodController {
             HashMap<String, Object> map = new HashMap<>();
 
             List<FoodOrder> foodOrders = foodService.getFoodOrdersByOid(order.getOid());
-            if(foodOrders.isEmpty())
+            if (foodOrders.isEmpty())
                 System.out.println(order.getOid());
             map.put("tid", foodOrders.get(0).getTrainId());
             map.put("oid", order.getOid());
@@ -187,10 +187,10 @@ public class FoodController {
                 if (!map.containsKey("time")) {
                     //map.put("time", foodOrder.getMealTime());
                     String s = foodOrder.getMealTime();
-                    if(s.equals("lunch"))
-                        map.put("time","午餐");
+                    if (s.equals("lunch"))
+                        map.put("time", "午餐");
                     else
-                        map.put("time","晚餐");
+                        map.put("time", "晚餐");
                 }
 
                 foods.add(new HashMap<>() {{
@@ -227,11 +227,17 @@ public class FoodController {
             Date date = new Date();
             String formattedDate = formatter.format(date);
 
-            String content = "【WerwerTrip】您已成功取消" +food.getMealDate() + " " + food.getTrainId()+ "车次的" + food.getMealTime();
-            String Mcontent = "您已成功取消" +food.getMealDate() + " " + food.getTrainId()+ "车次的" + food.getMealTime();
+            String s = food.getMealTime();
+            if (s.equals("lunch"))
+                s = "午餐";
+            else
+                s = "晚餐";
+
+            String content = "【WerwerTrip】您已成功取消" + food.getMealDate() + " " + food.getTrainId() + "车次的" + s;
+            String Mcontent = "您已成功取消" + food.getMealDate() + " " + food.getTrainId() + "车次的" + s;
             messageService.addMessage(userID, Message.generateMessageId(), oid, "餐饮订单取消成功", formattedDate, Mcontent, false, "5");
 
-            emailService.sendSimpleMail(userService.getEmail(userID),"餐饮订单取消成功",content);
+            emailService.sendSimpleMail(userService.getEmail(userID), "餐饮订单取消成功", content);
             return new HashMap<>() {{
                 put("info", "取消订单成功");
                 put("result", true);

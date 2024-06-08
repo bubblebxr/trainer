@@ -89,7 +89,7 @@ public class Reminder {
                         }
                         if (finish.isNegative()) {
                             orderService.finishOrder(order.getOid());
-                            // 取消该trainOrder对应的foodOrder
+                            // 完成该trainOrder对应的foodOrder
                             foodService.getTrainRelatedFoodOrders(trainId, trainDate, userId).forEach(e-> {
                                 orderService.finishOrder(orderService.getOrder(e.getOid()).getOid());
                                 //orderService.cancelOrder(e);

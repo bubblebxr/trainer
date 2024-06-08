@@ -665,7 +665,7 @@ function updateUI() {
     document.getElementById("loggedInMessage").style.display = "none"; // 隐藏已登录的消息
   }
   //想在这里刷新该页面
-  
+  message.value = [];
 }
 //退出登录
 

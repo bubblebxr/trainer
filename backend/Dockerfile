@@ -1,7 +1,18 @@
-FROM openjdk:11-jre-slim
+# 使用官方 Maven 和 JDK 镜像
+FROM maven:3.8.5-openjdk-11
 
+# 设置工作目录
 WORKDIR /app
 
-COPY target/se_project-0.0.1-SNAPSHOT.jar se_project-0.0.1-SNAPSHOT.jar
+# 复制 pom.xml 和源码
+COPY pom.xml ./
+COPY src/ ./src/
 
-ENTRYPOINT ["java","-jar","se_project-0.0.1-SNAPSHOT.jar"]
+# 构建项目
+RUN mvn clean package
+
+# 运行应用
+CMD ["java", "-jar", "target/backend.jar"]
+
+# 暴露端口
+EXPOSE 8080

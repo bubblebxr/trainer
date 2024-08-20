@@ -48,13 +48,6 @@ public class UserController {
             return map;
         }
 
-        // 校验email格式
-//        if (!email.matches("\\w+@\\w+\\.\\w+")) {
-//            map.put("result", false);
-//            map.put("reason", "email格式错误");
-//            return map;
-//        }
-
         // email格式校验(支持中文)
         if (!email.matches("^[A-Za-z0-9\\u4e00-\\u9fa5]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$")) {
             map.put("result", false);

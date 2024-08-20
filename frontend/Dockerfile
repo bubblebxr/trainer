@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # 构建前端应用
-RUN npm run build
+RUN npm run build --legacy-peer-deps
 
 # 暴露应用端口
 EXPOSE 8080

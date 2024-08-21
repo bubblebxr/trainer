@@ -1,21 +1,25 @@
-# 使用Node.js官方镜像作为基础镜像
-FROM node:14
+# 使用Node.js官方镜像作为构建阶段
+FROM node:14 AS build
 
 # 设置工作目录
 WORKDIR /app
 
-# 复制package.json文件并安装依赖
+# 复制package.json和package-lock.json并安装依赖
 COPY package*.json ./
 RUN npm install
 
-# 复制所有代码到容器内
+# 复制项目文件并构建
 COPY . .
-
-# 构建前端项目
 RUN npm run build
 
-# 设置应用启动命令
-CMD ["npm", "start"]
+# 使用nginx作为发布阶段的基础镜像
+FROM nginx:alpine
 
-# 暴露应用端口
-EXPOSE 3000
+# 将构建的文件复制到nginx的html目录
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# 暴露nginx默认端口
+EXPOSE 80
+
+# 启动nginx
+CMD ["nginx", "-g", "daemon off;"]

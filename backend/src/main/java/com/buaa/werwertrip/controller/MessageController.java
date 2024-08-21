@@ -14,7 +14,6 @@ import java.util.Map;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
-//@CrossOrigin(origins = "*",allowCredentials="true",allowedHeaders = "*",methods = {POST,GET})
 @RestController
 public class MessageController {
     @Autowired
@@ -45,7 +44,6 @@ public class MessageController {
 
     @PostMapping("/message/setRead/{mid}")
     public void setHaveread(@PathVariable String mid) {
-
         // 标记已读
         messageService.setHaveread(mid);
     }
